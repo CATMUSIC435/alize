@@ -4,7 +4,7 @@ const path = require('node:path');
 const newTranslations = {
   the_concept: 'THE CONCEPT',
   concept_title:
-    'ERA RESIDENCES IS A BOUTIQUE GATED COMMUNITY OF ONLY 25 RESIDENCES, DESIGNED AROUND PRIVACY, WELLBEING AND TIMELESS MEDITERRANEAN LIVING',
+    'ALIZE RESIDENCES IS A BOUTIQUE GATED COMMUNITY OF ONLY 25 RESIDENCES, DESIGNED AROUND PRIVACY, WELLBEING AND TIMELESS MEDITERRANEAN LIVING',
   concept_desc:
     "Inspired by the atmosphere of Marbella's golden era, the project combines contemporary architecture with warm materials, natural landscaping and carefully curated spaces.",
   new_golden_mile: 'NEW GOLDEN MILE',

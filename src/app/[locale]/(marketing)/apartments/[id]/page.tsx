@@ -24,7 +24,7 @@ export async function generateMetadata(props: Props) {
   }
 
   return {
-    title: `NO. ${apartment.number} - ERA RESIDENCE`,
+    title: `NO. ${apartment.number} - ALIZE RESIDENCE`,
     description: apartment.description,
   };
 }

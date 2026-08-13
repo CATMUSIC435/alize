@@ -20,7 +20,7 @@ export function ThirdSection() {
       <div className="absolute inset-0 h-full w-full">
         <Image
           src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1920"
-          alt="Era Residence Pool"
+          alt="Alize Residence Pool"
           fill
           className="object-cover object-center"
           sizes="100vw"
