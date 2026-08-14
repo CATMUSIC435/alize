@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import Image from 'next/image';
-import { Link } from '@/libs/I18nNavigation';
+import Link from 'next/link';
+import { generatePageMetadata } from '@/libs/seo';
+import { AioSchema } from '@/components/AioSchema';
 import sentryLogo from '@/public/assets/images/sentry-dark.png';
 
 type PortfolioPageProps = {
@@ -15,10 +17,12 @@ export async function generateMetadata(props: PortfolioPageProps): Promise<Metad
     namespace: 'Portfolio',
   });
 
-  return {
+  return generatePageMetadata({
     title: t('meta_title'),
     description: t('meta_description'),
-  };
+    locale,
+    path: '/portfolio',
+  });
 }
 
 export default async function Portfolio(props: PortfolioPageProps) {
@@ -31,12 +35,23 @@ export default async function Portfolio(props: PortfolioPageProps) {
 
   return (
     <>
+      <AioSchema 
+        type="CollectionPage" 
+        name={t('meta_title')} 
+        description={t('meta_description')} 
+        url={`https://era-residence.com/${locale}/portfolio`} 
+      />
+
       <p>{t('presentation')}</p>
 
-      <div className="grid grid-cols-1 justify-items-start gap-3 md:grid-cols-2 xl:grid-cols-3">
-        {Array.from({ length: 6 }, (_, i) => (
-          <Link className="hover:text-blue-700" key={i} href={`/portfolio/${i}`}>
-            {t('portfolio_name', { name: i })}
+      <div className="grid grid-cols-1 gap-4 pt-8 sm:grid-cols-2 md:grid-cols-3">
+        {Array.from({ length: 6 }).map((_, index) => (
+          <Link
+            className="hover:text-blue-700"
+            key={index}
+            href={`/portfolio/${index + 1}`}
+          >
+            {t('portfolio_name', { name: index + 1 })}
           </Link>
         ))}
       </div>

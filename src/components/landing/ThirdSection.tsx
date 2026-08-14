@@ -15,7 +15,7 @@ export function ThirdSection() {
   const t = useTranslations('Index');
 
   return (
-    <section className="relative h-screen min-h-[600px] w-full overflow-hidden bg-[#151926] md:min-h-[800px]">
+    <section className="relative lg:h-screen min-h-[600px] w-full overflow-hidden bg-[#151926] md:min-h-[800px]">
       {/* Background Image */}
       <div className="absolute inset-0 h-full w-full">
         <Image

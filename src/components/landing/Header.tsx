@@ -1,37 +1,13 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { useUIStore } from '@/store/useUIStore';
 import { CircularLogo } from './CircularLogo';
 import { NavigationMenu } from './NavigationMenu';
 
 export function Header({ alwaysDark }: { alwaysDark?: boolean }) {
-  const [isDark, setIsDark] = useState(alwaysDark ?? false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      // Toggle dark text when scrolling into the bright Second Section (approx 1.5x window height)
-      if (window.scrollY > window.innerHeight * 1.5) {
-        setIsDark(true);
-      } else {
-        setIsDark(false);
-      }
-    };
-
-    let attached = false;
-    if (!alwaysDark) {
-      // Initial check
-      handleScroll();
-      window.addEventListener('scroll', handleScroll, { passive: true });
-      attached = true;
-    }
-
-    return () => {
-      if (attached) {
-        window.removeEventListener('scroll', handleScroll);
-      }
-    };
-  }, [alwaysDark]);
+  const headerTheme = useUIStore((state) => state.headerTheme);
+  const isDark = alwaysDark ?? headerTheme === 'dark';
 
   return (
     <motion.header

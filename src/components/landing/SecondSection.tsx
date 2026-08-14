@@ -1,10 +1,11 @@
 'use client';
 
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { Playfair_Display, Inter } from 'next/font/google';
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { WebGLSlider } from './WebGLSlider';
+import { useUIStore } from '@/store/useUIStore';
 
 const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400', '500', '600', '700'] });
 const inter = Inter({ subsets: ['latin'], weight: ['400', '500', '600'] });
@@ -12,6 +13,15 @@ const inter = Inter({ subsets: ['latin'], weight: ['400', '500', '600'] });
 export function SecondSection() {
   const t = useTranslations('Index');
   const sectionRef = useRef<HTMLElement>(null);
+  
+  const setActiveSection = useUIStore((state) => state.setActiveSection);
+  const isInView = useInView(sectionRef, { amount: 0.5 });
+
+  useEffect(() => {
+    if (isInView) {
+      setActiveSection('second');
+    }
+  }, [isInView, setActiveSection]);
 
   // Track scroll progress of this specific section
   const { scrollYProgress } = useScroll({
@@ -25,7 +35,7 @@ export function SecondSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative z-40 mt-[20vh] flex min-h-[150vh] w-full flex-col bg-transparent"
+      className="relative z-40 mt-[20vh] flex min-h-screen lg:min-h-[150vh] w-full flex-col bg-transparent"
     >
       <motion.div
         className="relative z-10 mx-auto flex w-full flex-col items-center"

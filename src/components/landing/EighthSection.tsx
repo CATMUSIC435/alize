@@ -33,7 +33,7 @@ export function EighthSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative z-20 w-full [border-top-left-radius:50vw] [border-top-right-radius:50vw] bg-[#F4F3ED] pt-[5vh] pb-44 text-[#151926] md:pt-[20vw]"
+      className="relative z-20 w-full [border-top-left-radius:50vw] [border-top-right-radius:50vw] bg-[#F4F3ED] pt-[10vh] pb-6 lg:pb-44 text-[#151926] md:pt-[20vw]"
     >
       {/* Center Title */}
       <div className="flex w-full flex-col items-center text-center">
@@ -58,7 +58,7 @@ export function EighthSection() {
       <div className="relative mt-24 flex w-full flex-col md:mt-48 md:flex-row">
         {/* Left Column (Burgundy Box & Flowers) */}
         <div className="relative w-full md:w-[45%]">
-          <div className="relative flex h-[600px] w-[90%] items-center justify-end rounded-r-xl bg-[#2D0D1D] md:h-[900px] md:w-full md:rounded-none">
+          <div className="relative flex h-[600px] w-full lg:w-[90%] items-center justify-end rounded-r-xl bg-[#2D0D1D] md:h-[900px] md:w-full md:rounded-none">
             {/* Circular Logo */}
             <div className="absolute top-12 left-12 z-20 scale-[0.6] text-white opacity-90 md:top-24 md:left-24 md:scale-75">
               <CircularLogo />

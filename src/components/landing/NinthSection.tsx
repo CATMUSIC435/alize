@@ -51,7 +51,7 @@ export function NinthSection() {
       </div>
 
       {/* Right side bleeding flowers */}
-      <div className="pointer-events-none absolute top-1/2 right-0 z-0 w-[80vw] max-w-[700px] -translate-y-1/2 rotate-y-[175deg] rotate-z-[-30deg] md:right-[-10em] md:w-[55vw]">
+      <div className="pointer-events-none absolute top-1/3 lg:top-1/2 right-[-10%] lg:right-0 z-0 w-[80vw] max-w-[700px] -translate-y-1/2 rotate-y-[175deg] rotate-z-[-40deg] lg:rotate-z-[-30deg] md:right-[-10em] md:w-[55vw]">
         <video
           autoPlay
           loop

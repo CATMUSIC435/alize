@@ -7,6 +7,8 @@ type SignInPageProps = {
   params: Promise<{ locale: string }>;
 };
 
+import { generatePageMetadata } from '@/libs/seo';
+
 export async function generateMetadata(props: SignInPageProps): Promise<Metadata> {
   const { locale } = await props.params;
   const t = await getTranslations({
@@ -14,10 +16,12 @@ export async function generateMetadata(props: SignInPageProps): Promise<Metadata
     namespace: 'SignIn',
   });
 
-  return {
+  return generatePageMetadata({
     title: t('meta_title'),
     description: t('meta_description'),
-  };
+    locale,
+    path: '/sign-in',
+  });
 }
 
 export default async function SignInPage(props: SignInPageProps) {

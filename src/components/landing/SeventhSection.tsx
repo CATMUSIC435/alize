@@ -84,14 +84,14 @@ export function SeventhSection() {
           <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-r from-black/40 via-transparent to-black/60"></div>
         </motion.div>
 
-        {/* Absolute positioning for Amenities List (Middle Right) */}
-        <div className="absolute top-[25%] right-12 z-30 md:right-24 lg:right-32 xl:top-[20%] xl:right-40">
+        {/* Absolute positioning for Amenities List (Top Right on mobile, Middle Right on desktop) */}
+        <div className="absolute top-28 right-6 z-30 md:top-[25%] md:right-24 lg:right-32 xl:top-[20%] xl:right-40">
           <motion.ul
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 1, ease: 'easeOut', delay: 0.2 }}
-            className="flex flex-col items-start space-y-1 md:space-y-2"
+            className="flex flex-col items-end md:items-start space-y-2 md:space-y-2"
           >
             {amenities.map((amenity, index) => {
               const isActive = index === activeIdx;
@@ -102,14 +102,14 @@ export function SeventhSection() {
                     onClick={() => {
                       setActiveIdx(index);
                     }}
-                    className={`relative w-full cursor-pointer text-left text-base tracking-wider uppercase transition-all duration-500 sm:text-lg md:text-xl lg:text-[22px] ${playfair.className} origin-top [transform:scaleY(1.15)] ${
+                    className={`relative w-full cursor-pointer text-right md:text-left text-sm tracking-wider uppercase transition-all duration-500 sm:text-lg md:text-xl lg:text-[22px] ${playfair.className} origin-top [transform:scaleY(1)] md:[transform:scaleY(1.15)] ${
                       isActive ? 'text-white' : 'text-white/40 hover:text-white/70'
                     }`}
                   >
                     {isActive && (
                       <motion.div
                         layoutId="activeIndicator"
-                        className="absolute top-0 bottom-0 -left-4 w-[1px] bg-white md:-left-6"
+                        className="absolute top-0 bottom-0 -right-4 md:right-auto md:-left-6 w-[1px] bg-white"
                         transition={{ duration: 0.5, ease: 'easeOut' }}
                       />
                     )}
@@ -122,11 +122,11 @@ export function SeventhSection() {
         </div>
 
         {/* Main Content (Bottom Left Quote and Bottom Right Circle) */}
-        <div className="pointer-events-none absolute inset-0 z-20 flex flex-col justify-end p-6 pb-8 md:p-16 md:pb-12 lg:p-24">
+        <div className="pointer-events-none absolute inset-0 z-20 flex flex-col justify-end p-6 pb-24 md:pb-12 md:p-16 lg:p-24">
           {/* Inner wrapper to handle row/col layout and margin on mobile */}
-          <div className="ml-6 flex w-full flex-col items-start justify-between gap-6 md:ml-0 md:flex-row md:items-end md:gap-0">
+          <div className="ml-10 flex w-full flex-col items-start justify-between gap-6 md:ml-0 md:flex-row md:items-end md:gap-0">
             {/* Left Column: Quote */}
-            <div className="pointer-events-auto flex w-full flex-col items-start text-left md:max-w-[45%] lg:max-w-[42%]">
+            <div className="pointer-events-auto flex w-full flex-col items-start text-left md:max-w-[50%] lg:max-w-[42%]">
               <div className="mb-6 min-h-[24px] md:mb-8 md:min-h-[32px]">
                 <AnimatePresence mode="wait">
                   <motion.h4
@@ -162,14 +162,13 @@ export function SeventhSection() {
                     className="absolute top-0 left-0 w-full"
                   >
                     <p
-                      className={`text-[12px] leading-[1.2] tracking-tighter text-white uppercase sm:text-[14px] md:text-[1.6vw] lg:text-[24px] ${playfair.className}`}
-                      style={{ transform: 'scaleY(1.5)', transformOrigin: 'top left' }}
+                      className={`text-[12px] leading-[1.4] tracking-tight text-white uppercase sm:text-[14px] md:text-[1.6vw] lg:text-[24px] ${playfair.className} origin-top-left [transform:scaleY(1)] md:[transform:scaleY(1.5)]`}
                     >
-                      <span className="flex w-full flex-wrap justify-start gap-x-[0.2em] gap-y-[0.2em] md:gap-y-[0.3em]">
+                      <span className="flex w-full flex-wrap justify-start gap-x-[0.2em] gap-y-[0.1em] md:gap-y-[0.3em]">
                         {(quotes[activeIdx] ?? '').split(' ').map((word, i) => (
                           <span
                             key={i}
-                            className={`inline-block overflow-hidden pb-1 ${i === 0 ? 'ml-12 md:ml-20' : ''}`}
+                            className={`inline-block overflow-hidden pb-1 ${i === 0 ? 'ml-8 md:ml-20' : ''}`}
                           >
                             <motion.span
                               className="inline-block origin-bottom"
@@ -194,7 +193,7 @@ export function SeventhSection() {
             </div>
 
             {/* Right Column: Circle Button */}
-            <div className="pointer-events-auto self-start md:self-auto">
+            <div className="pointer-events-auto absolute bottom-6 right-6 md:relative md:bottom-auto md:right-auto md:self-auto">
               <CircleButton text={t('book_a_call_now')} variant="light" />
             </div>
           </div>

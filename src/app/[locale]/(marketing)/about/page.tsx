@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import Image from 'next/image';
 import crowdinLogo from '@/public/assets/images/crowdin-dark.png';
+import { generatePageMetadata } from '@/libs/seo';
+import { AioSchema } from '@/components/AioSchema';
 
 type AboutPageProps = {
   params: Promise<{ locale: string }>;
@@ -14,10 +16,12 @@ export async function generateMetadata(props: AboutPageProps): Promise<Metadata>
     namespace: 'About',
   });
 
-  return {
+  return generatePageMetadata({
     title: t('meta_title'),
     description: t('meta_description'),
-  };
+    locale,
+    path: '/about',
+  });
 }
 
 export default async function About(props: AboutPageProps) {
@@ -30,6 +34,13 @@ export default async function About(props: AboutPageProps) {
 
   return (
     <>
+      <AioSchema 
+        type="WebPage" 
+        name={t('meta_title')} 
+        description={t('meta_description')} 
+        url={`https://era-residence.com/${locale}/about`} 
+      />
+      
       <p>{t('about_paragraph')}</p>
 
       <div className="mt-2 text-center text-sm">

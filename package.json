@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev:spotlight": "npx @spotlightjs/spotlight",
-    "dev:next": "next dev",
+    "dev:next": "next dev --experimental-https",
     "dev": "run-p db-server:file dev:*",
     "build:next": "next build",
     "build-local": "run-p db-server:memory build:next --race",
@@ -49,7 +49,8 @@
     "react-dom": "^19.2.6",
     "react-hook-form": "^7.76.0",
     "three": "^0.185.1",
-    "zod": "^4.4.3"
+    "zod": "^4.4.3",
+    "zustand": "^5.0.15"
   },
   "devDependencies": {
     "@chromatic-com/playwright": "^0.14.2",

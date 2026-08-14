@@ -26,6 +26,8 @@ const baseConfig: NextConfig = {
   outputFileTracingIncludes: {
     '/': ['./migrations/**/*'],
   },
+  // Allow accessing the dev server from local network IP
+  allowedDevOrigins: ['192.168.1.190'],
 };
 
 // Initialize the Next-Intl plugin
