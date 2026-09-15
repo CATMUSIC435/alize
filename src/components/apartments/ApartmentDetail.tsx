@@ -112,6 +112,8 @@ export function ApartmentDetail({ data }: { data: ApartmentData }) {
                   src={data.image}
                   alt={`Floor plan for apartment ${data.number}`}
                   fill
+                  priority
+                  sizes="(max-width: 1024px) 100vw, 65vw"
                   className="object-cover"
                   unoptimized
                 />
@@ -133,6 +135,7 @@ export function ApartmentDetail({ data }: { data: ApartmentData }) {
                         src={img}
                         alt={`Gallery image ${idx + 1}`}
                         fill
+                        sizes="(max-width: 1024px) 100vw, 65vw"
                         className="object-cover"
                         unoptimized
                       />

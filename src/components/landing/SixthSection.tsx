@@ -382,6 +382,7 @@ export function SixthSection() {
             src="https://images.unsplash.com/photo-1596700508000-0e1075bd8ce1?q=80&w=1000&auto=format&fit=crop"
             alt="Bougainvillea flowers decoration for Alizé Residence"
             fill
+            sizes="(max-width: 768px) 50vw, 30vw"
             className="[mask-image:linear-gradient(to_right,black,transparent)] object-cover opacity-80 mix-blend-multiply [-webkit-mask-image:linear-gradient(to_right,black,transparent)]"
           />
         </div>

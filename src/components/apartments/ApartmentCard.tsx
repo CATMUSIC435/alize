@@ -61,6 +61,7 @@ export function ApartmentCard({ data }: { data: ApartmentData }) {
             src={data.image}
             alt={`Apartment ${data.number}`}
             fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className="object-contain"
             unoptimized
           />

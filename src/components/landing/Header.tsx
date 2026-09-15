@@ -25,6 +25,7 @@ export function Header({ alwaysDark }: { alwaysDark?: boolean }) {
             alt="Alize Logo"
             width={80}
             height={160}
+            priority
             className="h-auto w-12 object-contain md:w-16 lg:w-20"
           />
         </Link>
