@@ -8,6 +8,8 @@ import { useUIStore } from '@/store/useUIStore';
 import { SandRipples } from './SandRipples';
 import { WebGLSlider } from './WebGLSlider';
 
+import { DottedLinesSVG } from './DottedLinesSVG';
+
 const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400', '500', '600', '700'] });
 const inter = Inter({ subsets: ['latin'], weight: ['400', '500', '600'] });
 
@@ -92,6 +94,7 @@ export function SecondSection() {
         </svg>
         {/* Solid blue background for the rest of the section */}
         <div className="bg-textured-sand relative flex w-full flex-col items-center px-4 pt-0 pb-24 md:px-16 md:pb-48">
+          <DottedLinesSVG className="pointer-events-none absolute -top-[11%] -left-[10%] z-10 h-full w-full" />
           <SandRipples position="left" />
           <SandRipples position="right" />
           {/* Wrapper to pull content UP into the empty blue space of the SVG semi-circle */}
