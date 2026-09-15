@@ -27,7 +27,7 @@ const baseConfig: NextConfig = {
     '/': ['./migrations/**/*'],
   },
   // Allow accessing the dev server from local network IP
-  allowedDevOrigins: ['192.168.1.190'],
+  allowedDevOrigins: ['192.168.1.211', '192.168.1.190', 'localhost:3000'],
 };
 
 // Initialize the Next-Intl plugin

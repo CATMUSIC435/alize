@@ -128,7 +128,7 @@ export function SixthSection() {
         }}
       />
       {/* Slider Section */}
-      <div className="relative min-h-[100vh] w-full pt-20 ld:pt-[160px]">
+      <div className="ld:pt-[160px] relative min-h-[100vh] w-full pt-20">
         {/* Carousel & Animated Text Wrapper */}
         <div className="mx-auto flex h-full min-h-[70vh] w-full max-w-[1400px] flex-col items-center justify-center px-8 pt-10 pr-6 md:flex-row md:justify-between md:px-[10vw] md:pl-16">
           {/* Left Column (Stats) - Fixed & Animated */}
@@ -351,7 +351,7 @@ export function SixthSection() {
                     {slides[selectedIndex]?.description}
                   </p>
                   <button
-                    className={`mt-8 mx-auto w-fit rounded-full border border-[#151926] px-6 py-3 text-[9px] font-bold tracking-[0.1em] uppercase transition-colors hover:bg-[#151926] hover:text-white ${inter.className}`}
+                    className={`mx-auto mt-8 w-fit rounded-full border border-[#151926] px-6 py-3 text-[9px] font-bold tracking-[0.1em] uppercase transition-colors hover:bg-[#151926] hover:text-white ${inter.className}`}
                   >
                     {slides[selectedIndex]?.buttonText}
                   </button>
@@ -487,7 +487,7 @@ export function SixthSection() {
       </motion.div>
 
       {/* Video Graphic Right Bottom */}
-      <div className="pointer-events-none absolute -bottom-10 md:-bottom-20 left-0 z-10 h-[70vh] origin-center -rotate-90 md:bottom-0">
+      <div className="pointer-events-none absolute -bottom-10 left-0 z-10 h-[70vh] origin-center -rotate-90 md:-bottom-20 md:bottom-0">
         <video
           aria-label="Bougainvillea video"
           autoPlay

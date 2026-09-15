@@ -13,56 +13,81 @@ export function CursorTrail() {
   // Store the actual mouse coordinates
   const mouse = useRef({ x: 0, y: 0 });
   // Store the trail points coordinates
-  const trail = useRef(Array(TRAIL_LENGTH).fill({ x: 0, y: 0 }));
-  
+  const trail = useRef(Array.from({ length: TRAIL_LENGTH }, () => ({ x: 0, y: 0 })));
+
   const rafId = useRef<number>(0);
 
   useEffect(() => {
-    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    if (isTouchDevice) return;
-
     const onPointerMove = (e: PointerEvent) => {
       mouse.current = { x: e.clientX, y: e.clientY };
     };
+
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    if (isTouchDevice) {
+      return () => {
+        window.removeEventListener('pointermove', onPointerMove);
+      };
+    }
 
     window.addEventListener('pointermove', onPointerMove, { passive: true });
 
     const render = () => {
       const points = trail.current;
-      
+      const [firstPoint] = points;
+
+      if (!firstPoint) {
+        return;
+      }
+
       // Slower lerp for the head (creates drag)
       points[0] = {
-        x: points[0].x + (mouse.current.x - points[0].x) * 0.2,
-        y: points[0].y + (mouse.current.y - points[0].y) * 0.2,
+        x: firstPoint.x + (mouse.current.x - firstPoint.x) * 0.2,
+        y: firstPoint.y + (mouse.current.y - firstPoint.y) * 0.2,
       };
 
       // Much slower lerp subsequent points for a long, fluid, slow-moving tail
-      for (let i = 1; i < TRAIL_LENGTH; i++) {
+      for (let i = 1; i < TRAIL_LENGTH; i += 1) {
+        const curr = points[i];
+        const prev = points[i - 1];
+        if (!curr || !prev) {
+          continue;
+        }
+
         points[i] = {
-          x: points[i].x + (points[i - 1].x - points[i].x) * 0.15,
-          y: points[i].y + (points[i - 1].y - points[i].y) * 0.15,
+          x: curr.x + (prev.x - curr.x) * 0.15,
+          y: curr.y + (prev.y - curr.y) * 0.15,
         };
       }
 
       // Update individual path segments directly in the DOM using Bezier curves
-      for (let i = 0; i < TRAIL_LENGTH - 1; i++) {
+      for (let i = 0; i < TRAIL_LENGTH - 1; i += 1) {
         const path = pathsRef.current[i];
-        if (!path) continue;
+        if (!path) {
+          continue;
+        }
 
         let d = '';
 
         if (i === 0) {
-          // First segment: from point 0 to the midpoint of 0 and 1
-          const nextMidX = (points[0].x + points[1].x) / 2;
-          const nextMidY = (points[0].y + points[1].y) / 2;
-          d = `M ${points[0].x},${points[0].y} L ${nextMidX},${nextMidY}`;
+          const [p0, p1] = points;
+          if (p0 && p1) {
+            // First segment: from point 0 to the midpoint of 0 and 1
+            const nextMidX = (p0.x + p1.x) / 2;
+            const nextMidY = (p0.y + p1.y) / 2;
+            d = `M ${p0.x},${p0.y} L ${nextMidX},${nextMidY}`;
+          }
         } else {
-          // Middle segments: from prev midpoint, using current point as control, to next midpoint
-          const prevMidX = (points[i - 1].x + points[i].x) / 2;
-          const prevMidY = (points[i - 1].y + points[i].y) / 2;
-          const nextMidX = (points[i].x + points[i + 1].x) / 2;
-          const nextMidY = (points[i].y + points[i + 1].y) / 2;
-          d = `M ${prevMidX},${prevMidY} Q ${points[i].x},${points[i].y} ${nextMidX},${nextMidY}`;
+          const prev = points[i - 1];
+          const curr = points[i];
+          const next = points[i + 1];
+          if (prev && curr && next) {
+            // Middle segments: from prev midpoint, using current point as control, to next midpoint
+            const prevMidX = (prev.x + curr.x) / 2;
+            const prevMidY = (prev.y + curr.y) / 2;
+            const nextMidX = (curr.x + next.x) / 2;
+            const nextMidY = (curr.y + next.y) / 2;
+            d = `M ${prevMidX},${prevMidY} Q ${curr.x},${curr.y} ${nextMidX},${nextMidY}`;
+          }
         }
 
         path.setAttribute('d', d);
@@ -74,11 +99,11 @@ export function CursorTrail() {
     const onFirstMove = (e: PointerEvent) => {
       const { clientX, clientY } = e;
       mouse.current = { x: clientX, y: clientY };
-      trail.current = Array(TRAIL_LENGTH).fill({ x: clientX, y: clientY });
+      trail.current = Array.from({ length: TRAIL_LENGTH }, () => ({ x: clientX, y: clientY }));
       window.removeEventListener('pointermove', onFirstMove);
       rafId.current = requestAnimationFrame(render);
     };
-    
+
     window.addEventListener('pointermove', onFirstMove, { passive: true });
 
     return () => {
@@ -89,8 +114,12 @@ export function CursorTrail() {
   }, []);
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-[9999] overflow-hidden hidden md:block">
-      <svg ref={svgRef} className="h-full w-full" style={{ filter: 'drop-shadow(0px 2px 4px rgba(0,0,0,0.1))' }}>
+    <div className="pointer-events-none fixed inset-0 z-[9999] hidden overflow-hidden md:block">
+      <svg
+        ref={svgRef}
+        className="h-full w-full"
+        style={{ filter: 'drop-shadow(0px 2px 4px rgba(0,0,0,0.1))' }}
+      >
         {Array.from({ length: TRAIL_LENGTH - 1 }).map((_, index) => {
           // Calculate tapering effect (thicker at head, thinner at tail)
           const ratio = 1 - index / (TRAIL_LENGTH - 1);

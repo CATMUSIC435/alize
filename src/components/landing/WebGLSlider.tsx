@@ -77,6 +77,7 @@ type WebGLSliderProps = {
   controlsLeft?: boolean;
   noRounded?: boolean;
   autoplay?: boolean;
+  className?: string;
 };
 
 export function WebGLSlider({
@@ -90,6 +91,7 @@ export function WebGLSlider({
   controlsLeft = false,
   noRounded = false,
   autoplay = false,
+  className = '',
 }: WebGLSliderProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -274,12 +276,11 @@ export function WebGLSlider({
 
   const formattedIndex = String(currentIndex + 1).padStart(2, '0');
 
-  let containerClasses =
-    'relative mx-auto mb-20 aspect-[4/3] w-full max-w-[1000px] md:mb-28 md:aspect-[16/9]';
+  let containerClasses = `relative mx-auto mb-20 aspect-[4/3] w-full max-w-[1000px] md:mb-28 md:aspect-[16/9] ${className}`;
   if (absoluteFill) {
-    containerClasses = 'absolute inset-0 h-full w-full';
+    containerClasses = `absolute inset-0 h-full w-full ${className}`;
   } else if (fullHeight && alignRight) {
-    containerClasses = 'relative ml-auto w-[95%] md:w-[85%] h-[80vh] md:h-[90vh]';
+    containerClasses = `relative ml-auto w-[95%] md:w-[85%] h-[80vh] md:h-[90vh] ${className}`;
   }
 
   const viewportClasses = `h-full w-full overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.08)] ${noRounded ? 'rounded-none' : 'rounded-xl'}`;

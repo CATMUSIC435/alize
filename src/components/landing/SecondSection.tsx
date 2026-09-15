@@ -4,8 +4,9 @@ import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { Playfair_Display, Inter } from 'next/font/google';
 import { useRef, useEffect } from 'react';
-import { WebGLSlider } from './WebGLSlider';
 import { useUIStore } from '@/store/useUIStore';
+import { SandRipples } from './SandRipples';
+import { WebGLSlider } from './WebGLSlider';
 
 const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400', '500', '600', '700'] });
 const inter = Inter({ subsets: ['latin'], weight: ['400', '500', '600'] });
@@ -13,7 +14,7 @@ const inter = Inter({ subsets: ['latin'], weight: ['400', '500', '600'] });
 export function SecondSection() {
   const t = useTranslations('Index');
   const sectionRef = useRef<HTMLElement>(null);
-  
+
   const setActiveSection = useUIStore((state) => state.setActiveSection);
   const isInView = useInView(sectionRef, { amount: 0.5 });
 
@@ -32,10 +33,26 @@ export function SecondSection() {
   // Push the content up slightly for a parallax feel
   const contentY = useTransform(scrollYProgress, [0, 1], [100, 0]);
 
+  // Dynamically animate the SVG curve from a full dome to a flat horizontal line shifted upwards
+  const curveTextPathData = useTransform(
+    scrollYProgress,
+    [0.1, 0.9],
+    ['M 0,960 Q 960,-960 1920,960', 'M 0,-200 Q 960,-200 1920,-200'],
+  );
+
+  const curveBgPathData = useTransform(
+    scrollYProgress,
+    [0.1, 0.9],
+    [
+      'M 0,960 Q 960,-960 1920,960 L 1920,960 L 0,960 Z',
+      'M 0,-200 Q 960,-200 1920,-200 L 1920,960 L 0,960 Z',
+    ],
+  );
+
   return (
     <section
       ref={sectionRef}
-      className="relative z-40 mt-[20vh] flex min-h-screen lg:min-h-[150vh] w-full flex-col bg-transparent"
+      className="relative z-40 mt-[20vh] flex min-h-screen w-full flex-col bg-transparent lg:min-h-[150vh]"
     >
       <motion.div
         className="relative z-10 mx-auto flex w-full flex-col items-center"
@@ -46,14 +63,22 @@ export function SecondSection() {
           viewBox="0 0 1920 960"
           className="-mb-[1px] block h-auto w-full"
           preserveAspectRatio="xMidYMax meet"
+          overflow="visible"
         >
           <defs>
             {/* Path specifically for text, without the Z closing line, so 50% is perfectly at the top arc */}
-            <path id="curve-text-path" d="M 0,960 A 960,960 0 0,1 1920,960" />
+            <motion.path id="curve-text-path" d={curveTextPathData} />
+
+            {/* Gradient matching the bg-textured-sand class */}
+            <linearGradient id="sandGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#F0EBE1" />
+              <stop offset="50%" stopColor="#EBD0B3" />
+              <stop offset="100%" stopColor="#E1AC88" />
+            </linearGradient>
           </defs>
 
-          {/* Blue background curve (Perfect Semi-Circle) */}
-          <path d="M 0,960 A 960,960 0 0,1 1920,960 Z" fill="#B3C6D3" />
+          {/* Sand background curve (Perfect Semi-Circle) */}
+          <motion.path d={curveBgPathData} fill="url(#sandGrad)" />
 
           {/* Text following the curve, pushed down (dy) to sit inside the blue area */}
           <text
@@ -66,7 +91,9 @@ export function SecondSection() {
           </text>
         </svg>
         {/* Solid blue background for the rest of the section */}
-        <div className="flex w-full flex-col items-center bg-[#B3C6D3] px-4 pt-0 pb-24 md:px-16 md:pb-48">
+        <div className="bg-textured-sand relative flex w-full flex-col items-center px-4 pt-0 pb-24 md:px-16 md:pb-48">
+          <SandRipples position="left" />
+          <SandRipples position="right" />
           {/* Wrapper to pull content UP into the empty blue space of the SVG semi-circle */}
           {/* On mobile, we pull up much less because the curve is physically shorter (only 50vw tall) */}
           <div className="relative z-20 -mt-[5vw] flex w-full flex-col items-center md:-mt-[25vw] lg:-mt-[22vw]">
@@ -124,16 +151,25 @@ export function SecondSection() {
                 {t('real_life_location')}
               </h2>
 
-              {/* Image Slider Component */}
-              <WebGLSlider
-                images={[
-                  'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1920',
-                  'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1920',
-                  'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80&w=1920',
-                ]}
-                autoplay
-                noRounded
-              />
+              {/* Image Slider Component wrapped with scale animation */}
+              <motion.div
+                className="flex w-full justify-center"
+                initial={{ scale: 0.9, opacity: 0 }}
+                whileInView={{ scale: 1, opacity: 1 }}
+                viewport={{ once: true, margin: '-100px' }}
+                transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <WebGLSlider
+                  images={[
+                    'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1920',
+                    'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1920',
+                    'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80&w=1920',
+                  ]}
+                  autoplay
+                  noRounded
+                  className="w-[85vw] !max-w-[1150px]"
+                />
+              </motion.div>
 
               <p
                 className={`mt-8 max-w-[600px] text-center text-xs leading-[1.8] font-light text-[#2D3346] sm:text-sm md:mt-12 md:text-base ${inter.className}`}

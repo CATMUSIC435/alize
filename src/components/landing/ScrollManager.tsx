@@ -11,7 +11,7 @@ export function ScrollManager() {
     // Only update Zustand store if there's an actual change to avoid unnecessary renders
     const isPastHero = latest > window.innerHeight * 1.5;
     const currentTheme = useUIStore.getState().headerTheme;
-    
+
     if (isPastHero && currentTheme !== 'dark') {
       setHeaderTheme('dark');
     } else if (!isPastHero && currentTheme !== 'light') {

@@ -13,7 +13,13 @@ export const useUIStore = create<UIState>((set) => ({
   headerTheme: 'light',
   activeSection: 'hero',
   isMenuOpen: false,
-  setHeaderTheme: (theme) => set({ headerTheme: theme }),
-  setActiveSection: (section) => set({ activeSection: section }),
-  setIsMenuOpen: (isOpen) => set({ isMenuOpen: isOpen }),
+  setHeaderTheme: (theme) => {
+    set({ headerTheme: theme });
+  },
+  setActiveSection: (section) => {
+    set({ activeSection: section });
+  },
+  setIsMenuOpen: (isOpen) => {
+    set({ isMenuOpen: isOpen });
+  },
 }));

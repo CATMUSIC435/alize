@@ -12,10 +12,18 @@ export const CurrentCount = async () => {
   // The default value is 0 when there is no `x-e2e-random-id` header
   const headersList = await headers();
   const id = Number(headersList.get('x-e2e-random-id')) || 0;
-  const result = await db.query.counterSchema.findFirst({
-    where: eq(counterSchema.id, id),
-  });
-  const count = result?.count ?? 0;
+  let count = 0;
+
+  if (db?.query?.counterSchema) {
+    try {
+      const result = await db.query.counterSchema.findFirst({
+        where: eq(counterSchema.id, id),
+      });
+      count = result?.count ?? 0;
+    } catch {
+      count = 0;
+    }
+  }
 
   logger.info('Counter fetched successfully');
 

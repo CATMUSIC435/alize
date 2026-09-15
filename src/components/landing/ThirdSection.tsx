@@ -15,7 +15,7 @@ export function ThirdSection() {
   const t = useTranslations('Index');
 
   return (
-    <section className="relative lg:h-screen min-h-[600px] w-full overflow-hidden bg-[#151926] md:min-h-[800px]">
+    <section className="relative min-h-[600px] w-full overflow-hidden bg-[#151926] md:min-h-[800px] lg:h-screen">
       {/* Background Image */}
       <div className="absolute inset-0 h-full w-full">
         <Image
@@ -25,8 +25,8 @@ export function ThirdSection() {
           className="object-cover object-center"
           sizes="100vw"
         />
-        {/* Top Fade from #B3C6D3 to transparent to blend sections seamlessly */}
-        <div className="pointer-events-none absolute top-0 left-0 z-10 h-24 w-full bg-gradient-to-b from-[#B3C6D3] via-[#B3C6D3]/80 to-transparent md:h-64"></div>
+        {/* Top Fade matching the sand gradient to blend sections seamlessly */}
+        <div className="pointer-events-none absolute top-0 left-0 z-10 h-24 w-full bg-gradient-to-r from-[#F0EBE1] via-[#EBD0B3] to-[#E1AC88] [mask-image:linear-gradient(to_bottom,black_10%,transparent)] [-webkit-mask-image:linear-gradient(to_bottom,black_10%,transparent)] md:h-64"></div>
         {/* Soft Gradient Overlay for better text readability */}
         <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
       </div>

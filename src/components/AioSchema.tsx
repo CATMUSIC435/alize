@@ -1,25 +1,24 @@
-import React from 'react';
-
 type AioSchemaProps = {
   type: 'WebPage' | 'CollectionPage' | 'ApartmentComplex' | 'RealEstateListing' | 'Organization';
   name: string;
   description: string;
   url: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  additionalData?: Record<string, any>;
+  additionalData?: Record<string, unknown>;
 };
 
 /**
- * A generalized helper component to generate JSON-LD schema (AIO) for any page.
+ * Generates JSON-LD schema (AIO) for any page.
+ * @param props The component properties.
+ * @returns The JSON-LD script element.
  */
-export function AioSchema({ type, name, description, url, additionalData = {} }: AioSchemaProps) {
+export function AioSchema(props: AioSchemaProps) {
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': type,
-    name,
-    description,
-    url,
-    ...additionalData,
+    '@type': props.type,
+    name: props.name,
+    description: props.description,
+    url: props.url,
+    ...props.additionalData,
   };
 
   return (

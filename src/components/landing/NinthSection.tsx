@@ -13,7 +13,7 @@ export function NinthSection() {
   const items = [t('developer'), t('sales_marketing'), t('license_obtained'), t('year_2026')];
 
   return (
-    <section className="relative flex w-full flex-col items-center justify-start overflow-hidden bg-[#F4F3ED] py-32 text-[#151926] md:py-48">
+    <section className="bg-textured-sand relative flex w-full flex-col items-center justify-start overflow-hidden py-32 text-[#151926] md:py-48">
       {/* Top indicator: RETURN YEAR AFTER YEAR */}
       <div className="sticky top-32 z-20 flex flex-col items-center justify-center">
         <h4
@@ -51,7 +51,7 @@ export function NinthSection() {
       </div>
 
       {/* Right side bleeding flowers */}
-      <div className="pointer-events-none absolute top-1/3 lg:top-1/2 right-[-10%] lg:right-0 z-0 w-[80vw] max-w-[700px] -translate-y-1/2 rotate-y-[175deg] rotate-z-[-40deg] lg:rotate-z-[-30deg] md:right-[-10em] md:w-[55vw]">
+      <div className="pointer-events-none absolute top-1/3 right-[-10%] z-0 w-[80vw] max-w-[700px] -translate-y-1/2 rotate-y-[175deg] rotate-z-[-40deg] md:right-[-10em] md:w-[55vw] lg:top-1/2 lg:right-0 lg:rotate-z-[-30deg]">
         <video
           autoPlay
           loop

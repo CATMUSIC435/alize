@@ -63,7 +63,7 @@ export function ArchitectureSplit() {
   const rightFlowerScale = useTransform(scrollYProgress, [0.3, 0.5], [1, 2.5]);
 
   return (
-    <div ref={containerRef} className="relative h-[300vh] w-full bg-[#F4F3ED]">
+    <div ref={containerRef} className="bg-textured-sand relative h-[300vh] w-full">
       <div className="sticky top-0 flex h-screen w-full items-center justify-center overflow-hidden">
         {/* Split Image Container */}
         <motion.div

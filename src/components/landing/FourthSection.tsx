@@ -27,18 +27,17 @@ function VerticalTimelinePoint({
   top: string;
 }) {
   const isLeft = align === 'left';
-  
+
   return (
-    <div 
-      className={`absolute w-full flex items-center justify-between md:justify-center ${isLeft ? 'flex-row' : 'flex-row-reverse'}`}
+    <div
+      className={`absolute flex w-full items-center justify-between md:justify-center ${isLeft ? 'flex-row' : 'flex-row-reverse'}`}
       style={{ top, transform: 'translateY(-50%)' }}
     >
-      
       {/* Spacer for one side on desktop */}
-      <div className="hidden md:block w-1/2" />
-      
+      <div className="hidden w-1/2 md:block" />
+
       {/* The Dot on the central timeline */}
-      <div className="absolute left-[15px] md:left-1/2 top-1/2 z-20 flex h-4 w-4 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[#F4F3EF] ring-1 ring-[#151926]">
+      <div className="absolute top-1/2 left-[15px] z-20 flex h-4 w-4 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[#F4F3EF] ring-1 ring-[#151926] md:left-1/2">
         <motion.div
           initial={{ scale: 0 }}
           whileInView={{ scale: 1 }}
@@ -54,7 +53,7 @@ function VerticalTimelinePoint({
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true, margin: '-20%' }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
-        className={`w-[calc(100%-40px)] md:w-[45%] flex ${isLeft ? 'md:justify-end md:pr-12' : 'md:justify-start md:pl-12'} ml-10 md:ml-0`}
+        className={`flex w-[calc(100%-40px)] md:w-[45%] ${isLeft ? 'md:justify-end md:pr-12' : 'md:justify-start md:pl-12'} ml-10 md:ml-0`}
       >
         <div className="relative flex min-h-[160px] w-full max-w-[320px] flex-col justify-between rounded-sm bg-[#F4F3EC] p-5 shadow-2xl md:min-h-[220px] md:p-8">
           {/* Inner Decorative Chamfered Border */}
@@ -103,7 +102,7 @@ function VerticalTimelinePoint({
 
 export function FourthSection() {
   const t = useTranslations('Index');
-  
+
   // Ref for parallax image
   const imageContainerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -113,17 +112,16 @@ export function FourthSection() {
   const imageY = useTransform(scrollYProgress, [0, 1], ['-15%', '15%']);
 
   return (
-    <section className="relative z-20 bg-[#F4F3EF] overflow-hidden w-full">
-      
+    <section className="bg-textured-sand relative z-20 w-full overflow-hidden">
       {/* Background Flowers spanning the whole section */}
-      <div className="absolute inset-0 pointer-events-none z-0">
-         <FlowerOverlay />
+      <div className="pointer-events-none absolute inset-0 z-0">
+        <FlowerOverlay />
       </div>
 
-      {/* 
+      {/*
         BLOCK 1: The Concept 
       */}
-      <div className="relative min-h-[90vh] flex flex-col items-center justify-center py-24 px-4 w-full">
+      <div className="relative flex min-h-[90vh] w-full flex-col items-center justify-center px-4 py-24">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -235,21 +233,20 @@ export function FourthSection() {
         </motion.div>
       </div>
 
-      {/* 
+      {/*
         BLOCK 2: New Golden Mile & Image 
       */}
-      <div className="w-full relative py-12 md:py-32">
-        <div className="mx-auto w-full max-w-[1400px] px-4 md:px-8 flex flex-col md:flex-row items-center justify-between gap-12">
-          
+      <div className="relative w-full py-12 md:py-32">
+        <div className="mx-auto flex w-full max-w-[1400px] flex-col items-center justify-between gap-12 px-4 md:flex-row md:px-8">
           {/* Left Text */}
-          <div className="w-full md:w-1/2 flex flex-col items-start pt-10 md:pt-0">
+          <div className="flex w-full flex-col items-start pt-10 md:w-1/2 md:pt-0">
             <span
               className={`mb-4 text-sm font-bold tracking-[0.5em] text-[#151926] uppercase md:mb-8 md:text-[14px] ${playfair.className}`}
             >
               {t('spain')}
             </span>
             <h2
-              className={`text-left text-[12vw] leading-[1] font-medium tracking-tight text-[#151926] uppercase sm:text-[10vw] md:text-[8vw] lg:text-[100px] md:leading-[0.85] md:tracking-[-0.04em] ${playfair.className}`}
+              className={`text-left text-[12vw] leading-[1] font-medium tracking-tight text-[#151926] uppercase sm:text-[10vw] md:text-[8vw] md:leading-[0.85] md:tracking-[-0.04em] lg:text-[100px] ${playfair.className}`}
             >
               {t('new_text')}
               <br />
@@ -257,8 +254,8 @@ export function FourthSection() {
               <br />
               {t('mile_text')}
             </h2>
-            
-            <div className="mt-12 md:mt-24 max-w-[400px]">
+
+            <div className="mt-12 max-w-[400px] md:mt-24">
               <h3
                 className={`mb-4 text-xl tracking-tight text-[#151926] uppercase md:mb-6 md:text-3xl ${playfair.className}`}
               >
@@ -270,7 +267,7 @@ export function FourthSection() {
                 {t('between_marbella_desc')}
               </p>
             </div>
-            
+
             <div className="mt-10 md:mt-16">
               <CircleButton
                 text={t('view_available')}
@@ -281,10 +278,10 @@ export function FourthSection() {
           </div>
 
           {/* Right Image */}
-          <div className="w-full md:w-1/2 flex justify-end">
-            <div 
+          <div className="flex w-full justify-end md:w-1/2">
+            <div
               ref={imageContainerRef}
-              className="relative w-full max-w-[600px] h-[60vh] md:h-[80vh] overflow-hidden bg-gray-200"
+              className="relative h-[60vh] w-full max-w-[600px] overflow-hidden bg-gray-200 md:h-[80vh]"
             >
               <motion.div
                 style={{ y: imageY }}
@@ -300,18 +297,16 @@ export function FourthSection() {
               </motion.div>
             </div>
           </div>
-          
         </div>
       </div>
 
-      {/* 
+      {/*
         BLOCK 3: Vertical Timeline 
       */}
-      <div className="w-full relative py-20 md:py-32">
+      <div className="relative w-full py-20 md:py-32">
         <div className="mx-auto w-full max-w-[1200px] px-4 md:px-8">
-          
           {/* Timeline Title */}
-          <div className="mb-20 md:mb-32 flex flex-col items-center justify-center">
+          <div className="mb-20 flex flex-col items-center justify-center md:mb-32">
             <h2
               className={`text-center text-[8vw] leading-none tracking-tighter text-[#151926] uppercase md:text-[5vw] lg:text-[70px] ${playfair.className}`}
             >
@@ -323,44 +318,81 @@ export function FourthSection() {
             >
               {t('yours')}
             </span>
-            <span className={`mt-6 text-sm md:text-base font-light tracking-widest uppercase text-[#151926] ${inter.className}`}>
+            <span
+              className={`mt-6 text-sm font-light tracking-widest text-[#151926] uppercase md:text-base ${inter.className}`}
+            >
               {t('this_year')}
             </span>
           </div>
 
           {/* Timeline Container */}
-          <div className="relative w-full h-[1200px] sm:h-[1400px] md:h-[1800px] mt-24 mb-10">
+          <div className="relative mt-24 mb-10 h-[1200px] w-full sm:h-[1400px] md:h-[1800px]">
             {/* The Wavy SVG Line */}
-            <div className="absolute left-[15px] md:left-1/2 top-0 bottom-0 w-[40px] md:w-[280px] -translate-x-1/2 z-0">
-               <svg
-                 className="absolute inset-0 h-full w-full overflow-visible"
-                 preserveAspectRatio="none"
-                 viewBox="0 0 100 1000"
-               >
-                 <motion.path
-                   initial={{ pathLength: 0 }}
-                   whileInView={{ pathLength: 1 }}
-                   viewport={{ once: true, margin: "0px" }}
-                   transition={{ duration: 2.5, ease: 'easeInOut' }}
-                   d="M 50 0 C 120 70 120 130 50 200 C -20 270 -20 330 50 400 C 120 470 120 530 50 600 C -20 670 -20 730 50 800 C 120 870 120 930 50 1000"
-                   fill="none"
-                   stroke="#151926"
-                   strokeWidth="1.5"
-                   strokeLinecap="round"
-                 />
-               </svg>
+            <div className="absolute top-0 bottom-0 left-[15px] z-0 w-[40px] -translate-x-1/2 md:left-1/2 md:w-[280px]">
+              <svg
+                className="absolute inset-0 h-full w-full overflow-visible"
+                preserveAspectRatio="none"
+                viewBox="0 0 100 1000"
+              >
+                <motion.path
+                  initial={{ pathLength: 0 }}
+                  whileInView={{ pathLength: 1 }}
+                  viewport={{ once: true, margin: '0px' }}
+                  transition={{ duration: 2.5, ease: 'easeInOut' }}
+                  d="M 50 0 C 120 70 120 130 50 200 C -20 270 -20 330 50 400 C 120 470 120 530 50 600 C -20 670 -20 730 50 800 C 120 870 120 930 50 1000"
+                  fill="none"
+                  stroke="#151926"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                />
+              </svg>
             </div>
 
             {/* Timeline Points */}
             <div className="absolute inset-0 z-10 w-full">
-              <VerticalTimelinePoint top="0%" align="left" label={t('timeline_gibraltar')} time={t('min_50')} description={t('timeline_desc')} />
-              <VerticalTimelinePoint top="20%" align="right" label={t('timeline_estepona')} time={t('min_10')} description={t('timeline_desc')} />
-              <VerticalTimelinePoint top="40%" align="left" label={t('timeline_kempinski')} time={t('min_5')} description={t('timeline_desc')} />
-              <VerticalTimelinePoint top="60%" align="right" label={t('timeline_puerto_banus')} time={t('min_20')} description={t('timeline_desc')} />
-              <VerticalTimelinePoint top="80%" align="left" label={t('timeline_marbella')} time={t('min_25')} description={t('timeline_desc')} />
-              <VerticalTimelinePoint top="100%" align="right" label={t('timeline_malaga')} time={t('min_45')} description={t('timeline_desc')} />
+              <VerticalTimelinePoint
+                top="0%"
+                align="left"
+                label={t('timeline_gibraltar')}
+                time={t('min_50')}
+                description={t('timeline_desc')}
+              />
+              <VerticalTimelinePoint
+                top="20%"
+                align="right"
+                label={t('timeline_estepona')}
+                time={t('min_10')}
+                description={t('timeline_desc')}
+              />
+              <VerticalTimelinePoint
+                top="40%"
+                align="left"
+                label={t('timeline_kempinski')}
+                time={t('min_5')}
+                description={t('timeline_desc')}
+              />
+              <VerticalTimelinePoint
+                top="60%"
+                align="right"
+                label={t('timeline_puerto_banus')}
+                time={t('min_20')}
+                description={t('timeline_desc')}
+              />
+              <VerticalTimelinePoint
+                top="80%"
+                align="left"
+                label={t('timeline_marbella')}
+                time={t('min_25')}
+                description={t('timeline_desc')}
+              />
+              <VerticalTimelinePoint
+                top="100%"
+                align="right"
+                label={t('timeline_malaga')}
+                time={t('min_45')}
+                description={t('timeline_desc')}
+              />
             </div>
-            
           </div>
         </div>
       </div>

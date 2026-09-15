@@ -12,7 +12,7 @@ export function BackgroundAnimation() {
 
   return (
     <motion.div
-      className="fixed inset-0 z-0 h-[120vh] w-full bg-[#2c142c]"
+      className="fixed inset-0 z-0 h-[120vh] w-full bg-[#0D2D40]"
       style={{
         y,
         willChange: 'transform',
@@ -25,7 +25,7 @@ export function BackgroundAnimation() {
           initial={{ scale: 1.3 }}
           animate={{ scale: 1 }}
           transition={{
-            duration: 4,
+            duration: 5,
             ease: [0.76, 0, 0.24, 1],
             delay: 0.2,
           }}
@@ -51,6 +51,12 @@ export function BackgroundAnimation() {
       <div className="pointer-events-none absolute inset-0 z-10">
         <svg width="100%" height="100%">
           <defs>
+            <linearGradient id="loadingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#143A52" />
+              <stop offset="50%" stopColor="#0D2D40" />
+              <stop offset="100%" stopColor="#061824" />
+            </linearGradient>
+
             <mask id="bottomArchMask">
               <rect width="100%" height="100%" fill="white" />
               {/* Nested SVG moves origin to bottom-center of the screen */}
@@ -62,9 +68,9 @@ export function BackgroundAnimation() {
                     scale: [1, 1, 1, 40],
                   }}
                   transition={{
-                    duration: 4,
-                    times: [0, 0.3, 0.6, 1], // Slide up (30%), Pause (30%), Expand (40%)
-                    ease: 'easeInOut',
+                    duration: 5,
+                    times: [0, 0.25, 0.45, 1], // Slide up (1.25s), Pause (1s), Expand (2.75s)
+                    ease: ['easeOut', 'linear', [0.45, 0, 0.15, 1]], // Softer expansion curve
                     delay: 0.2,
                   }}
                 >
@@ -76,8 +82,8 @@ export function BackgroundAnimation() {
             </mask>
           </defs>
 
-          {/* Solid Dark Burgundy Overlay */}
-          <rect width="100%" height="100%" fill="#2c142c" mask="url(#bottomArchMask)" />
+          {/* Solid Dark Overlay using linear gradient */}
+          <rect width="100%" height="100%" fill="url(#loadingGrad)" mask="url(#bottomArchMask)" />
 
           {/* Decorative Borders (Animated identically to the mask) */}
           <svg x="50%" y="100%" overflow="visible">
@@ -89,25 +95,49 @@ export function BackgroundAnimation() {
                 opacity: [1, 1, 1, 0], // Fades out the stroke as it expands
               }}
               transition={{
-                duration: 4,
-                times: [0, 0.3, 0.6, 1],
-                ease: 'easeInOut',
+                duration: 5,
+                times: [0, 0.25, 0.45, 1],
+                ease: ['easeOut', 'linear', [0.45, 0, 0.15, 1]],
                 delay: 0.2,
               }}
             >
-              {/* Stroke 1 (Offset +20px -> Radius 195) */}
+              {/* Stroke 1 (Offset +12px -> Radius 187) */}
               <path
-                d="M -195 0 L -195 -350 A 195 195 0 0 1 195 -350 L 195 0 Z"
+                d="M -187 0 L -187 -350 A 187 187 0 0 1 187 -350 L 187 0 Z"
                 fill="none"
-                stroke="rgba(255, 255, 255, 0.4)"
+                stroke="rgba(255, 255, 255, 0.45)"
                 strokeWidth="1"
                 vectorEffect="non-scaling-stroke"
               />
-              {/* Stroke 2 (Offset +40px -> Radius 215) */}
+              {/* Stroke 2 (Offset +28px -> Radius 203) */}
               <path
-                d="M -215 0 L -215 -350 A 215 215 0 0 1 215 -350 L 215 0 Z"
+                d="M -203 0 L -203 -350 A 203 203 0 0 1 203 -350 L 203 0 Z"
                 fill="none"
-                stroke="rgba(255, 255, 255, 0.3)"
+                stroke="rgba(255, 255, 255, 0.35)"
+                strokeWidth="1"
+                vectorEffect="non-scaling-stroke"
+              />
+              {/* Stroke 3 (Offset +48px -> Radius 223) */}
+              <path
+                d="M -223 0 L -223 -350 A 223 223 0 0 1 223 -350 L 223 0 Z"
+                fill="none"
+                stroke="rgba(255, 255, 255, 0.25)"
+                strokeWidth="1"
+                vectorEffect="non-scaling-stroke"
+              />
+              {/* Stroke 4 (Offset +72px -> Radius 247) */}
+              <path
+                d="M -247 0 L -247 -350 A 247 247 0 0 1 247 -350 L 247 0 Z"
+                fill="none"
+                stroke="rgba(255, 255, 255, 0.15)"
+                strokeWidth="1"
+                vectorEffect="non-scaling-stroke"
+              />
+              {/* Stroke 5 (Offset +100px -> Radius 275) */}
+              <path
+                d="M -275 0 L -275 -350 A 275 275 0 0 1 275 -350 L 275 0 Z"
+                fill="none"
+                stroke="rgba(255, 255, 255, 0.08)"
                 strokeWidth="1"
                 vectorEffect="non-scaling-stroke"
               />

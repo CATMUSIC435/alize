@@ -20,6 +20,10 @@ export const PUT = async (request: Request) => {
   const headersList = await headers();
   const id = Number(headersList.get('x-e2e-random-id')) || 0;
 
+  if (!db) {
+    return NextResponse.json({ count: parse.data.increment });
+  }
+
   const count = await db
     .insert(counterSchema)
     .values({ id, count: parse.data.increment })

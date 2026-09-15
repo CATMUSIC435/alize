@@ -30,7 +30,7 @@ export function FlowerOverlay() {
         muted
         playsInline
         aria-hidden="true"
-        className="absolute top-[16%] lg:top-[8%] right-0 w-[50vw] md:w-[60vw] max-w-[750px] translate-x-[20%] rotate-90 object-contain"
+        className="absolute top-[16%] right-0 w-[50vw] max-w-[750px] translate-x-[20%] rotate-90 object-contain md:w-[60vw] lg:top-[8%]"
         src="/bougainvillea-flowers_02.webm"
       />
 
@@ -41,7 +41,7 @@ export function FlowerOverlay() {
         muted
         playsInline
         aria-hidden="true"
-        className="absolute top-[16%] lg:top-[8%] left-[-8%] lg:hidden w-[50vw] md:w-[60vw] max-w-[750px] translate-x-[20%] rotate-90 rotate-x-[-180deg] object-contain"
+        className="absolute top-[16%] left-[-8%] w-[50vw] max-w-[750px] translate-x-[20%] rotate-90 rotate-x-[-180deg] object-contain md:w-[60vw] lg:top-[8%] lg:hidden"
         src="/bougainvillea-flowers_02.webm"
       />
 
@@ -52,7 +52,7 @@ export function FlowerOverlay() {
         muted
         playsInline
         aria-hidden="true"
-        className="absolute top-[52%] lg:top-[45%] left-[-9%] w-[50vw] rotate-z-[-40deg] max-w-[750px] object-contain"
+        className="absolute top-[52%] left-[-9%] w-[50vw] max-w-[750px] rotate-z-[-40deg] object-contain lg:top-[45%]"
         src="/bougainvillea-flowers_03.webm"
       />
 
@@ -63,7 +63,7 @@ export function FlowerOverlay() {
         loop
         muted
         playsInline
-        className="absolute bottom-[2%] left-0 w-[50vw] max-w-[700px] -scale-y-100 rotate-180 rotate-y-[-180deg] rotate-z-[-25deg] -translate-x-[20%] object-contain"
+        className="absolute bottom-[2%] left-0 w-[50vw] max-w-[700px] -translate-x-[20%] -scale-y-100 rotate-180 rotate-y-[-180deg] rotate-z-[-25deg] object-contain"
         src="/bougainvillea-flowers_03.webm"
       />
     </motion.div>

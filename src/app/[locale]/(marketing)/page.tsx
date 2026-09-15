@@ -10,6 +10,7 @@ import { Header } from '@/components/landing/Header';
 import { HotspotLayer } from '@/components/landing/HotspotLayer';
 import { NinthSection } from '@/components/landing/NinthSection';
 import { ScrollIndicator } from '@/components/landing/ScrollIndicator';
+import { ScrollManager } from '@/components/landing/ScrollManager';
 import { SecondSection } from '@/components/landing/SecondSection';
 import { SeventhSection } from '@/components/landing/SeventhSection';
 import { SixthSection } from '@/components/landing/SixthSection';
@@ -17,9 +18,10 @@ import { SmoothScroll } from '@/components/landing/SmoothScroll';
 import { TenthSection } from '@/components/landing/TenthSection';
 import { ThirdSection } from '@/components/landing/ThirdSection';
 import { TypographyOverlay } from '@/components/landing/TypographyOverlay';
-import { ScrollManager } from '@/components/landing/ScrollManager';
 
-export async function generateMetadata(props: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+export async function generateMetadata(props: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
   const { locale } = await props.params;
   const t = await getTranslations({ locale, namespace: 'Index' });
 
@@ -46,7 +48,9 @@ export async function generateMetadata(props: { params: Promise<{ locale: string
       card: 'summary_large_image',
       title: t('meta_title'),
       description: t('meta_description'),
-      images: ['https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2070&auto=format&fit=crop'],
+      images: [
+        'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2070&auto=format&fit=crop',
+      ],
     },
   };
 }
@@ -78,7 +82,8 @@ export default async function EraResidencePage(props: { params: Promise<{ locale
       latitude: 36.4274,
       longitude: -5.1458,
     },
-    image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2070&auto=format&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2070&auto=format&fit=crop',
     containsPlace: [
       {
         '@type': 'Apartment',
@@ -124,8 +129,8 @@ export default async function EraResidencePage(props: { params: Promise<{ locale
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <ScrollIndicator />
-      
-      {/* 
+
+      {/*
         Semantic HTML Fix: Wrap all primary page content in <main> 
         The hero section is now <header> within the page 
       */}

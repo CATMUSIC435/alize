@@ -91,7 +91,7 @@ export function SeventhSection() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 1, ease: 'easeOut', delay: 0.2 }}
-            className="flex flex-col items-end md:items-start space-y-2 md:space-y-2"
+            className="flex flex-col items-end space-y-2 md:items-start md:space-y-2"
           >
             {amenities.map((amenity, index) => {
               const isActive = index === activeIdx;
@@ -102,14 +102,14 @@ export function SeventhSection() {
                     onClick={() => {
                       setActiveIdx(index);
                     }}
-                    className={`relative w-full cursor-pointer text-right md:text-left text-sm tracking-wider uppercase transition-all duration-500 sm:text-lg md:text-xl lg:text-[22px] ${playfair.className} origin-top [transform:scaleY(1)] md:[transform:scaleY(1.15)] ${
+                    className={`relative w-full cursor-pointer text-right text-sm tracking-wider uppercase transition-all duration-500 sm:text-lg md:text-left md:text-xl lg:text-[22px] ${playfair.className} origin-top [transform:scaleY(1)] md:[transform:scaleY(1.15)] ${
                       isActive ? 'text-white' : 'text-white/40 hover:text-white/70'
                     }`}
                   >
                     {isActive && (
                       <motion.div
                         layoutId="activeIndicator"
-                        className="absolute top-0 bottom-0 -right-4 md:right-auto md:-left-6 w-[1px] bg-white"
+                        className="absolute top-0 -right-4 bottom-0 w-[1px] bg-white md:right-auto md:-left-6"
                         transition={{ duration: 0.5, ease: 'easeOut' }}
                       />
                     )}
@@ -122,7 +122,7 @@ export function SeventhSection() {
         </div>
 
         {/* Main Content (Bottom Left Quote and Bottom Right Circle) */}
-        <div className="pointer-events-none absolute inset-0 z-20 flex flex-col justify-end p-6 pb-24 md:pb-12 md:p-16 lg:p-24">
+        <div className="pointer-events-none absolute inset-0 z-20 flex flex-col justify-end p-6 pb-24 md:p-16 md:pb-12 lg:p-24">
           {/* Inner wrapper to handle row/col layout and margin on mobile */}
           <div className="ml-10 flex w-full flex-col items-start justify-between gap-6 md:ml-0 md:flex-row md:items-end md:gap-0">
             {/* Left Column: Quote */}
@@ -193,7 +193,7 @@ export function SeventhSection() {
             </div>
 
             {/* Right Column: Circle Button */}
-            <div className="pointer-events-auto absolute bottom-6 right-6 md:relative md:bottom-auto md:right-auto md:self-auto">
+            <div className="pointer-events-auto absolute right-6 bottom-6 md:relative md:right-auto md:bottom-auto md:self-auto">
               <CircleButton text={t('book_a_call_now')} variant="light" />
             </div>
           </div>
