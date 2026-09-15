@@ -8,8 +8,6 @@ import { useUIStore } from '@/store/useUIStore';
 import { SandRipples } from './SandRipples';
 import { WebGLSlider } from './WebGLSlider';
 
-import { DottedLinesSVG } from './DottedLinesSVG';
-
 const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400', '500', '600', '700'] });
 const inter = Inter({ subsets: ['latin'], weight: ['400', '500', '600'] });
 
@@ -35,22 +33,6 @@ export function SecondSection() {
   // Push the content up slightly for a parallax feel
   const contentY = useTransform(scrollYProgress, [0, 1], [100, 0]);
 
-  // Dynamically animate the SVG curve from a full dome to a flat horizontal line shifted upwards
-  const curveTextPathData = useTransform(
-    scrollYProgress,
-    [0.1, 0.9],
-    ['M 0,960 Q 960,-960 1920,960', 'M 0,-200 Q 960,-200 1920,-200'],
-  );
-
-  const curveBgPathData = useTransform(
-    scrollYProgress,
-    [0.1, 0.9],
-    [
-      'M 0,960 Q 960,-960 1920,960 L 1920,960 L 0,960 Z',
-      'M 0,-200 Q 960,-200 1920,-200 L 1920,960 L 0,960 Z',
-    ],
-  );
-
   return (
     <section
       ref={sectionRef}
@@ -60,9 +42,13 @@ export function SecondSection() {
         className="relative z-10 mx-auto flex w-full flex-col items-center"
         style={{ y: contentY, willChange: 'transform' }}
       >
-        {/* Decorative Dotted Lines Overlay spanning from top arch through center logo */}
+        {/* Decorative Dotted Lines Overlay */}
         <div className="pointer-events-none absolute top-0 left-0 z-30 aspect-[1535/1252] w-full overflow-visible">
-          <DottedLinesSVG className="pointer-events-none absolute -top-[11%] -left-[10.7%] h-full w-full overflow-visible" />
+          <img
+            src="/section2-lines.svg"
+            alt=""
+            className="pointer-events-none absolute -top-[11%] -left-[10.7%] h-full w-full select-none"
+          />
         </div>
 
         {/* Unified SVG Curve and Text - Perfect Semi-Circle */}
@@ -74,7 +60,7 @@ export function SecondSection() {
         >
           <defs>
             {/* Path specifically for text, without the Z closing line, so 50% is perfectly at the top arc */}
-            <motion.path id="curve-text-path" d={curveTextPathData} />
+            <path id="curve-text-path" d="M 0,960 A 960,960 0 0,1 1920,960" />
 
             {/* Gradient matching the bg-textured-sand class */}
             <linearGradient id="sandGrad" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -85,7 +71,7 @@ export function SecondSection() {
           </defs>
 
           {/* Sand background curve (Perfect Semi-Circle) */}
-          <motion.path d={curveBgPathData} fill="url(#sandGrad)" />
+          <path d="M 0,960 A 960,960 0 0,1 1920,960 Z" fill="url(#sandGrad)" />
 
           {/* Text following the curve, pushed down (dy) to sit inside the blue area */}
           <text

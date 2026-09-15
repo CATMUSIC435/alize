@@ -107,6 +107,7 @@ export function WebGLSlider({
   const progressRef = useRef(0);
   const animationFrameRef = useRef<number | null>(null);
   const prevIndexRef = useRef(currentIndex);
+  const renderSceneRef = useRef<() => void>(() => {});
 
   useEffect(() => {
     if (!canvasRef.current || !containerRef.current) {
@@ -128,8 +129,28 @@ export function WebGLSlider({
     renderer.setSize(clientWidth, clientHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
+    const render = () => {
+      if (materialRef.current) {
+        const { uniforms } = materialRef.current;
+        if (uniforms.uProgress) {
+          uniforms.uProgress.value = progressRef.current;
+        }
+      }
+      renderer.render(scene, camera);
+      if (isAnimatingRef.current) {
+        animationFrameRef.current = requestAnimationFrame(render);
+      } else {
+        animationFrameRef.current = null;
+      }
+    };
+    renderSceneRef.current = render;
+
     const textureLoader = new THREE.TextureLoader();
-    const loadedTextures = images.map((src) => textureLoader.load(src));
+    const loadedTextures = images.map((src) =>
+      textureLoader.load(src, () => {
+        renderer.render(scene, camera);
+      }),
+    );
     texturesRef.current = loadedTextures;
 
     const geometry = new THREE.PlaneGeometry(2, 2);
@@ -149,17 +170,6 @@ export function WebGLSlider({
 
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
-
-    const render = () => {
-      if (materialRef.current) {
-        const { uniforms } = materialRef.current;
-        if (uniforms.uProgress) {
-          uniforms.uProgress.value = progressRef.current;
-        }
-      }
-      renderer.render(scene, camera);
-      animationFrameRef.current = requestAnimationFrame(render);
-    };
     render();
 
     const handleResize = () => {
@@ -174,6 +184,7 @@ export function WebGLSlider({
           uniforms.uPlaneRes.value.set(w, h);
         }
       }
+      renderer.render(scene, camera);
     };
     window.addEventListener('resize', handleResize);
 
@@ -224,6 +235,7 @@ export function WebGLSlider({
 
         const easeProgress = Math.sin((progress * Math.PI) / 2);
         progressRef.current = easeProgress;
+        renderSceneRef.current();
 
         if (progress < 1) {
           requestAnimationFrame(animateTransition);

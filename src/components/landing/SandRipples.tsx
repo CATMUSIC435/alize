@@ -45,35 +45,36 @@ export function SandRipples(props: { position?: 'left' | 'right' }) {
         isLeft ? 'left-0' : 'right-0'
       }`}
       style={{
-        // Radial gradient ensures a soft fade out on ALL edges (Top, Bottom, Left, Right)
-        // This completely eliminates any "hard cut" horizontal lines.
         maskImage: `radial-gradient(ellipse at ${isLeft ? '0%' : '100%'} 50%, black 10%, transparent 70%)`,
         WebkitMaskImage: `radial-gradient(ellipse at ${isLeft ? '0%' : '100%'} 50%, black 10%, transparent 70%)`,
       }}
     >
-      <svg viewBox="0 -1600 500 5600" preserveAspectRatio="none" className="h-full w-full">
+      <motion.svg
+        viewBox="0 -1600 500 5600"
+        preserveAspectRatio="none"
+        className="h-full w-full"
+        style={{ willChange: 'transform' }}
+        animate={{
+          x: isLeft ? [0, 15, 0] : [0, -15, 0],
+        }}
+        transition={{
+          duration: 8,
+          ease: 'easeInOut',
+          repeat: Infinity,
+        }}
+      >
         {ribbonPaths.map((path, i) => (
-          <motion.path
+          <path
             key={i}
             d={path.d}
             fill="none"
             stroke="#151926"
             strokeWidth="0.4"
-            style={{ opacity: path.opacity }}
+            opacity={path.opacity}
             vectorEffect="non-scaling-stroke"
-            initial={{ pathLength: 0 }}
-            whileInView={{ pathLength: 1 }}
-            viewport={{ once: true, margin: '400px' }}
-            animate={{
-              x: isLeft ? [0, 20, 0] : [0, -20, 0],
-            }}
-            transition={{
-              pathLength: { duration: 4, ease: 'easeOut', delay: i * 0.08 },
-              x: { duration: 6 + (i % 4), ease: 'easeInOut', repeat: Infinity },
-            }}
           />
         ))}
-      </svg>
+      </motion.svg>
     </div>
   );
 }
