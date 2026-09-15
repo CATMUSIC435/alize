@@ -11,3 +11,16 @@
     background-blend-mode: overlay, normal;
   }
 }
+
+/* iOS / Safari WebM Alpha Fallback: 
+   Safari renders WebM transparent background as black. We hide decorative videos on Safari. */
+@supports (-webkit-touch-callout: none) {
+  .safari-video-hide {
+    display: none !important;
+  }
+}
+@supports (background: -webkit-named-image(i)) {
+  .safari-video-hide {
+    display: none !important;
+  }
+}

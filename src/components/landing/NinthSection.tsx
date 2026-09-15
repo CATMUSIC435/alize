@@ -58,7 +58,7 @@ export function NinthSection() {
           muted
           playsInline
           aria-label="Bougainvillea flowers video"
-          className="h-full w-full object-cover opacity-90 mix-blend-multiply"
+          className="safari-video-hide h-full w-full object-cover opacity-90 mix-blend-multiply"
           src="/bougainvillea-flowers_03.webm"
         />
       </div>

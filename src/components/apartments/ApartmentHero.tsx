@@ -33,7 +33,7 @@ export function ApartmentHero() {
           muted
           playsInline
           aria-label="Decorative Flowers"
-          className="h-full w-full object-contain"
+          className="safari-video-hide h-full w-full object-contain"
         />
       </div>
 

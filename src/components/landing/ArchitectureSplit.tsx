@@ -137,7 +137,7 @@ export function ArchitectureSplit() {
             muted
             playsInline
             aria-label="Bougainvillea flowers video"
-            className="h-full w-full object-cover opacity-90 mix-blend-multiply"
+            className="safari-video-hide h-full w-full object-cover opacity-90 mix-blend-multiply"
             src="/bougainvillea-flowers_01.webm"
           />
         </motion.div>
@@ -158,7 +158,7 @@ export function ArchitectureSplit() {
             muted
             playsInline
             aria-label="Bougainvillea flowers video"
-            className="h-full w-full object-cover opacity-90 mix-blend-multiply"
+            className="safari-video-hide h-full w-full object-cover opacity-90 mix-blend-multiply"
             src="/bougainvillea-flowers_03.webm"
           />
         </motion.div>

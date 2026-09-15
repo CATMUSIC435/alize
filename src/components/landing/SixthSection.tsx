@@ -495,7 +495,7 @@ export function SixthSection() {
           loop
           muted
           playsInline
-          className="h-full w-full scale-110 object-contain opacity-90"
+          className="safari-video-hide h-full w-full scale-110 object-contain opacity-90"
           src="/bougainvillea-flowers_04.webm"
         />
       </div>
