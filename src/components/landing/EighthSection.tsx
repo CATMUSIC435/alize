@@ -96,11 +96,11 @@ export function EighthSection() {
           {/* Upgrades List */}
           <div className="mt-16 flex w-full justify-start pl-8 md:mt-16 md:pl-[8vw]">
             <div className="max-w-[400px]">
-              <h4
+              <h3
                 className={`mb-4 text-[10px] font-bold tracking-widest text-[#151926] uppercase md:text-[11px] ${inter.className}`}
               >
                 {t('optional_upgrades')}
-              </h4>
+              </h3>
               <ul
                 className={`space-y-2 text-[10px] font-bold tracking-widest text-[#151926] uppercase md:text-[11px] ${inter.className}`}
               >

@@ -76,11 +76,11 @@ function VerticalTimelinePoint({
           {/* Content */}
           <div className="relative z-10 flex h-full flex-col justify-between">
             <div>
-              <h4
+              <h3
                 className={`text-xl leading-snug tracking-tight text-[#151926] uppercase md:text-2xl ${playfair.className}`}
               >
                 {label}
-              </h4>
+              </h3>
               <p
                 className={`mt-1 text-[10px] font-bold tracking-widest text-[#151926]/50 md:mt-2 md:text-[11px] ${inter.className}`}
               >

@@ -339,9 +339,10 @@ export function WebGLSlider({
             </span>
             <div className="relative h-[1px] w-16 overflow-hidden bg-[#151926]/20 md:w-24">
               <motion.div
-                className="absolute top-0 bottom-0 left-0 bg-[#151926]"
-                initial={{ width: 0 }}
-                animate={{ width: `${((currentIndex + 1) / images.length) * 100}%` }}
+                className="absolute top-0 bottom-0 left-0 w-full bg-[#151926] origin-left"
+                style={{ willChange: 'transform' }}
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: (currentIndex + 1) / images.length }}
                 transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
               />
             </div>

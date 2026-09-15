@@ -35,7 +35,7 @@ export function SandRipples(props: { position?: 'left' | 'right' }) {
 
     ribbonPaths.push({
       d,
-      opacity: 0.05 + Math.abs(Math.sin(i * 0.4)) * 0.15,
+      opacity: Number((0.05 + Math.abs(Math.sin(i * 0.4)) * 0.15).toFixed(4)),
     });
   }
 

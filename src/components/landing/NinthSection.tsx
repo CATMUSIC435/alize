@@ -16,11 +16,11 @@ export function NinthSection() {
     <section className="bg-textured-sand relative flex w-full flex-col items-center justify-start overflow-hidden py-32 text-[#151926] md:py-48">
       {/* Top indicator: RETURN YEAR AFTER YEAR */}
       <div className="sticky top-32 z-20 flex flex-col items-center justify-center">
-        <h4
+        <h2
           className={`text-[10px] font-bold tracking-[0.15em] text-[#151926] uppercase md:text-[11px] ${inter.className}`}
         >
           {t('return_year_after_year')}
-        </h4>
+        </h2>
         <div className="mt-8 h-16 w-[1px] bg-[#151926]/30 md:mt-12 md:h-24"></div>
       </div>
 
@@ -37,12 +37,12 @@ export function NinthSection() {
             transition={{ duration: 0.8, delay: i * 0.1, ease: 'easeOut' }}
             className="group flex cursor-pointer items-start justify-center transition-opacity hover:opacity-70"
           >
-            <h2
+            <h3
               className="text-center text-[9vw] leading-[0.9] font-medium tracking-tighter sm:text-[7vw] md:text-[5vw] xl:text-[4.5vw]"
               style={{ transform: 'scaleY(1.3)' }}
             >
               {text}
-            </h2>
+            </h3>
             <span className="mt-2 ml-2 text-[3vw] font-light md:mt-4 md:ml-3 md:text-[1.5vw]">
               +
             </span>

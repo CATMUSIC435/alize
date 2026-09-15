@@ -115,11 +115,11 @@ export function Hotspot({ x, y, title, description }: HotspotProps) {
               </div>
 
               {/* Title */}
-              <h4
+              <h2
                 className={`relative z-10 text-xl leading-snug tracking-tight text-[#151926] uppercase sm:text-4xl sm:leading-tight ${playfair.className}`}
               >
                 {title}
-              </h4>
+              </h2>
 
               {/* Description */}
               <p

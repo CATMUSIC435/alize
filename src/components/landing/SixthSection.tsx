@@ -146,7 +146,7 @@ export function SixthSection() {
                 >
                   <div>
                     <p
-                      className={`text-[9px] font-bold tracking-[0.2em] text-[#151926]/70 uppercase ${inter.className}`}
+                      className={`text-[9px] font-bold tracking-[0.2em] text-[#151926]/90 uppercase ${inter.className}`}
                     >
                       {t('bedrooms_label')}
                     </p>
@@ -159,7 +159,7 @@ export function SixthSection() {
                   </div>
                   <div>
                     <p
-                      className={`text-[9px] font-bold tracking-[0.2em] text-[#151926]/70 uppercase ${inter.className}`}
+                      className={`text-[9px] font-bold tracking-[0.2em] text-[#151926]/90 uppercase ${inter.className}`}
                     >
                       {t('area_up_to_label')}
                     </p>
@@ -250,7 +250,7 @@ export function SixthSection() {
               <button
                 onClick={scrollPrev}
                 aria-label="Previous Slide"
-                className="group relative flex h-12 w-12 cursor-pointer items-center justify-center text-[#151926]/50 transition-colors duration-300 hover:text-[#151926]"
+                className="group relative flex h-12 w-12 cursor-pointer items-center justify-center text-[#151926]/70 transition-colors duration-300 hover:text-[#151926]"
               >
                 <svg
                   width="28"
@@ -286,15 +286,16 @@ export function SixthSection() {
 
                 <div className="relative h-[1px] w-16 overflow-hidden bg-[#151926]/20 md:w-24">
                   <motion.div
-                    className="absolute top-0 bottom-0 left-0 bg-[#151926]"
-                    initial={{ width: 0 }}
-                    animate={{ width: `${((selectedIndex + 1) / slides.length) * 100}%` }}
+                    className="absolute top-0 bottom-0 left-0 w-full bg-[#151926] origin-left"
+                    style={{ willChange: 'transform' }}
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: (selectedIndex + 1) / slides.length }}
                     transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                   />
                 </div>
 
                 <span
-                  className={`text-[11px] text-[#151926]/50 md:text-xs ${inter.className} font-light tracking-widest`}
+                  className={`text-[11px] text-[#151926]/70 md:text-xs ${inter.className} font-light tracking-widest`}
                 >
                   {String(slides.length).padStart(2, '0')}
                 </span>
@@ -303,7 +304,7 @@ export function SixthSection() {
               <button
                 onClick={scrollNext}
                 aria-label="Next Slide"
-                className="group relative flex h-12 w-12 cursor-pointer items-center justify-center text-[#151926]/50 transition-colors duration-300 hover:text-[#151926]"
+                className="group relative flex h-12 w-12 cursor-pointer items-center justify-center text-[#151926]/70 transition-colors duration-300 hover:text-[#151926]"
               >
                 <svg
                   width="28"

@@ -62,6 +62,7 @@ export function BackgroundAnimation() {
               {/* Nested SVG moves origin to bottom-center of the screen */}
               <svg x="50%" y="100%" overflow="visible">
                 <motion.g
+                  style={{ willChange: 'transform' }}
                   initial={{ y: 700, scale: 1 }}
                   animate={{
                     y: [700, 0, 0, 0],
@@ -88,6 +89,7 @@ export function BackgroundAnimation() {
           {/* Decorative Borders (Animated identically to the mask) */}
           <svg x="50%" y="100%" overflow="visible">
             <motion.g
+              style={{ willChange: 'transform, opacity' }}
               initial={{ y: 700, scale: 1, opacity: 1 }}
               animate={{
                 y: [700, 0, 0, 0],

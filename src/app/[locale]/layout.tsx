@@ -6,6 +6,30 @@ import { routing } from '@/libs/I18nRouting';
 import '@/styles/global.css';
 
 export const metadata: Metadata = {
+  title: {
+    template: '%s | Era Residence',
+    default: 'Era Residence | Luxury Apartments in Estepona',
+  },
+  description: 'Exclusive luxury apartments and penthouses in Estepona, Costa del Sol. Experience Mediterranean living at its finest.',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'en',
+    siteName: 'Era Residence',
+  },
+  twitter: {
+    card: 'summary_large_image',
+  },
   icons: [
     {
       rel: 'apple-touch-icon',

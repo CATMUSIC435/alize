@@ -86,7 +86,7 @@ export function ApartmentDetail({ data }: { data: ApartmentData }) {
   };
 
   return (
-    <div className="min-h-screen bg-[#F4F3ED] pt-24 text-[#151926]">
+    <article className="min-h-screen bg-[#F4F3ED] pt-24 text-[#151926]">
       <div className="mx-auto w-full max-w-[1600px] px-6 pb-24 md:px-12">
         <LayoutGroup>
           <div className="flex flex-col gap-12 lg:flex-row xl:gap-24">
@@ -143,7 +143,7 @@ export function ApartmentDetail({ data }: { data: ApartmentData }) {
             </div>
 
             {/* RIGHT COLUMN - STICKY DETAILS */}
-            <div className="relative w-full lg:w-[40%] xl:w-[35%]">
+            <section aria-label="Apartment Specifications" className="relative w-full lg:w-[40%] xl:w-[35%]">
               <div className="flex flex-col pt-8 pb-12 lg:sticky lg:top-32 lg:max-h-[calc(100vh-8rem)] lg:pt-0">
                 {/* Right Header Placeholder (Visible when scrolled) */}
                 <div className="relative hidden shrink-0 lg:block">
@@ -291,6 +291,6 @@ export function ApartmentDetail({ data }: { data: ApartmentData }) {
           </div>
         </LayoutGroup>
       </div>
-    </div>
+    </article>
   );
 }
