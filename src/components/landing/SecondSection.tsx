@@ -3,6 +3,7 @@
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { Playfair_Display, Inter } from 'next/font/google';
+import Image from 'next/image';
 import { useRef, useEffect } from 'react';
 import { useUIStore } from '@/store/useUIStore';
 import { SandRipples } from './SandRipples';
@@ -42,12 +43,15 @@ export function SecondSection() {
         className="relative z-10 mx-auto flex w-full flex-col items-center"
         style={{ y: contentY, willChange: 'transform' }}
       >
-        {/* Decorative Dotted Lines Overlay */}
-        <div className="pointer-events-none absolute top-0 left-0 z-30 aspect-[1535/1252] w-full overflow-visible">
-          <img
-            src="/section2-lines.svg"
-            alt=""
-            className="pointer-events-none absolute -top-[11%] -left-[10.7%] h-full w-full select-none"
+        {/* Project Map Background */}
+        <div className="pointer-events-none absolute top-[8vw] left-1/2 z-10 aspect-[2560/1440] w-full max-w-[1500px] -translate-x-1/2 overflow-visible">
+          <Image
+            src="/map.png"
+            alt="Bản đồ dự án"
+            fill
+            priority
+            sizes="(max-width: 768px) 100vw, 1500px"
+            className="object-contain object-top"
           />
         </div>
 

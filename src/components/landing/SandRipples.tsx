@@ -5,7 +5,7 @@ export function SandRipples(props: { position?: 'left' | 'right' }) {
 
   // Generate overlapping, flowing ribbon waves
   const ribbonPaths = [];
-  const numLines = 30; // Optimized but rich
+  const numLines = 20; // Optimized but rich
 
   for (let i = 0; i < numLines; i += 1) {
     // Grouping effect adjusted so lines stay closer together

@@ -24,13 +24,13 @@ export function HotspotLayer() {
       style={{ opacity, pointerEvents, y, willChange: 'transform' }}
     >
       {/* Hotspot 1: Left Building */}
-      <Hotspot x="26%" y="45%" title={t('crafted')} description={t('stone_desc')} />
+      <Hotspot x="20%" y="45%" title={t('crafted')} description={t('stone_desc')} />
 
       {/* Hotspot 2: Palm tree area */}
-      <Hotspot x="57%" y="55%" title={t('crafted')} description={t('stone_desc')} />
+      <Hotspot x="57%" y="35%" title={t('crafted')} description={t('stone_desc')} />
 
       {/* Hotspot 3: Poolside */}
-      <Hotspot x="77%" y="75%" title={t('crafted')} description={t('stone_desc')} />
+      <Hotspot x="70%" y="75%" title={t('crafted')} description={t('stone_desc')} />
 
       {/* Bottom Center Magnetic Button */}
       <div className="absolute bottom-[calc(20vh+4rem)] left-1/2 z-50 -translate-x-1/2">
