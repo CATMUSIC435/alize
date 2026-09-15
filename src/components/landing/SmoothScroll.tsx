@@ -1,5 +1,6 @@
 'use client';
 
+import { useAnimationFrame } from 'framer-motion';
 import Lenis from 'lenis';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
@@ -10,28 +11,28 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 0.8, // Reduced from 1.2 to make it feel snappier
+      duration: 1.2, // Buttery smooth duration
       easing: (t) => Math.min(1, 1.001 - 2 ** (-10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1.2, // Slightly increased for better response
+      wheelMultiplier: 1.0, 
       touchMultiplier: 2,
     });
 
     lenisRef.current = lenis;
 
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-
-    requestAnimationFrame(raf);
-
     return () => {
       lenis.destroy();
     };
   }, []);
+
+  // Sync Lenis with Framer Motion's internal render loop to eliminate 1-frame scroll jitter
+  useAnimationFrame((time) => {
+    if (lenisRef.current) {
+      lenisRef.current.raf(time);
+    }
+  });
 
   // Reset scroll position on route change
   useEffect(() => {
