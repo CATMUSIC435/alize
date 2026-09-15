@@ -8,10 +8,10 @@ import '@/styles/global.css';
 export const metadata: Metadata = {
   title: {
     template: '%s | Alizé Residence',
-    default: 'Alizé Residence | Luxury Apartments in Estepona',
+    default: 'Alizé Residence | Căn hộ khách sạn cao cấp mặt biển Mỹ Khê, Đà Nẵng',
   },
-  description: 'Exclusive luxury apartments and penthouses in Estepona, Costa del Sol. Experience Mediterranean living at its finest at Alizé.',
-  keywords: ['Alizé', 'Alizé Residence', 'Estepona luxury apartments', 'Costa del Sol real estate', 'premium apartments Spain', 'Alize Estepona'],
+  description: 'Khám phá Alizé Residence. Căn hộ khách sạn cao cấp mặt biển Mỹ Khê, Đà Nẵng. Thiết kế bởi AEDAS, phát triển bởi A&T Group.',
+  keywords: ['Alizé', 'Alizé Residence', 'căn hộ cao cấp Đà Nẵng', 'khách sạn Mỹ Khê', 'A&T Group', 'AEDAS Da Nang', 'condotel Đà Nẵng'],
   robots: {
     index: true,
     follow: true,
