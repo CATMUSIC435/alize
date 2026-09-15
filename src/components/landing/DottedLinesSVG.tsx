@@ -1,13 +1,13 @@
-﻿export function DottedLinesSVG({ className = '' }: { className?: string }) {
+export function DottedLinesSVG({ className = '' }: { className?: string }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       id="Layer_2"
       viewBox="0 0 1535 1251.86"
-      className={dxmd-svg }
+      className={`dxmd-svg ${className}`}
     >
       <defs>
-        <style>{
+        <style>{`
           .dxmd-svg .cls-1,
           .dxmd-svg .cls-2,
           .dxmd-svg .cls-3 {
@@ -23,7 +23,7 @@
             stroke-dasharray: 5 5;
             stroke-width: 1.5px;
           }
-        }</style>
+        `}</style>
       </defs>
       <g style={{ transform: 'scale(1.16)', transformOrigin: 'center' }}>
         <path
