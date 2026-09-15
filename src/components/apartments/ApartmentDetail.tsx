@@ -287,7 +287,7 @@ export function ApartmentDetail({ data }: { data: ApartmentData }) {
                   </motion.div>
                 </div>
               </div>
-            </div>
+            </section>
           </div>
         </LayoutGroup>
       </div>
