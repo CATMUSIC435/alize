@@ -1,23 +1,27 @@
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { ArchitectureSplit } from '@/components/landing/ArchitectureSplit';
+import dynamic from 'next/dynamic';
+
 import { BackgroundAnimation } from '@/components/landing/BackgroundAnimation';
-import { EighthSection } from '@/components/landing/EighthSection';
-import { FifthSection } from '@/components/landing/FifthSection';
-import { Footer } from '@/components/landing/Footer';
-import { FourthSection } from '@/components/landing/FourthSection';
 import { Header } from '@/components/landing/Header';
 import { HotspotLayer } from '@/components/landing/HotspotLayer';
-import { NinthSection } from '@/components/landing/NinthSection';
 import { ScrollIndicator } from '@/components/landing/ScrollIndicator';
 import { ScrollManager } from '@/components/landing/ScrollManager';
-import { SecondSection } from '@/components/landing/SecondSection';
-import { SeventhSection } from '@/components/landing/SeventhSection';
-import { SixthSection } from '@/components/landing/SixthSection';
 import { SmoothScroll } from '@/components/landing/SmoothScroll';
-import { TenthSection } from '@/components/landing/TenthSection';
-import { ThirdSection } from '@/components/landing/ThirdSection';
 import { TypographyOverlay } from '@/components/landing/TypographyOverlay';
+
+// Dynamically import below-the-fold heavy Client Components
+const ArchitectureSplit = dynamic(() => import('@/components/landing/ArchitectureSplit').then((m) => m.ArchitectureSplit));
+const SecondSection = dynamic(() => import('@/components/landing/SecondSection').then((m) => m.SecondSection));
+const ThirdSection = dynamic(() => import('@/components/landing/ThirdSection').then((m) => m.ThirdSection));
+const FourthSection = dynamic(() => import('@/components/landing/FourthSection').then((m) => m.FourthSection));
+const FifthSection = dynamic(() => import('@/components/landing/FifthSection').then((m) => m.FifthSection));
+const SixthSection = dynamic(() => import('@/components/landing/SixthSection').then((m) => m.SixthSection));
+const SeventhSection = dynamic(() => import('@/components/landing/SeventhSection').then((m) => m.SeventhSection));
+const EighthSection = dynamic(() => import('@/components/landing/EighthSection').then((m) => m.EighthSection));
+const NinthSection = dynamic(() => import('@/components/landing/NinthSection').then((m) => m.NinthSection));
+const TenthSection = dynamic(() => import('@/components/landing/TenthSection').then((m) => m.TenthSection));
+const Footer = dynamic(() => import('@/components/landing/Footer').then((m) => m.Footer));
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
