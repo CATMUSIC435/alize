@@ -60,6 +60,11 @@ export function SecondSection() {
         className="relative z-10 mx-auto flex w-full flex-col items-center"
         style={{ y: contentY, willChange: 'transform' }}
       >
+        {/* Decorative Dotted Lines Overlay spanning from top arch through center logo */}
+        <div className="pointer-events-none absolute top-0 left-0 z-30 aspect-[1535/1252] w-full overflow-visible">
+          <DottedLinesSVG className="pointer-events-none absolute -top-[11%] -left-[10.7%] h-full w-full overflow-visible" />
+        </div>
+
         {/* Unified SVG Curve and Text - Perfect Semi-Circle */}
         <svg
           viewBox="0 0 1920 960"
@@ -94,7 +99,6 @@ export function SecondSection() {
         </svg>
         {/* Solid blue background for the rest of the section */}
         <div className="bg-textured-sand relative flex w-full flex-col items-center px-4 pt-0 pb-24 md:px-16 md:pb-48">
-          <DottedLinesSVG className="pointer-events-none absolute -top-[11%] -left-[10%] z-10 h-full w-full" />
           <SandRipples position="left" />
           <SandRipples position="right" />
           {/* Wrapper to pull content UP into the empty blue space of the SVG semi-circle */}

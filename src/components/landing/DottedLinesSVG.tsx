@@ -1,4 +1,10 @@
-export function DottedLinesSVG({ className = '' }: { className?: string }) {
+export function DottedLinesSVG({
+  className = '',
+  strokeColor = '#151926',
+}: {
+  className?: string;
+  strokeColor?: string;
+}) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -12,20 +18,21 @@ export function DottedLinesSVG({ className = '' }: { className?: string }) {
           .dxmd-svg .cls-2,
           .dxmd-svg .cls-3 {
             fill: none;
-            stroke: #151926;
-            opacity: 0.15;
+            stroke: ${strokeColor};
+            opacity: 0.45;
             stroke-miterlimit: 10;
           }
           .dxmd-svg .cls-2 {
             stroke-dasharray: 3 3;
+            stroke-width: 1.5px;
           }
           .dxmd-svg .cls-3 {
             stroke-dasharray: 5 5;
-            stroke-width: 1.5px;
+            stroke-width: 2.5px;
           }
         `}</style>
       </defs>
-      <g style={{ transform: 'scale(1.16)', transformOrigin: 'center' }}>
+      <g style={{ transform: 'scale(1.16)' }}>
         <path
           className="cls-3 dashed-path"
           d="M1534.97,1213.13l-87.28-260.11c-6.54-26.38,32.03-90.87,59.52-143.62,14.46-27.75,19.86-59.33,15.58-90.33l-23.42-169.45s-3.34-11.84-17.5-25.64c0,0-18.54-16.53-31.8-26.36-11.34-8.73-24.17-11.24-37.76-13.9-14.04-2.75-28.55-5.59-42.36-15.91-58.39-47.64-123.84-100.48-171.64-139.08-31.22-25.21-53.78-43.42-58.08-47.05-4.55-3.84-10.23-7.76-16.88-11.65-13.92-8.15-32.15-16.05-40.28-17.96-61.64-6.5-66.26-22.06-66.26-22.06l-64.31-78.76-338.73,123.25h-319.3s-43.62-8.44-73.46,30.56C191.16,344.06.3,592.07.3,592.07"
