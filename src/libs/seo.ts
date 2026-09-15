@@ -16,13 +16,13 @@ type GenerateMetadataProps = {
  */
 export function generatePageMetadata(props: GenerateMetadataProps): Metadata {
   // Base URL (In production, replace with process.env.NEXT_PUBLIC_APP_URL)
-  const baseUrl = 'https://era-residence.com';
+  const baseUrl = 'https://alize-residence.com';
   const path = props.path ?? '';
   const url = `${baseUrl}/${props.locale}${path}`;
   const image =
     props.image ??
     'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2070&auto=format&fit=crop';
-  const imageAlt = props.imageAlt ?? 'Era Residence Estepona';
+  const imageAlt = props.imageAlt ?? 'Alizé Residence Estepona';
 
   return {
     title: props.title,
@@ -31,7 +31,7 @@ export function generatePageMetadata(props: GenerateMetadataProps): Metadata {
       title: props.title,
       description: props.description,
       url,
-      siteName: 'Era Residence',
+      siteName: 'Alizé Residence',
       images: [
         {
           url: image,

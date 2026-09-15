@@ -35,14 +35,14 @@ export async function generateMetadata(props: {
     openGraph: {
       title: t('meta_title'),
       description: t('meta_description'),
-      url: `https://era-residence.com/${locale}`,
-      siteName: 'Era Residence',
+      url: `https://alize-residence.com/${locale}`,
+      siteName: 'Alizé Residence',
       images: [
         {
           url: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2070&auto=format&fit=crop',
           width: 1200,
           height: 630,
-          alt: 'Era Residence - Luxury Living in Estepona',
+          alt: 'Alizé Residence - Luxury Living in Estepona',
         },
       ],
       locale,
@@ -69,9 +69,9 @@ export default async function EraResidencePage(props: { params: Promise<{ locale
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'ApartmentComplex',
-    name: 'Era Residence Estepona',
+    name: 'Alizé Residence Estepona',
     description: t('meta_description'),
-    url: `https://era-residence.com/${locale}`,
+    url: `https://alize-residence.com/${locale}`,
     telephone: '+34 900 123 456',
     address: {
       '@type': 'PostalAddress',

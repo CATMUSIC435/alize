@@ -16,12 +16,12 @@ export async function generateMetadata(props: {
   const t = await getTranslations({ locale, namespace: 'Index' });
 
   return {
-    title: t('apartments') + ' | Era Residence',
+    title: t('apartments') + ' | Alizé Residence',
     description: t('boutique_desc'),
     openGraph: {
-      title: t('apartments') + ' | Era Residence',
+      title: t('apartments') + ' | Alizé Residence',
       description: t('boutique_desc'),
-      url: `https://era-residence.com/${locale}/apartments`,
+      url: `https://alize-residence.com/${locale}/apartments`,
     },
   };
 }
@@ -35,12 +35,12 @@ export default async function ApartmentsPage(props: { params: Promise<{ locale: 
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'SearchResultsPage',
-    name: t('apartments') + ' - Era Residence',
+    name: t('apartments') + ' - Alizé Residence',
     description: t('boutique_desc'),
-    url: `https://era-residence.com/${locale}/apartments`,
+    url: `https://alize-residence.com/${locale}/apartments`,
     mainEntity: {
       '@type': 'RealEstateAgent',
-      name: 'Era Residence Estepona',
+      name: 'Alizé Residence Estepona',
       address: {
         '@type': 'PostalAddress',
         streetAddress: 'New Golden Mile',

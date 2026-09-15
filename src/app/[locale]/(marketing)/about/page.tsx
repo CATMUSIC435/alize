@@ -38,7 +38,7 @@ export default async function About(props: AboutPageProps) {
         type="WebPage"
         name={t('meta_title')}
         description={t('meta_description')}
-        url={`https://era-residence.com/${locale}/about`}
+        url={`https://alize-residence.com/${locale}/about`}
       />
 
       <p>{t('about_paragraph')}</p>

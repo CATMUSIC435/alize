@@ -39,7 +39,7 @@ export default async function Portfolio(props: PortfolioPageProps) {
         type="CollectionPage"
         name={t('meta_title')}
         description={t('meta_description')}
-        url={`https://era-residence.com/${locale}/portfolio`}
+        url={`https://alize-residence.com/${locale}/portfolio`}
       />
 
       <p>{t('presentation')}</p>

@@ -7,10 +7,11 @@ import '@/styles/global.css';
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | Era Residence',
-    default: 'Era Residence | Luxury Apartments in Estepona',
+    template: '%s | Alizé Residence',
+    default: 'Alizé Residence | Luxury Apartments in Estepona',
   },
-  description: 'Exclusive luxury apartments and penthouses in Estepona, Costa del Sol. Experience Mediterranean living at its finest.',
+  description: 'Exclusive luxury apartments and penthouses in Estepona, Costa del Sol. Experience Mediterranean living at its finest at Alizé.',
+  keywords: ['Alizé', 'Alizé Residence', 'Estepona luxury apartments', 'Costa del Sol real estate', 'premium apartments Spain', 'Alize Estepona'],
   robots: {
     index: true,
     follow: true,
@@ -25,7 +26,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en',
-    siteName: 'Era Residence',
+    siteName: 'Alizé Residence',
   },
   twitter: {
     card: 'summary_large_image',

@@ -29,7 +29,7 @@ export async function generateMetadata(props: Props) {
     openGraph: {
       title: `NO. ${apartment.number} - ALIZE RESIDENCE`,
       description: apartment.description,
-      url: `https://era-residence.com/${locale}/apartments/${id}`,
+      url: `https://alize-residence.com/${locale}/apartments/${id}`,
       type: 'article',
       images: [
         {
@@ -58,7 +58,7 @@ export default async function ApartmentDetailPage(props: Props) {
     '@type': 'Apartment',
     name: `Apartment ${apartment.number} at Alize Residence`,
     description: apartment.description,
-    url: `https://era-residence.com/${locale}/apartments/${id}`,
+    url: `https://alize-residence.com/${locale}/apartments/${id}`,
     numberOfRooms: apartment.bedrooms,
     floorSize: {
       '@type': 'QuantitativeValue',
