@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { SmartVideo } from '@/components/SmartVideo';
 import { useTranslations } from 'next-intl';
 import { Playfair_Display } from 'next/font/google';
 
@@ -26,7 +27,7 @@ export function ApartmentHero() {
     <section className="relative w-full overflow-hidden bg-[#F4F3ED] pt-[20vh] pb-[10vh]">
       {/* Floral Decorative Image - Top Right */}
       <div className="pointer-events-none absolute top-0 right-0 z-0 h-[80vw] max-h-[600px] w-[80vw] max-w-[600px] translate-x-[20%] translate-y-0 rotate-y-[180deg] opacity-90">
-        <video
+        <SmartVideo
           src="/bougainvillea-flowers_01.webm"
           autoPlay
           loop

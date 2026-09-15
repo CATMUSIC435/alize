@@ -3,6 +3,7 @@
 import useEmblaCarousel from 'embla-carousel-react';
 import type { Variants } from 'framer-motion';
 import { motion, AnimatePresence } from 'framer-motion';
+import { SmartVideo } from '@/components/SmartVideo';
 import { useTranslations } from 'next-intl';
 import { Playfair_Display, Inter } from 'next/font/google';
 import Image from 'next/image';
@@ -490,7 +491,7 @@ export function SixthSection() {
 
       {/* Video Graphic Right Bottom */}
       <div className="pointer-events-none absolute -bottom-10 left-0 z-10 h-[70vh] origin-center -rotate-90 md:-bottom-20 md:bottom-0">
-        <video
+        <SmartVideo
           aria-label="Bougainvillea video"
           autoPlay
           loop

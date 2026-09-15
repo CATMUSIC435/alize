@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { SmartVideo } from '@/components/SmartVideo';
 import { useTranslations } from 'next-intl';
 import { Playfair_Display, Inter } from 'next/font/google';
 
@@ -52,7 +53,7 @@ export function NinthSection() {
 
       {/* Right side bleeding flowers */}
       <div className="pointer-events-none absolute top-1/3 right-[-10%] z-0 w-[80vw] max-w-[700px] -translate-y-1/2 rotate-y-[175deg] rotate-z-[-40deg] md:right-[-10em] md:w-[55vw] lg:top-1/2 lg:right-0 lg:rotate-z-[-30deg]">
-        <video
+        <SmartVideo
           autoPlay
           loop
           muted

@@ -1,17 +1,18 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { SmartVideo } from '@/components/SmartVideo';
 
 export function FlowerOverlay() {
   return (
     <motion.div
-      className="pointer-events-none absolute inset-0 z-0 opacity-80 mix-blend-multiply"
+      className="pointer-events-none absolute inset-0 z-0 opacity-80"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 2, delay: 1 }}
     >
       {/* 01: Top-Left corner (Concept Section) */}
-      <video
+      <SmartVideo
         aria-label="Bougainvillea flowers background"
         autoPlay
         loop
@@ -23,7 +24,7 @@ export function FlowerOverlay() {
       />
 
       {/* 02: Middle Right (Between Image and Timeline) */}
-      <video
+      <SmartVideo
         aria-label="Bougainvillea flowers background"
         autoPlay
         loop
@@ -34,7 +35,7 @@ export function FlowerOverlay() {
         src="/bougainvillea-flowers_02.webm"
       />
 
-      <video
+      <SmartVideo
         aria-label="Bougainvillea flowers background"
         autoPlay
         loop
@@ -45,7 +46,7 @@ export function FlowerOverlay() {
         src="/bougainvillea-flowers_02.webm"
       />
 
-      <video
+      <SmartVideo
         aria-label="Bougainvillea flowers background"
         autoPlay
         loop
@@ -57,7 +58,7 @@ export function FlowerOverlay() {
       />
 
       {/* 04: Bottom Left (Timeline end) */}
-      <video
+      <SmartVideo
         aria-label="Bougainvillea flowers background"
         autoPlay
         loop

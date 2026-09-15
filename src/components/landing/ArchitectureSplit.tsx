@@ -1,6 +1,7 @@
 'use client';
 
 import { motion, useScroll, useTransform } from 'framer-motion';
+import { SmartVideo } from '@/components/SmartVideo';
 import { useTranslations } from 'next-intl';
 import { Playfair_Display, Inter } from 'next/font/google';
 import Image from 'next/image';
@@ -131,7 +132,7 @@ export function ArchitectureSplit() {
           }}
           className="pointer-events-none absolute bottom-0 left-[-10vw] z-30 w-[80vw] max-w-[700px] will-change-transform md:left-[-5vw] md:w-[80vw]"
         >
-          <video
+          <SmartVideo
             autoPlay
             loop
             muted
@@ -149,10 +150,11 @@ export function ArchitectureSplit() {
             scale: rightFlowerScale,
             rotateY: -170,
             rotateZ: -37,
+            willChange: 'transform',
           }}
           className="pointer-events-none absolute top-1/4 right-[-15vw] z-30 w-[70vw] max-w-[700px] will-change-transform md:right-[-5vw] md:w-[60vw]"
         >
-          <video
+          <SmartVideo
             autoPlay
             loop
             muted

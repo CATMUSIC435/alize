@@ -1,6 +1,7 @@
 'use client';
 
 import { motion, useScroll, useTransform } from 'framer-motion';
+import { SmartVideo } from '@/components/SmartVideo';
 import { useTranslations } from 'next-intl';
 import { Playfair_Display, Inter, Pinyon_Script } from 'next/font/google';
 import Image from 'next/image';
@@ -82,7 +83,7 @@ export function EighthSection() {
             </motion.div>
 
             {/* Bougainvillea Video Overlay */}
-            <video
+            <SmartVideo
               autoPlay
               loop
               muted
@@ -114,7 +115,7 @@ export function EighthSection() {
 
         {/* Right Column (Balcony Image & Text) */}
         <motion.div
-          style={{ y: rightColumnY }}
+          style={{ y: rightColumnY, willChange: 'transform' }}
           className="relative z-10 mt-24 flex w-full flex-col px-6 md:mt-0 md:w-[55%] md:px-0"
         >
           {/* Balcony Image */}

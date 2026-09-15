@@ -48,7 +48,18 @@ export function BackgroundAnimation() {
       </div>
 
       {/* 2. The Arch Mask Overlay (Nested SVGs for bottom-center origin) */}
-      <div className="pointer-events-none absolute inset-0 z-10">
+      <motion.div 
+        className="pointer-events-none absolute inset-0 z-10"
+        style={{ willChange: 'opacity' }}
+        initial={{ opacity: 1 }}
+        animate={{ opacity: [1, 1, 1, 0] }}
+        transition={{
+          duration: 5,
+          times: [0, 0.25, 0.45, 1],
+          ease: ['easeOut', 'linear', [0.45, 0, 0.15, 1]],
+          delay: 0.2,
+        }}
+      >
         <svg width="100%" height="100%">
           <defs>
             <linearGradient id="loadingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -63,10 +74,9 @@ export function BackgroundAnimation() {
               <svg x="50%" y="100%" overflow="visible">
                 <motion.g
                   style={{ willChange: 'transform' }}
-                  initial={{ y: 700, scale: 1 }}
+                  initial={{ y: 700 }}
                   animate={{
-                    y: [700, 0, 0, 0],
-                    scale: [1, 1, 1, 40],
+                    y: [700, 0, 0, 0]
                   }}
                   transition={{
                     duration: 5,
@@ -89,12 +99,10 @@ export function BackgroundAnimation() {
           {/* Decorative Borders (Animated identically to the mask) */}
           <svg x="50%" y="100%" overflow="visible">
             <motion.g
-              style={{ willChange: 'transform, opacity' }}
-              initial={{ y: 700, scale: 1, opacity: 1 }}
+              style={{ willChange: 'transform' }}
+              initial={{ y: 700 }}
               animate={{
-                y: [700, 0, 0, 0],
-                scale: [1, 1, 1, 40],
-                opacity: [1, 1, 1, 0], // Fades out the stroke as it expands
+                y: [700, 0, 0, 0]
               }}
               transition={{
                 duration: 5,
@@ -146,7 +154,7 @@ export function BackgroundAnimation() {
             </motion.g>
           </svg>
         </svg>
-      </div>
+      </motion.div>
 
       {/* 3. Static Decorative Outer Frame (Chamfered Corners) - Only during load */}
       <motion.div

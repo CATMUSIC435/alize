@@ -56,7 +56,7 @@ export function SecondSection() {
     >
       <motion.div
         className="relative z-10 mx-auto flex w-full flex-col items-center"
-        style={{ y: contentY }}
+        style={{ y: contentY, willChange: 'transform' }}
       >
         {/* Unified SVG Curve and Text - Perfect Semi-Circle */}
         <svg
