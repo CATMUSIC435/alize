@@ -377,7 +377,7 @@ export function SixthSection() {
         className="relative flex min-h-[50vh] w-full flex-col items-center justify-center overflow-hidden pt-8 pb-16"
       >
         {/* Content */}
-        <div className="relative z-20 flex w-full max-w-[1200px] cursor-default flex-col items-center pr-6 pl-16 text-center md:px-6">
+        <div className="relative z-20 flex w-full max-w-[1200px] cursor-default flex-col items-center md:pr-6 md:pl-16 text-center md:px-6">
           {/* Vertical Line & Small Text */}
           <motion.div
             variants={{

@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import { Inter } from 'next/font/google';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import * as THREE from 'three';
@@ -108,9 +108,10 @@ export function WebGLSlider({
   const animationFrameRef = useRef<number | null>(null);
   const prevIndexRef = useRef(currentIndex);
   const renderSceneRef = useRef<() => void>(() => {});
+  const isInView = useInView(containerRef, { margin: '300px', once: true });
 
   useEffect(() => {
-    if (!canvasRef.current || !containerRef.current) {
+    if (!isInView || !canvasRef.current || !containerRef.current) {
       return () => {
         /* do nothing */
       };
@@ -198,7 +199,7 @@ export function WebGLSlider({
       renderer.dispose();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isInView]);
 
   const goToIndex = useCallback(
     (newIndex: number) => {

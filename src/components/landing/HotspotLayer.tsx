@@ -3,10 +3,12 @@
 import { motion, useMotionValueEvent, useScroll, useTransform } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
+import { useUIStore } from '@/store/useUIStore';
 import { Hotspot } from './Hotspot';
 
 export function HotspotLayer() {
   const t = useTranslations('Index');
+  const isIntroComplete = useUIStore((state) => state.isIntroComplete);
   const [activeHotspotId, setActiveHotspotId] = useState<number | null>(null);
   const [userExplicitlyClosed, setUserExplicitlyClosed] = useState(false);
 
@@ -17,17 +19,19 @@ export function HotspotLayer() {
   // Initial check on mount in case user is already scrolled into Section 1
   useEffect(() => {
     if (typeof window === 'undefined') return;
+    if (!isIntroComplete) return;
     const currentScroll = window.scrollY;
     const isMobile = window.innerWidth < 768;
     const heroEnd = isMobile ? window.innerHeight * 0.95 : window.innerHeight * 1.5;
     if (currentScroll >= 60 && currentScroll < heroEnd) {
       setActiveHotspotId(1);
     }
-  }, []);
+  }, [isIntroComplete]);
 
   // Auto-expand Hotspot 1 when scrolling into Section 1 (from top OR when scrolling back up from below).
   // Auto-close when leaving Section 1 (scrolling down to Section 2 or back to top).
   useMotionValueEvent(scrollY, 'change', (latest) => {
+    if (!useUIStore.getState().isIntroComplete) return;
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
     const heroEnd = isMobile
       ? (typeof window !== 'undefined' ? window.innerHeight * 0.95 : 800)
@@ -68,6 +72,8 @@ export function HotspotLayer() {
       { label: t('project_product_types_label'), value: t('project_product_types_val'), colSpan: 2 },
     ],
   };
+
+  if (!isIntroComplete) return null;
 
   return (
     <motion.div

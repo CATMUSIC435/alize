@@ -6,15 +6,15 @@ import Link from 'next/link';
 import { useUIStore } from '@/store/useUIStore';
 import { NavigationMenu } from './NavigationMenu';
 
-export function Header({ alwaysDark }: { alwaysDark?: boolean }) {
+export function Header(props: { alwaysDark?: boolean }) {
   const headerTheme = useUIStore((state) => state.headerTheme);
-  const isDark = alwaysDark ?? headerTheme === 'dark';
+  const isDark = props.alwaysDark ?? headerTheme === 'dark';
 
   return (
     <motion.header
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 3.5, duration: 1, ease: 'easeOut' }}
+      transition={{ delay: 2.8, duration: 0.8, ease: 'easeOut' }}
       className={`pointer-events-none fixed top-0 left-0 z-50 flex w-full items-start justify-between p-4 transition-colors duration-700 md:p-8 ${isDark ? 'text-[#151926]' : 'text-white'}`}
     >
       {/* Left side: Logo */}

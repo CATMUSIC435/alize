@@ -4,15 +4,18 @@ type UIState = {
   headerTheme: 'light' | 'dark';
   activeSection: string;
   isMenuOpen: boolean;
+  isIntroComplete: boolean;
   setHeaderTheme: (theme: 'light' | 'dark') => void;
   setActiveSection: (section: string) => void;
   setIsMenuOpen: (isOpen: boolean) => void;
+  setIsIntroComplete: (isComplete: boolean) => void;
 };
 
 export const useUIStore = create<UIState>((set) => ({
   headerTheme: 'light',
   activeSection: 'hero',
   isMenuOpen: false,
+  isIntroComplete: false,
   setHeaderTheme: (theme) => {
     set({ headerTheme: theme });
   },
@@ -21,5 +24,8 @@ export const useUIStore = create<UIState>((set) => ({
   },
   setIsMenuOpen: (isOpen) => {
     set({ isMenuOpen: isOpen });
+  },
+  setIsIntroComplete: (isComplete) => {
+    set({ isIntroComplete: isComplete });
   },
 }));

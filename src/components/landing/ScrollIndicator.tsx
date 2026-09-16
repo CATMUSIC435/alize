@@ -3,11 +3,13 @@
 import { motion, useScroll, useTransform, useMotionTemplate } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { Inter } from 'next/font/google';
+import { useUIStore } from '@/store/useUIStore';
 
 const inter = Inter({ subsets: ['latin'], weight: ['300', '400', '500', '700'], display: 'swap' });
 
 export function ScrollIndicator() {
   const t = useTranslations('Index');
+  const isIntroComplete = useUIStore((state) => state.isIntroComplete);
 
   const { scrollYProgress } = useScroll();
 
@@ -24,8 +26,8 @@ export function ScrollIndicator() {
     <motion.div
       className={`pointer-events-none fixed bottom-8 left-4 z-50 flex flex-col items-center md:bottom-12 md:left-12 ${inter.className}`}
       initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1, delay: 1, ease: 'easeOut' }}
+      animate={{ opacity: isIntroComplete ? 1 : 0 }}
+      transition={{ duration: 0.8, ease: 'easeOut' }}
     >
       <div className="mb-4 flex h-[200px] w-8 flex-col items-center md:h-[300px]">
         <motion.div className="w-[1px] shrink-0 bg-white" style={{ height: topHeight }} />
