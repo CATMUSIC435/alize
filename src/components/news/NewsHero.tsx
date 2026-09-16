@@ -36,7 +36,7 @@ export function NewsHero(props: { totalArticles?: number; featuredArticle?: News
   const countDisplay = (props.totalArticles ?? 4).toString().padStart(2, '0');
 
   return (
-    <section className="relative w-full overflow-hidden bg-[#F4F3ED] pt-[18vh] pb-[6vh] md:pt-[20vh] md:pb-[8vh]">
+    <section className="relative w-full overflow-hidden bg-transparent pt-[18vh] pb-[6vh] md:pt-[20vh] md:pb-[8vh]">
       {/* Floral Decorative Video - Top Right */}
       <div className="pointer-events-none absolute top-0 right-0 z-0 h-[80vw] max-h-[600px] w-[80vw] max-w-[600px] translate-x-[20%] translate-y-0 rotate-y-[180deg] opacity-90">
         <SmartVideo

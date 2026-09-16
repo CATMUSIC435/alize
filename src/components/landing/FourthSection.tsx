@@ -184,7 +184,7 @@ export function FourthSection() {
               hidden: { opacity: 0, y: 20 },
               visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: 'easeOut' } },
             }}
-            className={`mt-16 max-w-[500px] text-center text-[12px] leading-relaxed font-light text-[#151926] md:text-sm ${inter.className}`}
+            className={`mt-10 max-w-[720px] px-4 text-center text-sm leading-[1.85] font-light text-[#2D3346] sm:text-base sm:leading-[1.9] md:mt-14 md:text-[17px] md:leading-[1.95] ${inter.className}`}
           >
             {t('concept_desc')}
           </motion.p>
@@ -306,23 +306,25 @@ export function FourthSection() {
       <div className="relative w-full py-20 md:py-32">
         <div className="mx-auto w-full max-w-[1200px] px-4 md:px-8">
           {/* Timeline Title */}
-          <div className="mb-20 flex flex-col items-center justify-center md:mb-32">
+          <div className="mb-20 flex flex-col items-center justify-center text-center md:mb-32">
             <h2
-              className={`text-center text-[8vw] leading-none tracking-tighter text-[#151926] uppercase md:text-[5vw] lg:text-[70px] ${playfair.className}`}
+              className={`text-center text-[7vw] leading-tight tracking-tight text-[#151926] uppercase sm:text-[5vw] lg:text-[64px] ${playfair.className}`}
             >
               {t('the_coast_wanted')}
             </h2>
-            <span
-              className={`mt-4 block text-[12vw] leading-none tracking-normal text-[#151926]/90 lowercase md:mt-2 md:text-[7vw] lg:text-[90px] ${cursive.className}`}
-              style={{ transform: 'rotate(-3deg)' }}
-            >
-              {t('yours')}
-            </span>
-            <span
-              className={`mt-6 text-sm font-light tracking-widest text-[#151926] uppercase md:text-base ${inter.className}`}
+            {Boolean(t('yours')) && (
+              <span
+                className={`mt-4 block text-[12vw] leading-none tracking-normal text-[#151926]/90 lowercase md:mt-2 md:text-[7vw] lg:text-[90px] ${cursive.className}`}
+                style={{ transform: 'rotate(-3deg)' }}
+              >
+                {t('yours')}
+              </span>
+            )}
+            <p
+              className={`mt-4 max-w-[680px] text-center text-sm font-light tracking-wide text-[#2D3346] sm:text-base md:mt-6 md:text-[17px] md:tracking-wider ${inter.className}`}
             >
               {t('this_year')}
-            </span>
+            </p>
           </div>
 
           {/* Timeline Container */}

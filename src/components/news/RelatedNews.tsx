@@ -28,7 +28,7 @@ export function RelatedNews(props: { currentSlug: string; articles: NewsArticle[
   if (related.length === 0) return null;
 
   return (
-    <section className="relative z-20 w-full [border-top-left-radius:50vw] [border-top-right-radius:50vw] bg-[#F4F3ED] pt-[15vh] pb-32 text-[#151926] md:pt-[15vw] md:pb-44 border-t border-[#151926]/10">
+    <section className="bg-textured-sand relative z-20 w-full [border-top-left-radius:50vw] [border-top-right-radius:50vw] pt-[15vh] pb-32 text-[#151926] md:pt-[15vw] md:pb-44 border-t border-[#151926]/10">
       {/* Title & Hairline Divider matching SimilarApartments */}
       <div className="mb-20 flex w-full flex-col items-center px-6 text-center md:mb-28">
         <span className={`text-[10px] font-bold tracking-[0.25em] text-[#8B7043] uppercase md:text-xs ${inter.className}`}>

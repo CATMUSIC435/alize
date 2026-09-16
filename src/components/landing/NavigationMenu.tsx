@@ -15,7 +15,7 @@ const playfair = Playfair_Display({
 });
 const inter = Inter({ subsets: ['latin'], weight: ['400', '500', '600', '700'], display: 'swap' });
 
-const languages = ['vi', 'en', 'zh', 'fr', 'ru'];
+const languages = ['vi', 'en', 'zh'];
 
 export function NavigationMenu({ isDark }: { isDark?: boolean }) {
   const t = useTranslations('Index');

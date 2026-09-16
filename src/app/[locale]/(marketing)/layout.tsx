@@ -1,6 +1,4 @@
 import { setRequestLocale } from 'next-intl/server';
-import { CursorTrail } from '@/components/landing/CursorTrail';
-
 export default async function Layout(props: {
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
@@ -8,10 +6,5 @@ export default async function Layout(props: {
   const { locale } = await props.params;
   setRequestLocale(locale);
 
-  return (
-    <>
-      <CursorTrail />
-      {props.children}
-    </>
-  );
+  return <>{props.children}</>;
 }

@@ -68,8 +68,8 @@ export function SecondSection() {
 
           {/* Text following the curve, pushed down (dy) to sit inside the blue area */}
           <text
-            letterSpacing="0.1em"
-            className={`fill-[#151926] uppercase ${playfair.className} text-[110px] md:text-[75px]`}
+            letterSpacing="0.08em"
+            className={`fill-[#151926] uppercase ${playfair.className} text-[56px] sm:text-[62px] md:text-[68px]`}
           >
             <textPath href="#curve-text-path" startOffset="50%" textAnchor="middle">
               <tspan dy="120">{t('three_reasons')}</tspan>
@@ -110,17 +110,16 @@ export function SecondSection() {
               <div className="my-12 h-24 w-[1px] bg-[#151926]/30 md:my-8 md:h-32 lg:h-48"></div>
 
               <p
-                className={`max-w-[300px] text-center text-[11px] leading-loose font-bold tracking-[0.15em] text-[#151926] uppercase md:text-xs ${inter.className}`}
+                className={`max-w-[680px] px-4 text-center text-sm leading-[1.8] font-light tracking-wide text-[#2D3346] sm:text-base sm:leading-[1.85] md:text-[17px] md:leading-[1.9] ${inter.className}`}
               >
-                {t('a_place')} — {t('to_return_to')}
+                {t('trade_wind_story')}
               </p>
             </div>
 
             {/* Real Life Location */}
             <div className="flex w-full flex-col items-center">
               <h2
-                className={`mb-16 px-4 text-center text-[9vw] leading-[1.3] font-bold tracking-tighter text-[#151926] uppercase sm:text-[8vw] md:mb-32 md:text-[100px] md:leading-none lg:text-[120px] ${playfair.className}`}
-                style={{ transform: 'scaleY(1.25)', transformOrigin: 'center' }}
+                className={`mb-14 max-w-[1150px] px-6 text-center text-2xl leading-[1.4] font-normal tracking-tight text-[#151926] sm:text-3xl sm:leading-[1.35] md:mb-24 md:text-4xl md:leading-[1.3] lg:text-[48px] lg:leading-[1.28] xl:text-[54px] xl:leading-[1.25] ${playfair.className}`}
               >
                 {t('real_life_location')}
               </h2>
@@ -145,17 +144,20 @@ export function SecondSection() {
                 />
               </motion.div>
 
-              <p
-                className={`mt-8 max-w-[600px] text-center text-xs leading-[1.8] font-light text-[#2D3346] sm:text-sm md:mt-12 md:text-base ${inter.className}`}
+              {/* Location Heading */}
+              <h3
+                className={`mt-12 text-center text-xs font-bold tracking-[0.25em] text-[#151926] uppercase sm:text-sm md:mt-16 md:text-base ${inter.className}`}
               >
-                {t('location_desc')}
-              </p>
+                {t('location_heading')}
+              </h3>
 
-              <p
-                className={`mt-16 text-center text-[9px] font-bold tracking-[0.2em] text-[#151926] uppercase md:text-[11px] ${inter.className}`}
+              {/* Location Description Paragraphs */}
+              <div
+                className={`mt-6 max-w-[680px] space-y-4 px-4 text-center text-sm leading-[1.85] font-light text-[#2D3346] sm:text-base sm:leading-[1.9] md:text-[16px] md:leading-[1.95] ${inter.className}`}
               >
-                {t('designed_as')}
-              </p>
+                <p>{t('location_desc_1')}</p>
+                <p>{t('location_desc_2')}</p>
+              </div>
             </div>
           </div>{' '}
           {/* End of content wrapper */}

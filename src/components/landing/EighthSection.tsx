@@ -39,7 +39,7 @@ export function EighthSection() {
       {/* Center Title */}
       <div className="flex w-full flex-col items-center text-center">
         <h2
-          className={`flex flex-col items-center text-[6vw] leading-[0.8] font-medium tracking-tighter text-[#151926] uppercase md:text-[8vw] ${playfair.className}`}
+          className={`flex flex-col items-center text-[6vw] leading-[0.9] font-medium tracking-tighter text-[#151926] uppercase md:text-[8vw] md:leading-[0.92] ${playfair.className}`}
           style={{ transform: 'scaleY(1.15)' }}
         >
           {t('the_space')
@@ -134,8 +134,8 @@ export function EighthSection() {
           {/* Text Content */}
           <div className="mt-16 flex w-full flex-col px-4 md:mt-32 md:px-16 xl:px-24">
             <h3
-              className={`indent-[15%] text-3xl leading-[0.9] font-medium tracking-tighter text-[#151926] uppercase md:indent-[20%] md:text-[2.5vw] xl:text-[2.2vw] ${playfair.className}`}
-              style={{ transform: 'scaleY(1.2)', transformOrigin: 'left top' }}
+              className={`indent-[15%] text-3xl leading-[1.1] font-medium tracking-tighter text-[#151926] uppercase whitespace-pre-line md:indent-[20%] md:text-[2.5vw] md:leading-[1.15] xl:text-[2.2vw] ${playfair.className}`}
+              style={{ transform: 'scaleY(1.15)', transformOrigin: 'left top' }}
             >
               {t('every_detail')}
             </h3>

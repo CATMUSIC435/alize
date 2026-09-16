@@ -20,12 +20,15 @@ export function SmoothScroll(props: { children: React.ReactNode }) {
 
   const isHome = isHomePage(pathname);
 
-  // Non-home pages never require the intro loader - mark intro complete immediately
+  // Skip intro if already seen in this session or on non-home pages
   useEffect(() => {
-    if (!isHome && !isIntroComplete) {
-      setIsIntroComplete(true);
+    if (typeof window !== 'undefined') {
+      const seen = sessionStorage.getItem('alize_intro_seen');
+      if (seen === 'true' || !isHome) {
+        setIsIntroComplete(true);
+      }
     }
-  }, [isHome, isIntroComplete, setIsIntroComplete]);
+  }, [isHome, setIsIntroComplete]);
 
   useEffect(() => {
     // Prevent browser from restoring scroll position midway down the page on reload

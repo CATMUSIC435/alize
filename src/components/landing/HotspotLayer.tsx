@@ -12,24 +12,24 @@ export function HotspotLayer() {
   const [activeHotspotId, setActiveHotspotId] = useState<number | null>(null);
   const [userExplicitlyClosed, setUserExplicitlyClosed] = useState(false);
 
-  // Fade in as the user scrolls past 60px to 160px so it is fully solid before auto-opening.
+  // Fade in only after the hero typography has faded out (past 200px to 340px)
   const { scrollY } = useScroll();
-  const opacity = useTransform(scrollY, [60, 160], [0, 1]);
+  const opacity = useTransform(scrollY, [200, 340], [0, 1]);
 
-  // Initial check on mount in case user is already scrolled into Section 1
+  // Initial check on mount in case user is already scrolled past the hero typography
   useEffect(() => {
     if (typeof window === 'undefined') return;
     if (!isIntroComplete) return;
     const currentScroll = window.scrollY;
     const isMobile = window.innerWidth < 768;
     const heroEnd = isMobile ? window.innerHeight * 0.95 : window.innerHeight * 1.5;
-    if (currentScroll >= 60 && currentScroll < heroEnd) {
+    if (currentScroll >= 300 && currentScroll < heroEnd) {
       setActiveHotspotId(1);
     }
   }, [isIntroComplete]);
 
-  // Auto-expand Hotspot 1 when scrolling into Section 1 (from top OR when scrolling back up from below).
-  // Auto-close when leaving Section 1 (scrolling down to Section 2 or back to top).
+  // Auto-expand Hotspot 1 only after scrolling past the hero typography (latest >= 300).
+  // Auto-close when leaving Section 1 or scrolling back up to the hero text (latest < 250).
   useMotionValueEvent(scrollY, 'change', (latest) => {
     if (!useUIStore.getState().isIntroComplete) return;
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
@@ -37,7 +37,7 @@ export function HotspotLayer() {
       ? (typeof window !== 'undefined' ? window.innerHeight * 0.95 : 800)
       : (typeof window !== 'undefined' ? window.innerHeight * 1.5 : 1350);
 
-    const isInHeroSection = latest >= 60 && latest < heroEnd;
+    const isInHeroSection = latest >= 300 && latest < heroEnd;
 
     if (isInHeroSection) {
       if (activeHotspotId === null && !userExplicitlyClosed) {
@@ -47,8 +47,10 @@ export function HotspotLayer() {
       if (activeHotspotId !== null) {
         setActiveHotspotId(null);
       }
-      // Reset explicit close when scrolling away so returning to Section 1 shows it again
-      setUserExplicitlyClosed(false);
+      // Reset explicit close when scrolling back up so returning downwards shows it again
+      if (latest < 250) {
+        setUserExplicitlyClosed(false);
+      }
     }
   });
 

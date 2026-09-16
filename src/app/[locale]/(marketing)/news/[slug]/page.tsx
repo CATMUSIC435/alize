@@ -192,7 +192,7 @@ export default async function NewsDetailPage(props: NewsDetailPageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <main className="relative min-h-screen w-full bg-[#F4F3ED]">
+      <main className="bg-textured-sand relative min-h-screen w-full">
         {/* Fixed Top Header */}
         <Header alwaysDark={true} />
 

@@ -1,4 +1,4 @@
-import { enUS, frFR, viVN, zhCN, ruRU } from '@clerk/localizations';
+import { enUS, viVN, zhCN } from '@clerk/localizations';
 import type { LocalizationResource } from '@clerk/shared/types';
 import type { LocalePrefixMode } from 'next-intl/routing';
 
@@ -10,7 +10,7 @@ const localePrefix: LocalePrefixMode = 'as-needed';
 export const AppConfig = {
   name: 'Nextjs Starter',
   i18n: {
-    locales: ['vi', 'en', 'zh', 'fr', 'ru'],
+    locales: ['vi', 'en', 'zh'],
     defaultLocale: 'vi',
     localePrefix,
   },
@@ -20,8 +20,6 @@ const supportedLocales: Record<string, LocalizationResource> = {
   vi: viVN,
   en: enUS,
   zh: zhCN,
-  fr: frFR,
-  ru: ruRU,
 };
 
 export const ClerkLocalizations = {

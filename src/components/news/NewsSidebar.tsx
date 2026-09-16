@@ -10,10 +10,16 @@ export function NewsSidebar(props: { category?: string; articleTitle?: string })
   const t = useTranslations('Index');
   const tRoot = useTranslations('RootLayout');
 
+  const formattedTitle = props.articleTitle
+    ? props.articleTitle.length > 24
+      ? `${props.articleTitle.slice(0, 24).trim()}...`
+      : props.articleTitle
+    : null;
+
   return (
     <div className="fixed bottom-8 left-4 z-40 hidden w-8 justify-center mix-blend-difference md:bottom-12 md:left-12 md:flex">
       <div
-        className={`flex items-center gap-6 text-[9px] font-bold tracking-[0.2em] whitespace-nowrap text-white/50 uppercase lg:text-[10px] ${inter.className}`}
+        className={`flex items-center gap-4 text-[9px] font-bold tracking-[0.2em] whitespace-nowrap text-white/50 uppercase lg:gap-5 lg:text-[10px] ${inter.className}`}
         style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
       >
         <Link href="/" className="transition-colors hover:text-white">
@@ -29,11 +35,16 @@ export function NewsSidebar(props: { category?: string; articleTitle?: string })
             {props.category && (
               <>
                 <span className="rotate-90 text-white/30">/</span>
-                <span className="text-white/70">{props.category}</span>
+                <span className="max-h-[110px] truncate text-white/70">{props.category}</span>
               </>
             )}
             <span className="rotate-90 text-white/30">/</span>
-            <span className="max-w-[150px] truncate text-white">{props.articleTitle}</span>
+            <span
+              title={props.articleTitle}
+              className="max-h-[130px] truncate text-white md:max-h-[160px]"
+            >
+              {formattedTitle}
+            </span>
           </>
         ) : (
           <span className="text-white">{t('news')}</span>

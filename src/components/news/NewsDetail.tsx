@@ -63,7 +63,7 @@ export function NewsDetail(props: { article: NewsArticle }) {
             className="my-10 w-full drop-shadow-md filter"
           >
             <div
-              className="relative flex flex-col justify-between overflow-hidden bg-textured-sand p-8 text-[#151926] sm:p-12 md:p-16"
+              className="relative flex flex-col justify-between overflow-hidden bg-sand-card border border-[#D9CEBD]/80 p-8 text-[#151926] sm:p-12 md:p-16"
               style={{ clipPath: clipPathPolygon }}
             >
               {/* Decorative quotation mark */}
@@ -168,7 +168,7 @@ export function NewsDetail(props: { article: NewsArticle }) {
   };
 
   return (
-    <article className="relative w-full bg-[#F4F3ED] pt-32 pb-20 md:pt-40 md:pb-28">
+    <article className="relative w-full bg-transparent pt-32 pb-20 md:pt-40 md:pb-28">
       <div className="mx-auto w-full max-w-[1600px] px-6 md:px-12">
         {/* ARTICLE HEADER BLOCK */}
         <header className="mb-12 md:mb-20">

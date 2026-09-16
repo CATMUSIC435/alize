@@ -55,7 +55,7 @@ export function NewsCard(props: { article: NewsArticle }) {
         <div className="flex flex-1 flex-col justify-between">
           <div>
             <h3
-              className={`mb-3 text-lg leading-tight font-medium text-[#151926] uppercase transition-colors duration-300 group-hover:text-[#8B7043] sm:text-xl md:text-[22px] ${playfair.className}`}
+              className={`mb-3 line-clamp-2 text-lg leading-tight font-medium text-[#151926] uppercase transition-colors duration-300 group-hover:text-[#8B7043] sm:text-xl md:text-[22px] ${playfair.className}`}
             >
               {props.article.title}
             </h3>

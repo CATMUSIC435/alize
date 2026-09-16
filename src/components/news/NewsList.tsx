@@ -99,7 +99,7 @@ export function NewsList(props: { articles: NewsArticle[]; featuredArticleId?: s
   const activeSortLabel = sorts.find((s) => s.id === sortBy)?.label ?? tNews('sort_newest');
 
   return (
-    <section className="relative w-full bg-[#F4F3ED] px-6 py-12 md:px-12 md:py-20">
+    <section className="relative w-full bg-transparent px-6 py-12 md:px-12 md:py-20">
       <div className="mx-auto w-full max-w-[1600px]">
         {/* DUAL LAYER CHAMFERED FILTER BAR */}
         <div className="relative z-30 mb-12 w-full">

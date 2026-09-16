@@ -190,13 +190,16 @@ export function BackgroundAnimation() {
                   opacity: [1, 1, 1, 0],
                 }}
                 transition={{
-                  duration: 3.2,
+                  duration: 2.2,
                   times: [0, 0.28, 0.55, 1],
                   ease: ['easeOut', 'linear', [0.22, 1, 0.36, 1]],
-                  delay: 0.1,
+                  delay: 0.08,
                 }}
                 onAnimationComplete={() => {
                   setIsIntroComplete(true);
+                  if (typeof window !== 'undefined') {
+                    sessionStorage.setItem('alize_intro_seen', 'true');
+                  }
                 }}
               >
                 {/* 5 Concentric Architectural Stroke Rings (Hardware Accelerated CSS) */}
