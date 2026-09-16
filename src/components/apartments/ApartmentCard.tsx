@@ -12,7 +12,7 @@ const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400', '500', '
 const clipPathPolygon =
   'polygon(16px 0, calc(100% - 16px) 0, 100% 16px, 100% calc(100% - 16px), calc(100% - 16px) 100%, 16px 100%, 0 calc(100% - 16px), 0 16px)';
 
-export function ApartmentCard({ data }: { data: ApartmentData }) {
+export function ApartmentCard(props: { data: ApartmentData }) {
   const t = useTranslations('Index');
 
   const getTypologyLabel = (typ: string) => {
@@ -34,7 +34,7 @@ export function ApartmentCard({ data }: { data: ApartmentData }) {
 
   return (
     <Link
-      href={`/apartments/${data.id}`}
+      href={`/apartments/${props.data.id}`}
       className="group relative block w-full cursor-pointer drop-shadow-md filter transition-all duration-500 hover:drop-shadow-2xl"
     >
       <div
@@ -50,20 +50,20 @@ export function ApartmentCard({ data }: { data: ApartmentData }) {
           <h3
             className={`mb-2 text-[11px] font-bold tracking-[0.2em] text-[#151926] uppercase md:text-xs ${inter.className}`}
           >
-            {getTypologyLabel(data.typology)}
+            {getTypologyLabel(props.data.typology)}
           </h3>
           <p
             className={`text-[9px] tracking-[0.2em] text-[#151926]/60 uppercase md:text-[10px] ${inter.className}`}
           >
-            {t('completion')}: {data.completion}
+            {t('completion')}: {props.data.completion}
           </p>
         </div>
 
         {/* IMAGE SECTION */}
         <div className="relative mb-10 aspect-[4/3] w-full transition-transform duration-700 group-hover:scale-105">
           <Image
-            src={data.image}
-            alt={`Apartment ${data.number}`}
+            src={props.data.image}
+            alt={`Căn hộ No. ${props.data.number} (${props.data.area}m²) - Alizé Residence Đà Nẵng`}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className="object-contain"
@@ -76,21 +76,21 @@ export function ApartmentCard({ data }: { data: ApartmentData }) {
           <p
             className={`mb-6 text-[9px] font-bold tracking-[0.2em] text-[#151926] uppercase md:text-[10px] ${inter.className}`}
           >
-            Nº {data.number} <span className="mx-2 opacity-50">.</span> {t('block')} {data.block}{' '}
-            <span className="mx-2 opacity-50">.</span> {data.floor} {t('floor')}
+            Nº {props.data.number} <span className="mx-2 opacity-50">.</span> {t('block')} {props.data.block}{' '}
+            <span className="mx-2 opacity-50">.</span> {props.data.floor} {t('floor')}
           </p>
 
           <h2 className={`mb-4 text-4xl text-[#151926] md:text-5xl ${playfair.className}`}>
-            {data.bedrooms}{' '}
+            {props.data.bedrooms}{' '}
             <span className="font-sans text-[0.4em] tracking-[0.2em] uppercase">{t('bed')}</span>{' '}
-            <span className="mx-2 text-[0.8em] font-light opacity-30">/</span> {data.area} M²
+            <span className="mx-2 text-[0.8em] font-light opacity-30">/</span> {props.data.area} M²
           </h2>
 
-          {data.terrace ? (
+          {props.data.terrace ? (
             <p
               className={`text-[10px] font-bold tracking-[0.2em] text-[#151926] uppercase md:text-[11px] ${inter.className}`}
             >
-              + {data.terrace} M² {t('terrace')}
+              + {props.data.terrace} M² {t('terrace')}
             </p>
           ) : (
             <p

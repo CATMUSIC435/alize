@@ -11,11 +11,19 @@ import { SmoothScroll } from '@/components/landing/SmoothScroll';
 import { TenthSection } from '@/components/landing/TenthSection';
 import { APARTMENTS_DATA } from '@/data/apartments';
 
-type Props = {
+import { routing } from '@/libs/I18nRouting';
+
+type ApartmentDetailPageProps = {
   params: Promise<{ locale: string; id: string }>;
 };
 
-export async function generateMetadata(props: Props) {
+export function generateStaticParams() {
+  return APARTMENTS_DATA.map((apt) => ({
+    id: apt.id,
+  }));
+}
+
+export async function generateMetadata(props: ApartmentDetailPageProps) {
   const { locale, id } = await props.params;
   const apartment = APARTMENTS_DATA.find((apt) => apt.id === id);
 
@@ -23,27 +31,59 @@ export async function generateMetadata(props: Props) {
     return {};
   }
 
+  const title = `Căn Hộ No. ${apartment.number} (${apartment.area}m²) | Alizé Residence Đà Nẵng`;
+  const description = apartment.description ?? `Căn hộ cao cấp No. ${apartment.number} gồm ${apartment.bedrooms} phòng ngủ, diện tích ${apartment.area}m² tại dự án Alizé Residence, bờ biển Mỹ Khê Đà Nẵng.`;
+  const canonicalUrl = `https://alize-residence.com/${locale}/apartments/${id}`;
+
+  const languages = Object.fromEntries(
+    routing.locales.map((loc) => [loc, `https://alize-residence.com/${loc}/apartments/${id}`]),
+  );
+
   return {
-    title: `NO. ${apartment.number} - ALIZE RESIDENCE`,
-    description: apartment.description,
+    title,
+    description,
+    keywords: [
+      `Căn hộ ${apartment.number}`,
+      `Apartment ${apartment.number} Alizé`,
+      `Alizé Residence ${apartment.typology}`,
+      'Căn hộ mặt biển Mỹ Khê',
+      'Đà Nẵng luxury apartment',
+      'Dự án Alizé Đà Nẵng',
+    ],
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        ...languages,
+        'x-default': `https://alize-residence.com/en/apartments/${id}`,
+      },
+    },
     openGraph: {
-      title: `NO. ${apartment.number} - ALIZE RESIDENCE`,
-      description: apartment.description,
-      url: `https://alize-residence.com/${locale}/apartments/${id}`,
+      title,
+      description,
+      url: canonicalUrl,
+      siteName: 'Alizé Residence Đà Nẵng',
+      locale: locale === 'vi' ? 'vi_VN' : locale === 'zh' ? 'zh_CN' : `${locale}_${locale.toUpperCase()}`,
       type: 'article',
       images: [
         {
           url: apartment.image,
           width: 1200,
           height: 630,
-          alt: `Apartment ${apartment.number} at Alize Residence`,
+          alt: `Căn hộ No. ${apartment.number} - Alizé Residence Đà Nẵng`,
+          type: 'image/jpeg',
         },
       ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [apartment.image],
     },
   };
 }
 
-export default async function ApartmentDetailPage(props: Props) {
+export default async function ApartmentDetailPage(props: ApartmentDetailPageProps) {
   const { locale, id } = await props.params;
   setRequestLocale(locale);
 
@@ -53,17 +93,60 @@ export default async function ApartmentDetailPage(props: Props) {
     notFound();
   }
 
+  const baseUrl = 'https://alize-residence.com';
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Apartment',
-    name: `Apartment ${apartment.number} at Alize Residence`,
+    name: `Căn hộ No. ${apartment.number} - Alizé Residence Đà Nẵng`,
     description: apartment.description,
-    url: `https://alize-residence.com/${locale}/apartments/${id}`,
+    url: `${baseUrl}/${locale}/apartments/${id}`,
     numberOfRooms: apartment.bedrooms,
     floorSize: {
       '@type': 'QuantitativeValue',
       value: apartment.area,
       unitCode: 'MTK',
+    },
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: 'Đường Võ Nguyên Giáp, Phường Phước Mỹ',
+      addressLocality: 'Sơn Trà',
+      addressRegion: 'Đà Nẵng',
+      postalCode: '550000',
+      addressCountry: 'VN',
+    },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: 16.0617,
+      longitude: 108.2435,
+    },
+    containedInPlace: {
+      '@type': 'ApartmentComplex',
+      name: 'Alizé Residence Đà Nẵng',
+      url: baseUrl,
+    },
+    breadcrumb: {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Trang chủ',
+          item: `${baseUrl}/${locale}`,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Căn hộ',
+          item: `${baseUrl}/${locale}/apartments`,
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: `No. ${apartment.number}`,
+          item: `${baseUrl}/${locale}/apartments/${id}`,
+        },
+      ],
     },
     amenityFeature: [
       {

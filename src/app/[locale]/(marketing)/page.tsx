@@ -10,6 +10,8 @@ import { ScrollManager } from '@/components/landing/ScrollManager';
 import { SmoothScroll } from '@/components/landing/SmoothScroll';
 import { TypographyOverlay } from '@/components/landing/TypographyOverlay';
 
+import { routing } from '@/libs/I18nRouting';
+
 // Dynamically import below-the-fold heavy Client Components
 const ArchitectureSplit = dynamic(() => import('@/components/landing/ArchitectureSplit').then((m) => m.ArchitectureSplit));
 const SecondSection = dynamic(() => import('@/components/landing/SecondSection').then((m) => m.SecondSection));
@@ -29,14 +31,35 @@ export async function generateMetadata(props: {
   const { locale } = await props.params;
   const t = await getTranslations({ locale, namespace: 'Index' });
 
+  const canonicalUrl = `https://alize-residence.com/${locale}`;
+  const languages = Object.fromEntries(
+    routing.locales.map((loc) => [loc, `https://alize-residence.com/${loc}`]),
+  );
+
   return {
     title: t('meta_title'),
     description: t('meta_description'),
+    keywords: [
+      'Alizé Residence',
+      'Căn hộ Alizé Đà Nẵng',
+      'Bất động sản Mỹ Khê',
+      'Căn hộ biển cao cấp Đà Nẵng',
+      'Branded Residences Da Nang',
+      'Alizé Residence Danang',
+      'Luxury beachfront residences Vietnam',
+    ],
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        ...languages,
+        'x-default': 'https://alize-residence.com/en',
+      },
+    },
     openGraph: {
       title: t('meta_title'),
       description: t('meta_description'),
-      url: `https://alize-residence.com/${locale}`,
-      siteName: 'Alizé Residence',
+      url: canonicalUrl,
+      siteName: 'Alizé Residence Đà Nẵng',
       images: [
         {
           url: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2070&auto=format&fit=crop',
@@ -45,7 +68,7 @@ export async function generateMetadata(props: {
           alt: 'Alizé Residence - Căn hộ cao cấp mặt biển Mỹ Khê, Đà Nẵng',
         },
       ],
-      locale,
+      locale: locale === 'vi' ? 'vi_VN' : locale === 'zh' ? 'zh_CN' : `${locale}_${locale.toUpperCase()}`,
       type: 'website',
     },
     twitter: {
