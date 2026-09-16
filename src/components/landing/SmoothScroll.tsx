@@ -3,11 +3,13 @@
 import Lenis from 'lenis';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
+import { routing } from '@/libs/I18nRouting';
 import { useUIStore } from '@/store/useUIStore';
 
 const isHomePage = (path: string | null) => {
   if (!path || path === '/') return true;
-  return /^\/[a-zA-Z]{2,5}\/?$/.test(path);
+  const cleanPath = path.replace(/\/+$/, '');
+  return routing.locales.some((loc) => cleanPath === `/${loc}`);
 };
 
 export function SmoothScroll(props: { children: React.ReactNode }) {
@@ -45,7 +47,7 @@ export function SmoothScroll(props: { children: React.ReactNode }) {
     lenisRef.current = lenis;
 
     // Only lock scroll initially if on the home page AND intro is not yet completed
-    const currentIsHome = typeof window !== 'undefined' ? isHomePage(window.location.pathname) : true;
+    const currentIsHome = isHomePage(typeof window !== 'undefined' ? window.location.pathname : pathname);
     if (currentIsHome && !useUIStore.getState().isIntroComplete) {
       lenis.stop();
       document.documentElement.style.overflow = 'hidden';
@@ -56,13 +58,29 @@ export function SmoothScroll(props: { children: React.ReactNode }) {
       lenis.start();
     }
 
+    const resizeObserver = typeof ResizeObserver !== 'undefined'
+      ? new ResizeObserver(() => {
+          lenisRef.current?.resize();
+        })
+      : null;
+
+    if (resizeObserver && typeof document !== 'undefined') {
+      resizeObserver.observe(document.body);
+    }
+
+    const resizeTimer = setTimeout(() => {
+      lenisRef.current?.resize();
+    }, 400);
+
     return () => {
+      clearTimeout(resizeTimer);
+      resizeObserver?.disconnect();
       document.documentElement.style.overflow = '';
       document.body.style.overflow = '';
       lenis.destroy();
       lenisRef.current = null;
     };
-  }, []);
+  }, [isHome]);
 
   // Sync scroll lock with home intro state
   useEffect(() => {
@@ -72,6 +90,7 @@ export function SmoothScroll(props: { children: React.ReactNode }) {
       document.documentElement.style.overflow = '';
       document.body.style.overflow = '';
       lenisRef.current.start();
+      lenisRef.current.resize();
     } else {
       document.documentElement.style.overflow = 'hidden';
       document.body.style.overflow = 'hidden';
@@ -83,7 +102,14 @@ export function SmoothScroll(props: { children: React.ReactNode }) {
   useEffect(() => {
     if (lenisRef.current) {
       lenisRef.current.scrollTo(0, { immediate: true });
+      lenisRef.current.resize();
     }
+    const timer = setTimeout(() => {
+      lenisRef.current?.resize();
+    }, 150);
+    return () => {
+      clearTimeout(timer);
+    };
   }, [pathname]);
 
   return <>{props.children}</>;

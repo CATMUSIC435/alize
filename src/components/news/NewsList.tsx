@@ -246,7 +246,9 @@ export function NewsList(props: { articles: NewsArticle[]; featuredArticleId?: s
                 <input
                   type="text"
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                  }}
                   placeholder={tNews('search_placeholder')}
                   className="w-32 bg-transparent text-[10px] tracking-[0.15em] text-[#151926] placeholder-[#151926]/40 uppercase transition-all duration-300 focus:w-44 focus:outline-none md:text-xs"
                 />

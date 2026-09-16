@@ -21,9 +21,11 @@ export function NewsDetail(props: { article: NewsArticle }) {
 
   const handleShare = () => {
     if (typeof window !== 'undefined') {
-      navigator.clipboard.writeText(window.location.href);
+      void navigator.clipboard.writeText(window.location.href);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2500);
+      setTimeout(() => {
+        setCopied(false);
+      }, 2500);
     }
   };
 
@@ -252,10 +254,7 @@ export function NewsDetail(props: { article: NewsArticle }) {
             aria-label={tNews('article_info')}
             className="relative w-full lg:w-[38%] xl:w-[35%]"
           >
-            <div
-              data-lenis-prevent="true"
-              className="flex flex-col space-y-8 lg:sticky lg:top-32"
-            >
+            <div className="flex flex-col space-y-8 lg:sticky lg:top-32">
               {/* SPECIFICATION CARD WITH CHAMFERED CORNERS */}
               <div className="w-full drop-shadow-md filter">
                 <div

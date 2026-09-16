@@ -36,9 +36,16 @@ export function MenuOverlay() {
 
   const [hoveredIndex, setHoveredIndex] = useState<number>(0);
 
+  // Auto close menu on route change
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [pathname, setIsMenuOpen]);
+
   // Lock body scroll and handle Escape key when menu is active
   useEffect(() => {
-    if (!isMenuOpen) return;
+    if (!isMenuOpen) {
+      return () => {};
+    }
 
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
