@@ -82,7 +82,7 @@ export function TypographyOverlay() {
         {/* Main Title */}
         <h1 className="flex flex-col items-center text-center text-white">
           <span className="text-4xl leading-none font-normal tracking-[0.2em] drop-shadow-md md:text-7xl">
-            <AnimatedText text="ERA" delay={2.4} />
+            <AnimatedText text="ALIZÉ" delay={2.4} />
           </span>
           <span
             className="mt-2 flex justify-center text-[2.75rem] leading-none tracking-tight drop-shadow-md sm:text-6xl md:text-[7.5rem]"
