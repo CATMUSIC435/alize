@@ -60,7 +60,7 @@ export default async function ApartmentsPage(props: { params: Promise<{ locale: 
       />
       <main className="relative min-h-screen w-full bg-[#F4F3ED]">
         {/* Fixed Top Header (shared from main page) */}
-        <Header />
+        <Header alwaysDark={true} />
 
         {/* Fixed Left Sidebar */}
         <ApartmentSidebar />

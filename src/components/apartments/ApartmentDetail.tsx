@@ -157,7 +157,7 @@ export function ApartmentDetail({ data }: { data: ApartmentData }) {
                 </div>
 
                 {/* Scrollable Content */}
-                <div className="flex flex-col lg:overflow-y-auto lg:[&::-webkit-scrollbar]:hidden">
+                <div data-lenis-prevent="true" className="flex flex-col lg:overflow-y-auto lg:[&::-webkit-scrollbar]:hidden">
                   {/* Specs block */}
                   <motion.div
                     initial={{ opacity: 0, x: 50 }}
