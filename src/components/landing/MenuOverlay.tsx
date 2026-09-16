@@ -6,7 +6,6 @@ import { Inter, Playfair_Display } from 'next/font/google';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { SmartVideo } from '@/components/SmartVideo';
 import { Link, usePathname } from '@/libs/I18nNavigation';
 import { useUIStore } from '@/store/useUIStore';
 
@@ -184,21 +183,6 @@ export function MenuOverlay() {
           }}
           className="bg-textured-sand pointer-events-auto fixed inset-0 z-[9999] flex flex-col overflow-x-hidden overflow-y-auto text-[#151926] select-none"
         >
-          {/* Subtle Ambient Decorative Flowers */}
-          <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-            <div className="absolute -top-10 -right-10 h-[60vw] max-h-[500px] w-[60vw] max-w-[500px] rotate-180 opacity-40 mix-blend-multiply filter blur-[0.5px]">
-              <SmartVideo
-                src="/bougainvillea-flowers_02.webm"
-                autoPlay
-                loop
-                muted
-                playsInline
-                aria-label="Decorative Flowers Watermark"
-                className="h-full w-full object-contain"
-              />
-            </div>
-          </div>
-
           {/* TOP HEADER ROW - STICKY TO STAY VISIBLE ON ANY VIEWPORT HEIGHT */}
           <div className="sticky top-0 z-50 flex w-full shrink-0 items-center justify-between border-b border-[#151926]/10 bg-[#F0EBE1]/90 px-6 py-5 backdrop-blur-md sm:px-10 md:px-14 md:py-7">
             {/* Left Brand Identity */}
