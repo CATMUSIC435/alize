@@ -124,23 +124,7 @@ export function NavigationMenu({ isDark }: { isDark?: boolean }) {
           />
           <div className="mt-1 flex flex-col items-end gap-1">
             <Link
-              href="/#contact"
-              onClick={(e) => {
-                if (pathname === '/' || pathname === '') {
-                  const target = document.getElementById('contact');
-                  if (target) {
-                    e.preventDefault();
-                    const win = window as unknown as {
-                      __lenis?: { scrollTo: (el: HTMLElement, opts?: { offset?: number; duration?: number }) => void };
-                    };
-                    if (win.__lenis) {
-                      win.__lenis.scrollTo(target, { offset: -50, duration: 1.5 });
-                    } else {
-                      target.scrollIntoView({ behavior: 'smooth' });
-                    }
-                  }
-                }
-              }}
+              href="/contact"
               className={`text-[8px] font-bold tracking-[0.2em] uppercase transition-opacity hover:opacity-70 md:text-[9px] ${inter.className}`}
             >
               {t('contact')}

@@ -140,7 +140,7 @@ export function MenuOverlay() {
     },
     {
       id: 'contact',
-      href: '/#contact',
+      href: '/contact',
       number: '05',
       title: tMenu('contact'),
       sub: tMenu('contact_sub'),

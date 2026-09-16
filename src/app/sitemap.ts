@@ -11,6 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '', priority: 1.0, changeFrequency: 'daily' },
     { path: '/apartments', priority: 0.9, changeFrequency: 'daily' },
     { path: '/news', priority: 0.85, changeFrequency: 'daily' },
+    { path: '/contact', priority: 0.85, changeFrequency: 'weekly' },
   ];
 
   const staticEntries: MetadataRoute.Sitemap = staticRoutes.map((route) => ({
