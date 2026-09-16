@@ -2,18 +2,32 @@ import type { MetadataRoute } from 'next';
 import { getBaseUrl } from '@/utils/Helpers';
 
 export default function robots(): MetadataRoute.Robots {
+  const baseUrl = getBaseUrl();
+
   return {
     rules: [
       {
         userAgent: '*',
         allow: '/',
-        disallow: '/dashboard',
+        disallow: ['/dashboard', '/api/'],
       },
       {
-        userAgent: ['GPTBot', 'CCBot', 'Google-Extended', 'Anthropic-ai'],
-        allow: '/',
+        userAgent: [
+          'GPTBot',
+          'ChatGPT-User',
+          'ClaudeBot',
+          'Anthropic-ai',
+          'PerplexityBot',
+          'Google-Extended',
+          'Applebot-Extended',
+          'Bytespider',
+          'cohere-ai',
+          'CCBot',
+        ],
+        allow: ['/', '/news/', '/apartments/'],
+        disallow: ['/dashboard', '/api/'],
       },
     ],
-    sitemap: `${getBaseUrl()}/sitemap.xml`,
+    sitemap: `${baseUrl}/sitemap.xml`,
   };
 }

@@ -4,33 +4,59 @@ This document provides a comprehensive overview of the Alizé project, a luxury 
 
 ## Overview
 - **Project Name**: ALIZÉ
-- **Developer**: A&T Group
+- **Developer**: A&T Group & DXMD Vietnam
 - **Architectural Design**: AEDAS (World's leading architectural design consultant)
 - **Location**: Vo Nguyen Giap Street, My Khe beachfront, Da Nang City, Vietnam
 - **Total Area**: 2,867 sq.m
-- **Project Scale**: 1 tower (39 above-ground floors)
-- **Property Type**: Luxury Hotel Apartments (Căn hộ khách sạn cao cấp)
+- **Project Scale**: 1 tower (39 above-ground floors, 3 basements)
+- **Property Type**: Luxury Hotel Apartments & Seafront Penthouses (Căn hộ khách sạn & Dinh thự biển cao cấp)
 
 ## Concept & Architecture
 - **Theme**: "Nghệ thuật 'riêng tư' của gió" (The "Private" Art of the Wind).
 - **Core Philosophy**: A tranquil symphony on the shores of My Khe. Where the trade winds that once guided ocean journeys now return to My Khe beach, blending with the bustling life to open up another artistic journey: returning to one's own private rhythm of life.
-- **Design Language by AEDAS**: From the invisible dances of the wind, AEDAS creates a visible language—where every architectural line sings its own rhythm between the sea and sky of My Khe. Featuring soft curves, layered balconies, and continuous open spaces swept by the wind, allowing Alizé to move with the breath of the sea.
+- **Design Language by AEDAS**: Soft curves, layered balconies, and continuous open spaces swept by the wind, allowing Alizé to move with the breath of the sea.
+- **Materials**: Natural stone facade, triple-glazed Low-E acoustic & thermal glass, Villeroy & Boch sanitaryware, Aerothermal energy-efficient fresh air ventilation.
 
 ## Location & Connectivity
 - Situated at the golden intersection of Vo Nguyen Giap and Vo Van Kiet streets.
 - Direct beachfront on My Khe Beach.
 - Offers an unparalleled "Private Position Amidst the Ocean's Breath".
-- **Connectivity**: One step to the vibrant city, one sweeping view to the ocean. From Alizé, the journey to Da Nang International Airport, the city center, or Central Vietnam's heritage sites is as effortless as a breeze.
+- 10 minutes to Da Nang International Airport, 5 minutes to Dragon Bridge, 25 minutes to Hoi An Ancient Town.
 
-## Amenities & Ecosystem
-- **Concept**: A "Private Oasis" (Ốc đảo riêng tư) nurtured amidst the winds.
-- **Facilities**: Features world-class indoor and outdoor amenities, including a library and exclusive relaxation spaces designed for the ultimate sophisticated lifestyle.
+## Editorial Journal & Latest News Articles
 
-## Developer Heritage
-- **A&T Group**: Driven by the aspiration to create sustainable values in the Vietnamese real estate market. A&T Group develops diverse projects across high-potential provinces and cities. Every project is a serious investment in location, planning, architecture, and quality, aiming for sustainable values for the community and future generations. Alizé is a prime signature of this vision, crafted with wind, light, and architectural art.
+### 1. Construction Progress & Milestones 2026
+- **Title**: Tiến độ thi công Alizé Residence: Biểu tượng mới bên bờ biển Mỹ Khê
+- **URL**: https://alize-residence.com/vi/news/le-khoi-cong-va-tien-do-thi-cong-alize-da-nang-2026
+- **Date**: 2026-09-15
+- **Category**: Project / Construction Progress
+- **Key Takeaway**: Completed deep foundation pile testing and diaphragm walls to international standards. Handover planned for Q4/2026.
+
+### 2. Contemporary Mediterranean Architectural Philosophy
+- **Title**: Triết lý kiến trúc Địa Trung Hải đương đại tại Alizé Residence
+- **URL**: https://alize-residence.com/vi/news/triet-ly-kien-truc-dia-trung-hai-tai-alize
+- **Date**: 2026-09-10
+- **Category**: Architecture & Design
+- **Key Takeaway**: Explores the iconic arch portal visual language designed by AEDAS, sand-textured warm tones (#F4F3ED), deep ocean blues (#0D2D40), and natural ventilation connecting private indoor spaces directly with sea breezes.
+
+### 3. Coastal Branded Residences Market Trends 2026
+- **Title**: Thị trường bất động sản hàng hiệu ven biển Đà Nẵng: Sức hút năm 2026
+- **URL**: https://alize-residence.com/vi/news/bat-dong-san-hang-hieu-ven-bien-da-nang-suc-hut-2026
+- **Date**: 2026-09-02
+- **Category**: Real Estate Market & Investment
+- **Key Takeaway**: Analysis of capital shifting to beachfront branded residences along Vo Nguyen Giap corridor with limited supply and long-term capital appreciation.
+
+### 4. Coastal Slow Living & Wellness Lifestyle
+- **Title**: Nghệ thuật sống chậm và tận hưởng khoảnh khắc bên bờ biển Mỹ Khê
+- **URL**: https://alize-residence.com/vi/news/nghe-thuat-song-cham-ben-bo-bien-my-khe
+- **Date**: 2026-08-25
+- **Category**: Coastal Luxury Lifestyle
+- **Key Takeaway**: The daily wellness routine of Alizé residents: morning ocean meditation, afternoon high tea, and tropical sunset relaxation.
 
 ## Contact Information
 - **Website**: https://alize-residence.com
+- **News & Journal**: https://alize-residence.com/vi/news
+- **Apartments Collection**: https://alize-residence.com/vi/apartments
 - **Role**: Premium real estate asset and luxury living destination in Da Nang.
 
 ---

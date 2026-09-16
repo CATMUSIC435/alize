@@ -10,6 +10,7 @@ import { NewsDetail } from '@/components/news/NewsDetail';
 import { NewsSidebar } from '@/components/news/NewsSidebar';
 import { RelatedNews } from '@/components/news/RelatedNews';
 import { NEWS_ARTICLES } from '@/data/news';
+import { routing } from '@/libs/I18nRouting';
 
 type NewsDetailPageProps = {
   params: Promise<{ locale: string; slug: string }>;
@@ -31,28 +32,68 @@ export async function generateMetadata(props: NewsDetailPageProps): Promise<Meta
     };
   }
 
+  const title = `${article.title} | Alizé Residence Đà Nẵng`;
+  const description = article.excerpt;
+  const canonicalUrl = `https://alize-residence.com/${locale}/news/${article.slug}`;
+
+  const languages = Object.fromEntries(
+    routing.locales.map((loc) => [loc, `https://alize-residence.com/${loc}/news/${article.slug}`]),
+  );
+
   return {
-    title: `${article.title} | Alizé Residence Đà Nẵng`,
-    description: article.excerpt,
+    title,
+    description,
+    keywords: [
+      ...article.tags,
+      'Alizé Residence',
+      'Đà Nẵng',
+      'Mỹ Khê',
+      'Căn hộ biển',
+      'Branded Residences',
+      'Kiến trúc Alizé',
+    ],
+    alternates: {
+      canonical: canonicalUrl,
+      languages,
+    },
     openGraph: {
-      title: article.title,
-      description: article.excerpt,
-      url: `https://alize-residence.com/${locale}/news/${article.slug}`,
+      title,
+      description,
+      url: canonicalUrl,
+      siteName: 'Alizé Residence Đà Nẵng',
+      locale: locale === 'vi' ? 'vi_VN' : locale === 'zh' ? 'zh_CN' : `${locale}_${locale.toUpperCase()}`,
       type: 'article',
+      publishedTime: article.isoDate,
+      modifiedTime: article.modifiedDate,
+      section: article.categoryLabel,
+      authors: [article.author.name],
+      tags: article.tags,
       images: [
         {
           url: article.coverImage,
           width: 1200,
           height: 630,
           alt: article.title,
+          type: 'image/jpeg',
         },
       ],
     },
     twitter: {
       card: 'summary_large_image',
-      title: article.title,
-      description: article.excerpt,
+      title,
+      description,
       images: [article.coverImage],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        'index': true,
+        'follow': true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
     },
   };
 }
@@ -67,30 +108,76 @@ export default async function NewsDetailPage(props: NewsDetailPageProps) {
     notFound();
   }
 
+  const baseUrl = 'https://alize-residence.com';
+
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'NewsArticle',
-    headline: article.title,
-    description: article.excerpt,
-    image: [article.coverImage],
-    datePublished: article.date,
-    author: {
-      '@type': 'Person',
-      name: article.author.name,
-      jobTitle: article.author.role,
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: 'Alizé Residence',
-      logo: {
-        '@type': 'ImageObject',
-        url: 'https://alize-residence.com/logo-alize.png',
+    '@graph': [
+      {
+        '@type': 'NewsArticle',
+        '@id': `${baseUrl}/${locale}/news/${article.slug}#article`,
+        'isPartOf': {
+          '@type': 'WebPage',
+          '@id': `${baseUrl}/${locale}/news/${article.slug}`,
+          'url': `${baseUrl}/${locale}/news/${article.slug}`,
+          'name': article.title,
+          'inLanguage': locale,
+        },
+        'headline': article.title,
+        'description': article.excerpt,
+        'image': [article.coverImage],
+        'datePublished': article.isoDate,
+        'dateModified': article.modifiedDate,
+        'inLanguage': locale,
+        'articleSection': article.categoryLabel,
+        'keywords': article.tags.join(', '),
+        'mainEntityOfPage': `${baseUrl}/${locale}/news/${article.slug}`,
+        'author': {
+          '@type': 'Person',
+          'name': article.author.name,
+          'jobTitle': article.author.role,
+          'worksFor': {
+            '@type': 'Organization',
+            'name': 'Alizé Residence & DXMD Vietnam',
+          },
+        },
+        'publisher': {
+          '@type': 'Organization',
+          'name': 'Alizé Residence',
+          'url': baseUrl,
+          'logo': {
+            '@type': 'ImageObject',
+            'url': `${baseUrl}/logo-alize.png`,
+            'width': 200,
+            'height': 60,
+          },
+        },
       },
-    },
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': `https://alize-residence.com/${locale}/news/${article.slug}`,
-    },
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${baseUrl}/${locale}/news/${article.slug}#breadcrumb`,
+        'itemListElement': [
+          {
+            '@type': 'ListItem',
+            'position': 1,
+            'name': 'Trang chủ',
+            'item': `${baseUrl}/${locale}`,
+          },
+          {
+            '@type': 'ListItem',
+            'position': 2,
+            'name': 'Tin tức',
+            'item': `${baseUrl}/${locale}/news`,
+          },
+          {
+            '@type': 'ListItem',
+            'position': 3,
+            'name': article.title,
+            'item': `${baseUrl}/${locale}/news/${article.slug}`,
+          },
+        ],
+      },
+    ],
   };
 
   return (

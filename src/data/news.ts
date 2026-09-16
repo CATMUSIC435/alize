@@ -13,6 +13,8 @@ export type NewsArticle = {
   category: 'project' | 'architecture' | 'market' | 'lifestyle';
   categoryLabel: string;
   date: string;
+  isoDate: string;
+  modifiedDate: string;
   readTime: string;
   featured: boolean;
   coverImage: string;
@@ -35,6 +37,8 @@ export const NEWS_ARTICLES: NewsArticle[] = [
     category: 'project',
     categoryLabel: 'Dự án',
     date: '15 Tháng 09, 2026',
+    isoDate: '2026-09-15T08:00:00+07:00',
+    modifiedDate: '2026-09-16T10:00:00+07:00',
     readTime: '4 phút đọc',
     featured: true,
     coverImage:
@@ -102,6 +106,8 @@ export const NEWS_ARTICLES: NewsArticle[] = [
     category: 'architecture',
     categoryLabel: 'Kiến trúc',
     date: '10 Tháng 09, 2026',
+    isoDate: '2026-09-10T09:30:00+07:00',
+    modifiedDate: '2026-09-12T14:00:00+07:00',
     readTime: '6 phút đọc',
     featured: false,
     coverImage:
@@ -154,6 +160,8 @@ export const NEWS_ARTICLES: NewsArticle[] = [
     category: 'market',
     categoryLabel: 'Thị trường',
     date: '02 Tháng 09, 2026',
+    isoDate: '2026-09-02T14:15:00+07:00',
+    modifiedDate: '2026-09-05T11:00:00+07:00',
     readTime: '5 phút đọc',
     featured: false,
     coverImage:
@@ -199,6 +207,8 @@ export const NEWS_ARTICLES: NewsArticle[] = [
     category: 'lifestyle',
     categoryLabel: 'Phong cách sống',
     date: '25 Tháng 08, 2026',
+    isoDate: '2026-08-25T16:45:00+07:00',
+    modifiedDate: '2026-08-28T09:00:00+07:00',
     readTime: '3 phút đọc',
     featured: false,
     coverImage:
