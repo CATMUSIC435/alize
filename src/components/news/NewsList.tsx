@@ -1,151 +1,339 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import { Inter, Playfair_Display } from 'next/font/google';
-import { useState } from 'react';
+import Image from 'next/image';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { NewsArticle } from '@/data/news';
+import { Link } from '@/libs/I18nNavigation';
 import { NewsCard } from './NewsCard';
 
+const inter = Inter({ subsets: ['latin'], weight: ['400', '600', '700'] });
 const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400', '500', '600', '700'] });
-const inter = Inter({ subsets: ['latin'], weight: ['300', '400', '500', '600', '700'] });
+
+const clipPathPolygon =
+  'polygon(16px 0, calc(100% - 16px) 0, 100% 16px, 100% calc(100% - 16px), calc(100% - 16px) 100%, 16px 100%, 0 calc(100% - 16px), 0 16px)';
+const dropdownClip =
+  'polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px)';
 
 const CATEGORIES = [
-  { id: 'all', label: 'TẤT CẢ' },
+  { id: 'ALL', label: 'TẤT CẢ' },
   { id: 'project', label: 'DỰ ÁN' },
   { id: 'architecture', label: 'KIẾN TRÚC' },
   { id: 'market', label: 'THỊ TRƯỜNG' },
   { id: 'lifestyle', label: 'PHONG CÁCH SỐNG' },
 ] as const;
 
-export function NewsList(props: { articles: NewsArticle[] }) {
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [searchQuery, setSearchQuery] = useState<string>('');
+const SORTS = [
+  { id: 'NEWEST', label: 'MỚI NHẤT' },
+  { id: 'OLDEST', label: 'CŨ NHẤT' },
+  { id: 'READ_TIME', label: 'THỜI GIAN ĐỌC' },
+] as const;
 
-  const filteredArticles = props.articles.filter((article) => {
-    const matchesCategory =
-      selectedCategory === 'all' || article.category === selectedCategory;
-    const matchesSearch =
-      searchQuery.trim() === '' ||
-      article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      article.excerpt.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
+export function NewsList(props: { articles: NewsArticle[] }) {
+  const t = useTranslations('Index');
+  const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
+  const [sortBy, setSortBy] = useState<string>('NEWEST');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeDropdown, setActiveDropdown] = useState<'category' | 'sort' | null>(null);
+
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        event.target instanceof Node &&
+        !dropdownRef.current.contains(event.target)
+      ) {
+        setActiveDropdown(null);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const filteredAndSorted = useMemo(() => {
+    let result = [...props.articles];
+
+    // Filter by Category
+    if (selectedCategory !== 'ALL') {
+      result = result.filter((a) => a.category === selectedCategory);
+    }
+
+    // Search query
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter(
+        (a) =>
+          a.title.toLowerCase().includes(q) ||
+          a.excerpt.toLowerCase().includes(q) ||
+          a.tags.some((tag) => tag.toLowerCase().includes(q)),
+      );
+    }
+
+    // Sort
+    if (sortBy === 'OLDEST') {
+      result.reverse();
+    } else if (sortBy === 'READ_TIME') {
+      result.sort((a, b) => parseInt(a.readTime, 10) - parseInt(b.readTime, 10));
+    }
+
+    return result;
+  }, [props.articles, selectedCategory, searchQuery, sortBy]);
+
+  const toggleDropdown = (dropdown: 'category' | 'sort') => {
+    setActiveDropdown((prev) => (prev === dropdown ? null : dropdown));
+  };
+
+  const handleReset = () => {
+    setSelectedCategory('ALL');
+    setSortBy('NEWEST');
+    setSearchQuery('');
+    setActiveDropdown(null);
+  };
+
+  const activeCategoryLabel =
+    CATEGORIES.find((c) => c.id === selectedCategory)?.label ?? 'TẤT CẢ';
+  const activeSortLabel = SORTS.find((s) => s.id === sortBy)?.label ?? 'MỚI NHẤT';
 
   return (
-    <section className="relative w-full pb-24 md:pb-36">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Controls Row: Category Filter Tabs & Search Bar */}
-        <div className="flex flex-col items-center justify-between gap-6 border-b border-[#D4CEBF]/60 pb-8 md:flex-row">
-          {/* Category Tabs */}
-          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
-            {CATEGORIES.map((cat) => {
-              const isActive = selectedCategory === cat.id;
-              return (
+    <section className="relative w-full bg-[#F4F3ED] px-6 py-12 md:px-12 md:py-20">
+      <div className="mx-auto w-full max-w-[1600px]">
+        {/* DUAL LAYER CHAMFERED FILTER BAR */}
+        <div className="relative z-30 mb-12 w-full">
+          {/* Background Chamfer Frame */}
+          <div
+            className="absolute inset-0 z-0 bg-[#D6D3C8] p-[1px]"
+            style={{ clipPath: clipPathPolygon }}
+          >
+            <div className="h-full w-full bg-[#F4F3ED]" style={{ clipPath: clipPathPolygon }} />
+          </div>
+
+          {/* Filter Bar Content */}
+          <div className="relative z-10 flex w-full flex-col items-start justify-between gap-6 px-6 py-6 md:flex-row md:items-center md:gap-8 md:px-10 md:py-8">
+            <div
+              className={`flex flex-wrap items-center gap-6 text-[10px] font-bold tracking-[0.2em] text-[#151926] uppercase md:gap-12 md:text-xs ${inter.className}`}
+              ref={dropdownRef}
+            >
+              {/* Category Dropdown */}
+              <div className="relative">
                 <button
-                  key={cat.id}
-                  type="button"
-                  onClick={() => setSelectedCategory(cat.id)}
-                  className={`relative cursor-pointer rounded-full px-4 py-2 text-[10px] font-bold tracking-[0.16em] uppercase transition-all duration-300 md:px-5 md:py-2.5 md:text-xs ${
-                    inter.className
-                  } ${
-                    isActive
-                      ? 'bg-[#0D2D40] text-white shadow-md'
-                      : 'border border-[#D4CEBF]/60 bg-white/60 text-[#7A7F8D] hover:border-[#8B7043]/50 hover:text-[#151926]'
-                  }`}
+                  onClick={() => {
+                    toggleDropdown('category');
+                  }}
+                  className="flex items-center gap-2 transition-opacity hover:opacity-70 focus:outline-none"
                 >
-                  {cat.label}
+                  <span className="opacity-60">CHỦ ĐỀ:</span>
+                  <span className="text-[#8B7043]">{activeCategoryLabel}</span>
+                  <svg
+                    width="10"
+                    height="6"
+                    viewBox="0 0 10 6"
+                    fill="none"
+                    className={`transition-transform ${activeDropdown === 'category' ? 'rotate-180' : ''}`}
+                  >
+                    <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" />
+                  </svg>
                 </button>
-              );
-            })}
-          </div>
 
-          {/* Search Input */}
-          <div className="relative w-full max-w-xs sm:w-auto">
-            <input
-              type="text"
-              placeholder="Tìm kiếm bài viết..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className={`w-full rounded-full border border-[#D4CEBF]/70 bg-white/80 px-4 py-2 pl-9 text-xs text-[#151926] placeholder-[#7A7F8D]/70 transition-all focus:border-[#8B7043] focus:outline-none focus:ring-1 focus:ring-[#8B7043] ${inter.className}`}
-            />
-            <svg
-              className="absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2 text-[#7A7F8D]"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-            {searchQuery && (
-              <button
-                type="button"
-                onClick={() => setSearchQuery('')}
-                className="absolute top-1/2 right-3 -translate-y-1/2 text-xs text-[#7A7F8D] hover:text-[#151926]"
-              >
-                ✕
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* Results Counter */}
-        <div className="mt-8 flex items-center justify-between">
-          <span className={`text-[11px] font-medium tracking-[0.1em] text-[#7A7F8D] uppercase ${inter.className}`}>
-            Hiển thị {filteredArticles.length} bài viết
-          </span>
-        </div>
-
-        {/* Articles Grid */}
-        <AnimatePresence mode="wait">
-          {filteredArticles.length > 0 ? (
-            <motion.div
-              key={selectedCategory + searchQuery}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.4 }}
-              className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-10"
-            >
-              {filteredArticles.map((article, index) => (
-                <NewsCard key={article.id} article={article} index={index} />
-              ))}
-            </motion.div>
-          ) : (
-            <motion.div
-              key="empty"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mt-16 flex flex-col items-center justify-center py-16 text-center"
-            >
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#E0AC87]/20 text-[#8B7043]">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
+                <AnimatePresence>
+                  {activeDropdown === 'category' && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute top-full left-0 z-50 mt-6 min-w-[220px] bg-[#D6D3C8] p-[1px]"
+                      style={{
+                        clipPath: dropdownClip,
+                        filter: 'drop-shadow(0 10px 25px rgba(0,0,0,0.1))',
+                      }}
+                    >
+                      <div
+                        className="flex h-full w-full flex-col bg-[#F4F3ED] py-2"
+                        style={{ clipPath: dropdownClip }}
+                      >
+                        {CATEGORIES.map((cat) => (
+                          <button
+                            key={cat.id}
+                            onClick={() => {
+                              setSelectedCategory(cat.id);
+                              setActiveDropdown(null);
+                            }}
+                            className={`w-full px-5 py-3 text-left text-[10px] font-bold tracking-[0.15em] transition-colors hover:bg-[#D6D3C8]/40 focus:outline-none ${selectedCategory === cat.id ? 'text-[#8B7043]' : 'text-[#151926]/70'}`}
+                          >
+                            {cat.label}
+                          </button>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
-              <h3 className={`mt-4 text-xl font-medium text-[#151926] ${playfair.className}`}>
-                Không tìm thấy bài viết nào
-              </h3>
-              <p className={`mt-2 text-xs text-[#7A7F8D] ${inter.className}`}>
-                Vui lòng thử lại với từ khóa khác hoặc chọn chuyên mục khác.
-              </p>
-              <button
-                type="button"
-                onClick={() => {
-                  setSelectedCategory('all');
-                  setSearchQuery('');
-                }}
-                className={`mt-6 rounded-full border border-[#8B7043] px-5 py-2 text-xs font-bold tracking-[0.15em] text-[#8B7043] uppercase transition-colors hover:bg-[#8B7043] hover:text-white ${inter.className}`}
-              >
-                Xem tất cả bài viết
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
+
+              {/* Sort Dropdown */}
+              <div className="relative">
+                <button
+                  onClick={() => {
+                    toggleDropdown('sort');
+                  }}
+                  className="flex items-center gap-2 transition-opacity hover:opacity-70 focus:outline-none"
+                >
+                  <span className="opacity-60">SẮP XẾP:</span>
+                  <span>{activeSortLabel}</span>
+                  <svg
+                    width="10"
+                    height="6"
+                    viewBox="0 0 10 6"
+                    fill="none"
+                    className={`transition-transform ${activeDropdown === 'sort' ? 'rotate-180' : ''}`}
+                  >
+                    <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" />
+                  </svg>
+                </button>
+
+                <AnimatePresence>
+                  {activeDropdown === 'sort' && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute top-full left-0 z-50 mt-6 min-w-[200px] bg-[#D6D3C8] p-[1px]"
+                      style={{
+                        clipPath: dropdownClip,
+                        filter: 'drop-shadow(0 10px 25px rgba(0,0,0,0.1))',
+                      }}
+                    >
+                      <div
+                        className="flex h-full w-full flex-col bg-[#F4F3ED] py-2"
+                        style={{ clipPath: dropdownClip }}
+                      >
+                        {SORTS.map((s) => (
+                          <button
+                            key={s.id}
+                            onClick={() => {
+                              setSortBy(s.id);
+                              setActiveDropdown(null);
+                            }}
+                            className={`w-full px-5 py-3 text-left text-[10px] font-bold tracking-[0.15em] transition-colors hover:bg-[#D6D3C8]/40 focus:outline-none ${sortBy === s.id ? 'text-[#151926]' : 'text-[#151926]/70'}`}
+                          >
+                            {s.label}
+                          </button>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Search Bar Input */}
+              <div className="flex items-center gap-2 border-b border-[#151926]/20 pb-1">
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  className="opacity-40"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="m21 21-4.35-4.35" />
+                </svg>
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="TÌM KIẾM BÀI VIẾT..."
+                  className="w-32 bg-transparent text-[10px] tracking-[0.15em] text-[#151926] placeholder-[#151926]/40 uppercase focus:w-44 focus:outline-none transition-all duration-300 md:text-xs"
+                />
+              </div>
+            </div>
+
+            {/* Reset Button */}
+            <button
+              onClick={handleReset}
+              className={`text-[10px] font-bold tracking-[0.2em] text-[#151926]/50 uppercase transition-colors hover:text-[#151926] focus:outline-none md:text-xs ${inter.className}`}
+            >
+              {t('reset')}
+            </button>
+          </div>
+        </div>
+
+        {/* ARTICLES GRID */}
+        {filteredAndSorted.length > 0 ? (
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {filteredAndSorted.map((article) => (
+              <NewsCard key={article.id} article={article} />
+            ))}
+
+            {/* Editorial Concept Promo Card (matching ApartmentList promo card) */}
+            <div
+              className="group relative h-[600px] w-full cursor-pointer overflow-hidden lg:h-auto"
+              style={{ clipPath: clipPathPolygon }}
+            >
+              <Image
+                src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&q=80&w=1200"
+                alt="Alizé Architectural Philosophy"
+                fill
+                sizes="(max-width: 1024px) 100vw, 33vw"
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                unoptimized
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0D2D40] via-[#0D2D40]/60 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-95" />
+
+              <div className="relative z-10 flex h-full flex-col justify-between p-8 text-white md:p-12">
+                <div className="flex items-center justify-between">
+                  <span
+                    className={`text-[9px] font-bold tracking-[0.25em] text-[#E0AC87] uppercase md:text-[10px] ${inter.className}`}
+                  >
+                    BẢN SẮC KIẾN TRÚC
+                  </span>
+                  <span className="h-[1px] w-12 bg-white/30" />
+                </div>
+
+                <div>
+                  <h4
+                    className={`mb-4 text-2xl leading-tight text-white uppercase sm:text-3xl ${playfair.className}`}
+                  >
+                    MỘT NƠI ĐỂ TRỞ VỀ, KHÔNG PHẢI ĐỂ DI CHUYỂN
+                  </h4>
+                  <p
+                    className={`mb-8 text-xs leading-relaxed text-white/80 ${inter.className}`}
+                  >
+                    Alizé Residence kết hợp tinh hoa kiến trúc Địa Trung Hải với hơi thở đại dương Mỹ Khê – kiệt tác dành riêng cho 25 chủ nhân tôn quý.
+                  </p>
+                  <Link
+                    href="/apartments"
+                    className={`inline-flex items-center gap-3 text-[10px] font-bold tracking-[0.2em] text-[#E0AC87] uppercase transition-colors hover:text-white ${inter.className}`}
+                  >
+                    <span>KHÁM PHÁ CĂN HỘ</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center py-24 text-center">
+            <p className={`text-sm tracking-[0.2em] text-[#151926]/50 uppercase ${inter.className}`}>
+              KHÔNG TÌM THẤY BÀI VIẾT NÀO PHÙ HỢP
+            </p>
+            <button
+              onClick={handleReset}
+              className={`mt-4 text-xs font-bold tracking-[0.2em] text-[#8B7043] uppercase underline underline-offset-4 hover:opacity-70 ${inter.className}`}
+            >
+              LÀM MỚI BỘ LỌC
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );

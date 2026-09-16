@@ -1,14 +1,17 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { Inter, Playfair_Display } from 'next/font/google';
 import Image from 'next/image';
 import { useState } from 'react';
-import type { NewsArticle } from '@/data/news';
+import { CircleButton } from '@/components/landing/CircleButton';
+import type { NewsArticle, NewsContentBlock } from '@/data/news';
 import { Link } from '@/libs/I18nNavigation';
 
 const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400', '500', '600', '700'] });
 const inter = Inter({ subsets: ['latin'], weight: ['300', '400', '500', '600', '700'] });
+
+const clipPathPolygon =
+  'polygon(16px 0, calc(100% - 16px) 0, 100% 16px, 100% calc(100% - 16px), calc(100% - 16px) 100%, 16px 100%, 0 calc(100% - 16px), 0 16px)';
 
 export function NewsDetail(props: { article: NewsArticle }) {
   const [copied, setCopied] = useState(false);
@@ -21,270 +24,376 @@ export function NewsDetail(props: { article: NewsArticle }) {
     }
   };
 
-  return (
-    <article className="relative w-full pt-32 pb-20 md:pt-40 md:pb-28">
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-        {/* Breadcrumb Navigation */}
-        <motion.nav
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          className={`flex items-center gap-2 text-[10px] font-medium tracking-[0.1em] text-[#7A7F8D] uppercase md:text-xs ${inter.className}`}
-        >
-          <Link href="/" className="transition-colors hover:text-[#151926]">
-            Trang chủ
-          </Link>
-          <span>/</span>
-          <Link href="/news" className="transition-colors hover:text-[#151926]">
-            Tin tức
-          </Link>
-          <span>/</span>
-          <span className="truncate text-[#8B7043]">{props.article.categoryLabel}</span>
-        </motion.nav>
-
-        {/* Header Information */}
-        <motion.header
-          initial={{ opacity: 0, y: 25 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1 }}
-          className="mt-6 md:mt-8"
-        >
-          {/* Category Badge & Metadata */}
-          <div className="flex flex-wrap items-center gap-3">
-            <span
-              className={`rounded-full border border-[#8B7043]/40 bg-[#8B7043]/10 px-3.5 py-1 text-[9px] font-bold tracking-[0.2em] text-[#8B7043] uppercase ${inter.className}`}
+  const renderContentBlock = (block: NewsContentBlock, index: number) => {
+    switch (block.type) {
+      case 'paragraph': {
+        return (
+          <p
+            key={index}
+            className={`text-base leading-relaxed text-[#151926]/85 md:text-lg ${inter.className} ${
+              index === 0
+                ? 'first-letter:float-left first-letter:mr-3 first-letter:text-5xl first-letter:font-bold first-letter:text-[#8B7043] md:first-letter:text-6xl'
+                : ''
+            }`}
+          >
+            {block.text}
+          </p>
+        );
+      }
+      case 'heading': {
+        return (
+          <h2
+            key={index}
+            className={`mt-12 mb-6 text-2xl font-medium tracking-tight text-[#151926] uppercase sm:text-3xl md:text-4xl ${playfair.className}`}
+            style={{ transform: 'scaleY(1.1)', transformOrigin: 'bottom left' }}
+          >
+            {block.text}
+          </h2>
+        );
+      }
+      case 'pullQuote': {
+        return (
+          <div
+            key={index}
+            className="my-10 w-full drop-shadow-md filter"
+          >
+            <div
+              className="relative flex flex-col justify-between overflow-hidden bg-textured-sand p-8 text-[#151926] sm:p-12 md:p-16"
+              style={{ clipPath: clipPathPolygon }}
             >
-              {props.article.categoryLabel}
-            </span>
-            <span className={`text-[11px] text-[#7A7F8D] ${inter.className}`}>
-              {props.article.date}
-            </span>
-            <span className="text-[#7A7F8D]">•</span>
-            <span className={`text-[11px] text-[#7A7F8D] ${inter.className}`}>
-              {props.article.readTime}
-            </span>
-          </div>
+              {/* Decorative quotation mark */}
+              <span
+                className={`pointer-events-none absolute -top-4 -left-2 text-8xl font-serif text-[#8B7043]/20 md:text-9xl ${playfair.className}`}
+              >
+                “
+              </span>
 
-          {/* Article Title */}
+              <blockquote
+                className={`relative z-10 text-xl leading-snug font-medium text-[#151926] sm:text-2xl md:text-3xl ${playfair.className}`}
+                style={{ transform: 'scaleY(1.05)' }}
+              >
+                "{block.quote}"
+              </blockquote>
+
+              {block.author && (
+                <div className="relative z-10 mt-6 flex items-center gap-3 border-t border-[#151926]/15 pt-4">
+                  <span className="h-[1px] w-6 bg-[#8B7043]" />
+                  <span
+                    className={`text-[10px] font-bold tracking-[0.2em] text-[#8B7043] uppercase md:text-xs ${inter.className}`}
+                  >
+                    {block.author}
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      }
+      case 'image': {
+        return (
+          <figure key={index} className="my-10 w-full drop-shadow-md filter">
+            <div
+              className="relative aspect-[16/10] w-full overflow-hidden"
+              style={{ clipPath: clipPathPolygon }}
+            >
+              <Image
+                src={block.src}
+                alt={block.alt ?? 'Minh họa bài viết Alizé'}
+                fill
+                sizes="(max-width: 1024px) 100vw, 65vw"
+                className="object-cover"
+                unoptimized
+              />
+            </div>
+            {block.caption && (
+              <figcaption
+                className={`mt-3 text-center text-[10px] font-medium tracking-[0.15em] text-[#151926]/60 uppercase md:text-xs ${inter.className}`}
+              >
+                — {block.caption}
+              </figcaption>
+            )}
+          </figure>
+        );
+      }
+      case 'takeaway': {
+        return (
+          <div key={index} className="my-10 w-full drop-shadow-md filter">
+            <div
+              className="relative bg-[#D6D3C8] p-[1px]"
+              style={{ clipPath: clipPathPolygon }}
+            >
+              <div
+                className="flex flex-col bg-[#F4F3ED] p-8 sm:p-10 md:p-12"
+                style={{ clipPath: clipPathPolygon }}
+              >
+                <div className="mb-6 flex items-center justify-between border-b border-[#151926]/10 pb-4">
+                  <span
+                    className={`text-[10px] font-bold tracking-[0.25em] text-[#8B7043] uppercase md:text-xs ${inter.className}`}
+                  >
+                    ĐIỂM NHẤN CỐT LÕI
+                  </span>
+                  <span className="h-[1px] w-12 bg-[#8B7043]/40" />
+                </div>
+
+                <h3
+                  className={`mb-6 text-xl font-medium text-[#151926] uppercase md:text-2xl ${playfair.className}`}
+                  style={{ transform: 'scaleY(1.1)', transformOrigin: 'bottom left' }}
+                >
+                  {block.title}
+                </h3>
+
+                <ul className="flex flex-col space-y-3">
+                  {block.items.map((item, i) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rotate-45 bg-[#8B7043]" />
+                      <span className={`text-xs leading-relaxed text-[#151926]/80 md:text-sm ${inter.className}`}>
+                        {item}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        );
+      }
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <article className="relative w-full bg-[#F4F3ED] pt-32 pb-20 md:pt-40 md:pb-28">
+      <div className="mx-auto w-full max-w-[1600px] px-6 md:px-12">
+        {/* ARTICLE HEADER BLOCK */}
+        <header className="mb-12 md:mb-20">
+          {/* Breadcrumb Navigation */}
+          <nav
+            aria-label="Breadcrumb"
+            className={`flex items-center gap-2 text-[10px] font-bold tracking-[0.2em] text-[#151926]/50 uppercase md:text-xs ${inter.className}`}
+          >
+            <Link href="/" className="transition-colors hover:text-[#151926]">
+              TRANG CHỦ
+            </Link>
+            <span className="opacity-40">/</span>
+            <Link href="/news" className="transition-colors hover:text-[#151926]">
+              TIN TỨC
+            </Link>
+            <span className="opacity-40">/</span>
+            <span className="text-[#8B7043]">{props.article.categoryLabel}</span>
+          </nav>
+
+          {/* Title with Signature Scaled Typography */}
           <h1
-            className={`mt-6 text-3xl font-semibold leading-tight text-[#151926] sm:text-4xl md:text-5xl lg:text-[54px] ${playfair.className}`}
+            className={`mt-6 text-[8vw] leading-[0.92] font-medium tracking-tight text-[#151926] uppercase sm:text-5xl md:text-6xl lg:text-7xl xl:text-[80px] ${playfair.className}`}
+            style={{ transform: 'scaleY(1.15)', transformOrigin: 'bottom left' }}
           >
             {props.article.title}
           </h1>
 
-          {/* Excerpt Lead */}
+          {/* Subtitle / Excerpt Lead */}
           <p
-            className={`mt-6 text-base leading-relaxed text-[#2D3346]/85 sm:text-lg md:text-xl md:leading-relaxed ${inter.className}`}
+            className={`mt-8 max-w-4xl border-l-2 border-[#8B7043] pl-6 text-sm leading-relaxed text-[#151926]/75 uppercase sm:text-base md:text-lg ${inter.className}`}
           >
             {props.article.excerpt}
           </p>
+        </header>
 
-          {/* Author Byline */}
-          <div className="mt-8 flex items-center justify-between border-y border-[#D4CEBF]/60 py-4">
-            <div className="flex items-center gap-3.5">
-              <div className="relative h-11 w-11 overflow-hidden rounded-full border border-[#D4CEBF]">
-                <Image
-                  src={props.article.author.avatar}
-                  alt={props.article.author.name}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <div>
-                <div className={`text-sm font-semibold text-[#151926] ${inter.className}`}>
-                  {props.article.author.name}
-                </div>
-                <div className={`text-xs text-[#7A7F8D] ${inter.className}`}>
-                  {props.article.author.role}
-                </div>
-              </div>
-            </div>
-
-            {/* Share Button */}
-            <button
-              type="button"
-              onClick={handleShare}
-              className={`inline-flex cursor-pointer items-center gap-2 rounded-full border border-[#D4CEBF] bg-white px-4 py-1.5 text-xs font-semibold tracking-wider text-[#151926] uppercase transition-all hover:border-[#8B7043] hover:text-[#8B7043] ${inter.className}`}
+        {/* 2-COLUMN LUXURY EDITORIAL LAYOUT */}
+        <div className="flex flex-col gap-12 lg:flex-row xl:gap-20">
+          {/* LEFT COLUMN: SCROLLABLE EDITORIAL STORY (65%) */}
+          <main className="flex w-full flex-col lg:w-[62%] xl:w-[65%]">
+            {/* Main Cover Image */}
+            <div
+              className="relative mb-12 aspect-[16/10] w-full overflow-hidden drop-shadow-xl filter"
+              style={{ clipPath: clipPathPolygon }}
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
-                <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-              <span>{copied ? 'Đã sao chép!' : 'Chia sẻ'}</span>
-            </button>
-          </div>
-        </motion.header>
-
-        {/* Featured Cover Image */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.98 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 0.2 }}
-          className="relative mt-10 aspect-[16/10] w-full overflow-hidden rounded-sm border border-[#D4CEBF]/70 shadow-2xl sm:aspect-[16/9]"
-        >
-          <Image
-            src={props.article.coverImage}
-            alt={props.article.title}
-            fill
-            priority
-            sizes="(max-width: 1024px) 100vw, 900px"
-            className="object-cover object-center"
-          />
-        </motion.div>
-
-        {/* Formatted Article Body */}
-        <div className="mt-12 space-y-8 md:mt-16 md:space-y-10">
-          {props.article.content.map((block, idx) => {
-            switch (block.type) {
-              case 'paragraph':
-                return (
-                  <p
-                    key={idx}
-                    className={`text-base leading-[1.9] text-[#2D3346] md:text-lg md:leading-[2] ${inter.className}`}
-                  >
-                    {block.text}
-                  </p>
-                );
-
-              case 'heading':
-                return (
-                  <h2
-                    key={idx}
-                    className={`pt-4 text-2xl font-semibold leading-tight text-[#151926] md:text-3xl ${playfair.className}`}
-                  >
-                    {block.text}
-                  </h2>
-                );
-
-              case 'pullQuote':
-                return (
-                  <figure
-                    key={idx}
-                    className="relative my-8 border-l-2 border-[#8B7043] bg-white/60 p-6 pl-6 shadow-sm backdrop-blur-sm md:my-12 md:p-8 md:pl-8"
-                  >
-                    <div className="font-serif text-5xl leading-none text-[#8B7043]/30">“</div>
-                    <blockquote
-                      className={`-mt-4 font-serif text-xl leading-snug italic text-[#151926] md:text-2xl md:leading-normal ${playfair.className}`}
-                    >
-                      {block.quote}
-                    </blockquote>
-                    {block.author && (
-                      <figcaption
-                        className={`mt-4 text-xs font-semibold tracking-[0.15em] text-[#8B7043] uppercase ${inter.className}`}
-                      >
-                        — {block.author}
-                      </figcaption>
-                    )}
-                  </figure>
-                );
-
-              case 'image':
-                return (
-                  <figure key={idx} className="my-8 overflow-hidden rounded-sm border border-[#D4CEBF]/60 md:my-12">
-                    <div className="relative aspect-[16/10] w-full overflow-hidden">
-                      <Image
-                        src={block.src}
-                        alt={block.alt ?? ''}
-                        fill
-                        sizes="(max-width: 1024px) 100vw, 850px"
-                        className="object-cover object-center"
-                      />
-                    </div>
-                    {block.caption && (
-                      <figcaption
-                        className={`border-t border-[#D4CEBF]/40 bg-white/80 px-4 py-2.5 text-center text-xs font-light text-[#7A7F8D] italic ${inter.className}`}
-                      >
-                        {block.caption}
-                      </figcaption>
-                    )}
-                  </figure>
-                );
-
-              case 'takeaway':
-                return (
-                  <div
-                    key={idx}
-                    className="my-8 rounded-sm border border-[#8B7043]/30 bg-[#0D2D40] p-6 text-white shadow-xl md:my-12 md:p-8"
-                  >
-                    <div className="flex items-center gap-2 text-[#E0AC87]">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                      <h3
-                        className={`text-base font-semibold tracking-wider text-[#E0AC87] uppercase ${playfair.className}`}
-                      >
-                        {block.title}
-                      </h3>
-                    </div>
-                    <ul className="mt-4 space-y-2.5">
-                      {block.items.map((item, itemIdx) => (
-                        <li key={itemIdx} className={`flex items-start gap-3 text-xs leading-relaxed text-white/90 md:text-sm ${inter.className}`}>
-                          <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#E0AC87]" />
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                );
-
-              default:
-                return null;
-            }
-          })}
-        </div>
-
-        {/* Tags & Bottom Share Row */}
-        <div className="mt-14 border-t border-[#D4CEBF]/60 pt-8">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            {/* Tags */}
-            <div className="flex flex-wrap items-center gap-2">
-              <span className={`text-xs font-semibold text-[#7A7F8D] uppercase ${inter.className}`}>
-                Từ khóa:
-              </span>
-              {props.article.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className={`rounded-full border border-[#D4CEBF] bg-white px-3 py-1 text-[11px] text-[#2D3346] ${inter.className}`}
-                >
-                  #{tag}
-                </span>
-              ))}
-            </div>
-
-            {/* Back to news button */}
-            <Link
-              href="/news"
-              className={`inline-flex items-center gap-2 text-xs font-bold tracking-[0.15em] text-[#0D2D40] uppercase transition-colors hover:text-[#8B7043] ${inter.className}`}
-            >
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                <path d="M10 13L5 8L10 3" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-              <span>Trở về danh sách tin tức</span>
-            </Link>
-          </div>
-        </div>
-
-        {/* Author Bio Box */}
-        <div className="mt-12 rounded-sm border border-[#D4CEBF]/60 bg-white/70 p-6 shadow-md md:p-8">
-          <div className="flex flex-col items-center gap-5 sm:flex-row sm:items-start">
-            <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full border-2 border-[#8B7043]">
               <Image
-                src={props.article.author.avatar}
-                alt={props.article.author.name}
+                src={props.article.coverImage}
+                alt={props.article.title}
                 fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 65vw"
                 className="object-cover"
+                unoptimized
               />
             </div>
-            <div className="text-center sm:text-left">
-              <h4 className={`text-lg font-semibold text-[#151926] ${playfair.className}`}>
-                {props.article.author.name}
-              </h4>
-              <p className={`text-xs text-[#8B7043] font-medium uppercase tracking-wider ${inter.className}`}>
-                {props.article.author.role}
-              </p>
-              <p className={`mt-2 text-xs leading-relaxed text-[#2D3346]/80 ${inter.className}`}>
-                Đại diện truyền thông và thông tin dự án Alizé Residence. Cung cấp những góc nhìn chuyên sâu về kiến trúc, trải nghiệm nghỉ dưỡng và tiến độ hoàn thiện dự án.
-              </p>
+
+            {/* Editorial Content Blocks */}
+            <div className="flex flex-col space-y-6">
+              {props.article.content.map((block, idx) => renderContentBlock(block, idx))}
             </div>
-          </div>
+
+            {/* Tags & Footer Navigation */}
+            <div className="mt-16 border-t border-[#151926]/15 pt-8">
+              <span
+                className={`block text-[9px] font-bold tracking-[0.2em] text-[#151926]/50 uppercase mb-3 ${inter.className}`}
+              >
+                CHỦ ĐỀ LIÊN QUAN
+              </span>
+              <div className="flex flex-wrap gap-2">
+                {props.article.tags.map((tag, i) => (
+                  <span
+                    key={i}
+                    className={`rounded-full border border-[#151926]/15 bg-white/50 px-4 py-1.5 text-[10px] font-bold tracking-[0.15em] text-[#151926] uppercase transition-colors hover:border-[#8B7043] hover:text-[#8B7043] ${inter.className}`}
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </main>
+
+          {/* RIGHT COLUMN: STICKY METADATA & ACTIONS (35%) */}
+          <aside
+            aria-label="Thông tin bài viết"
+            className="relative w-full lg:w-[38%] xl:w-[35%]"
+          >
+            <div
+              data-lenis-prevent="true"
+              className="flex flex-col space-y-8 lg:sticky lg:top-32"
+            >
+              {/* SPECIFICATION CARD WITH CHAMFERED CORNERS */}
+              <div className="w-full drop-shadow-md filter">
+                <div
+                  className="bg-[#D6D3C8] p-[1px]"
+                  style={{ clipPath: clipPathPolygon }}
+                >
+                  <div
+                    className="flex flex-col bg-[#F4F3ED] p-8"
+                    style={{ clipPath: clipPathPolygon }}
+                  >
+                    <div className="mb-6 flex items-center justify-between border-b border-[#151926]/10 pb-4">
+                      <span
+                        className={`text-[9px] font-bold tracking-[0.25em] text-[#8B7043] uppercase md:text-[10px] ${inter.className}`}
+                      >
+                        THÔNG TIN BÀI VIẾT
+                      </span>
+                      <span
+                        className={`text-[9px] tracking-[0.2em] text-[#151926]/40 uppercase ${inter.className}`}
+                      >
+                        VOL. 2026
+                      </span>
+                    </div>
+
+                    <div className="flex flex-col space-y-4">
+                      <div className="flex items-center justify-between border-b border-[#151926]/5 pb-3 text-xs">
+                        <span className={`text-[10px] tracking-[0.15em] text-[#151926]/60 uppercase ${inter.className}`}>
+                          CHỦ ĐỀ
+                        </span>
+                        <span className={`text-[10px] font-bold tracking-[0.15em] text-[#8B7043] uppercase ${inter.className}`}>
+                          {props.article.categoryLabel}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center justify-between border-b border-[#151926]/5 pb-3 text-xs">
+                        <span className={`text-[10px] tracking-[0.15em] text-[#151926]/60 uppercase ${inter.className}`}>
+                          NGÀY ĐĂNG
+                        </span>
+                        <span className={`text-[10px] font-bold tracking-[0.15em] text-[#151926] uppercase ${inter.className}`}>
+                          {props.article.date}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center justify-between border-b border-[#151926]/5 pb-3 text-xs">
+                        <span className={`text-[10px] tracking-[0.15em] text-[#151926]/60 uppercase ${inter.className}`}>
+                          THỜI GIAN ĐỌC
+                        </span>
+                        <span className={`text-[10px] font-bold tracking-[0.15em] text-[#151926] uppercase ${inter.className}`}>
+                          {props.article.readTime}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center justify-between text-xs pt-1">
+                        <span className={`text-[10px] tracking-[0.15em] text-[#151926]/60 uppercase ${inter.className}`}>
+                          ĐỊA ĐIỂM
+                        </span>
+                        <span className={`text-[10px] font-bold tracking-[0.15em] text-[#151926] uppercase ${inter.className}`}>
+                          MỸ KHÊ, ĐÀ NẴNG
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* AUTHOR BIO CARD */}
+              <div className="w-full drop-shadow-md filter">
+                <div
+                  className="bg-[#D6D3C8] p-[1px]"
+                  style={{ clipPath: clipPathPolygon }}
+                >
+                  <div
+                    className="flex items-center gap-4 bg-[#F4F3ED] p-6"
+                    style={{ clipPath: clipPathPolygon }}
+                  >
+                    <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-full border-2 border-[#8B7043]/50">
+                      <Image
+                        src={props.article.author.avatar}
+                        alt={props.article.author.name}
+                        fill
+                        sizes="56px"
+                        className="object-cover"
+                        unoptimized
+                      />
+                    </div>
+                    <div className="flex flex-col">
+                      <span className={`text-[9px] font-bold tracking-[0.2em] text-[#8B7043] uppercase ${inter.className}`}>
+                        BAN BIÊN TẬP
+                      </span>
+                      <h4 className={`text-base font-semibold text-[#151926] uppercase ${playfair.className}`}>
+                        {props.article.author.name}
+                      </h4>
+                      <p className={`text-[10px] text-[#151926]/60 ${inter.className}`}>
+                        {props.article.author.role}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* INTERACTIVE MAGNETIC CIRCLE BUTTON FOR SHARING */}
+              <div className="flex flex-col items-center justify-center py-6">
+                <CircleButton
+                  text={copied ? 'ĐÃ SAO CHÉP LIÊN KẾT' : 'CHIA SẺ BÀI VIẾT'}
+                  variant="dark"
+                  onClick={handleShare}
+                  className="h-36 w-36 sm:h-44 sm:w-44 lg:h-48 lg:w-48"
+                />
+                <span className={`mt-3 text-[9px] tracking-[0.2em] text-[#151926]/40 uppercase ${inter.className}`}>
+                  {copied ? 'ĐÃ LƯU VÀO CLIPBOARD' : 'NHẤP ĐỂ SAO CHÉP LIÊN KẾT'}
+                </span>
+              </div>
+
+              {/* APARTMENTS PROMO CTA */}
+              <div className="w-full drop-shadow-md filter">
+                <div
+                  className="bg-[#151926] p-8 text-center text-white"
+                  style={{ clipPath: clipPathPolygon }}
+                >
+                  <span
+                    className={`block text-[9px] font-bold tracking-[0.25em] text-[#E0AC87] uppercase md:text-[10px] ${inter.className}`}
+                  >
+                    ALIZE RESIDENCE
+                  </span>
+                  <h4
+                    className={`mt-2 mb-4 text-xl font-medium text-white uppercase ${playfair.className}`}
+                  >
+                    25 CĂN HỘ NGHỈ DƯỠNG THƯỢNG LƯU
+                  </h4>
+                  <p className={`mb-6 text-xs text-white/70 ${inter.className}`}>
+                    Trải nghiệm tầm nhìn vô cực ra bãi biển Mỹ Khê cùng đặc quyền sống tinh hoa.
+                  </p>
+                  <Link
+                    href="/apartments"
+                    className={`inline-block border border-white/30 bg-white/10 px-6 py-3 text-[9px] font-bold tracking-[0.2em] text-white uppercase transition-colors hover:bg-white hover:text-[#151926] ${inter.className}`}
+                  >
+                    XEM CÁC CĂN HỘ ĐANG BÁN
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </aside>
         </div>
       </div>
     </article>

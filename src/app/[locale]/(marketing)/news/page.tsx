@@ -2,9 +2,12 @@ import type { Metadata } from 'next';
 import { setRequestLocale } from 'next-intl/server';
 import { Footer } from '@/components/landing/Footer';
 import { Header } from '@/components/landing/Header';
+import { NinthSection } from '@/components/landing/NinthSection';
 import { SmoothScroll } from '@/components/landing/SmoothScroll';
+import { TenthSection } from '@/components/landing/TenthSection';
 import { NewsHero } from '@/components/news/NewsHero';
 import { NewsList } from '@/components/news/NewsList';
+import { NewsSidebar } from '@/components/news/NewsSidebar';
 import { NEWS_ARTICLES } from '@/data/news';
 
 type NewsPageProps = {
@@ -40,8 +43,6 @@ export default async function NewsPage(props: NewsPageProps) {
   const { locale } = await props.params;
   setRequestLocale(locale);
 
-  const featuredArticle = NEWS_ARTICLES.find((a) => a.featured) ?? NEWS_ARTICLES[0];
-
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
@@ -70,16 +71,22 @@ export default async function NewsPage(props: NewsPageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <main className="relative min-h-screen w-full bg-[#F4F3ED]">
-        {/* Fixed Top Header (shared in dark theme for light background) */}
+        {/* Fixed Top Header */}
         <Header alwaysDark={true} />
 
-        {/* Hero Section with Editorial Headline */}
-        <NewsHero featuredArticle={featuredArticle} />
+        {/* Fixed Left Vertical Sidebar */}
+        <NewsSidebar />
 
-        {/* Filter Tabs and Articles Grid */}
+        {/* Hero Section with bougainvillea video and giant typography */}
+        <NewsHero totalArticles={NEWS_ARTICLES.length} />
+
+        {/* Dual-layer chamfered Filter Tabs & Articles Grid */}
         <NewsList articles={NEWS_ARTICLES} />
       </main>
 
+      {/* Signature Alizé bottom sections */}
+      <NinthSection />
+      <TenthSection />
       <Footer />
     </SmoothScroll>
   );

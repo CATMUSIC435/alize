@@ -3,8 +3,11 @@ import { notFound } from 'next/navigation';
 import { setRequestLocale } from 'next-intl/server';
 import { Footer } from '@/components/landing/Footer';
 import { Header } from '@/components/landing/Header';
+import { NinthSection } from '@/components/landing/NinthSection';
 import { SmoothScroll } from '@/components/landing/SmoothScroll';
+import { TenthSection } from '@/components/landing/TenthSection';
 import { NewsDetail } from '@/components/news/NewsDetail';
+import { NewsSidebar } from '@/components/news/NewsSidebar';
 import { RelatedNews } from '@/components/news/RelatedNews';
 import { NEWS_ARTICLES } from '@/data/news';
 
@@ -97,10 +100,22 @@ export default async function NewsDetailPage(props: NewsDetailPageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <main className="relative min-h-screen w-full bg-[#F4F3ED]">
+        {/* Fixed Top Header */}
         <Header alwaysDark={true} />
+
+        {/* Fixed Left Vertical Sidebar */}
+        <NewsSidebar category={article.categoryLabel} articleTitle={article.title} />
+
+        {/* 2-Column Luxury Editorial Reader */}
         <NewsDetail article={article} />
+
+        {/* Arch Portal Related News */}
         <RelatedNews currentSlug={article.slug} articles={NEWS_ARTICLES} />
       </main>
+
+      {/* Signature Alizé bottom sections */}
+      <NinthSection />
+      <TenthSection />
       <Footer />
     </SmoothScroll>
   );
