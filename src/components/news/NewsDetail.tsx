@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { Inter, Playfair_Display } from 'next/font/google';
 import Image from 'next/image';
 import { useState } from 'react';
@@ -14,6 +15,8 @@ const clipPathPolygon =
   'polygon(16px 0, calc(100% - 16px) 0, 100% 16px, 100% calc(100% - 16px), calc(100% - 16px) 100%, 16px 100%, 0 calc(100% - 16px), 0 16px)';
 
 export function NewsDetail(props: { article: NewsArticle }) {
+  const t = useTranslations('Index');
+  const tNews = useTranslations('NewsPage');
   const [copied, setCopied] = useState(false);
 
   const handleShare = () => {
@@ -173,11 +176,11 @@ export function NewsDetail(props: { article: NewsArticle }) {
             className={`flex items-center gap-2 text-[10px] font-bold tracking-[0.2em] text-[#151926]/50 uppercase md:text-xs ${inter.className}`}
           >
             <Link href="/" className="transition-colors hover:text-[#151926]">
-              TRANG CHỦ
+              {tNews('breadcrumb_home')}
             </Link>
             <span className="opacity-40">/</span>
             <Link href="/news" className="transition-colors hover:text-[#151926]">
-              TIN TỨC
+              {t('news')}
             </Link>
             <span className="opacity-40">/</span>
             <span className="text-[#8B7043]">{props.article.categoryLabel}</span>
@@ -229,7 +232,7 @@ export function NewsDetail(props: { article: NewsArticle }) {
               <span
                 className={`block text-[9px] font-bold tracking-[0.2em] text-[#151926]/50 uppercase mb-3 ${inter.className}`}
               >
-                CHỦ ĐỀ LIÊN QUAN
+                {tNews('related_articles')}
               </span>
               <div className="flex flex-wrap gap-2">
                 {props.article.tags.map((tag, i) => (
@@ -246,7 +249,7 @@ export function NewsDetail(props: { article: NewsArticle }) {
 
           {/* RIGHT COLUMN: STICKY METADATA & ACTIONS (35%) */}
           <aside
-            aria-label="Thông tin bài viết"
+            aria-label={tNews('article_info')}
             className="relative w-full lg:w-[38%] xl:w-[35%]"
           >
             <div
@@ -267,7 +270,7 @@ export function NewsDetail(props: { article: NewsArticle }) {
                       <span
                         className={`text-[9px] font-bold tracking-[0.25em] text-[#8B7043] uppercase md:text-[10px] ${inter.className}`}
                       >
-                        THÔNG TIN BÀI VIẾT
+                        {tNews('article_info')}
                       </span>
                       <span
                         className={`text-[9px] tracking-[0.2em] text-[#151926]/40 uppercase ${inter.className}`}
@@ -279,7 +282,7 @@ export function NewsDetail(props: { article: NewsArticle }) {
                     <div className="flex flex-col space-y-4">
                       <div className="flex items-center justify-between border-b border-[#151926]/5 pb-3 text-xs">
                         <span className={`text-[10px] tracking-[0.15em] text-[#151926]/60 uppercase ${inter.className}`}>
-                          CHỦ ĐỀ
+                          {tNews('category_label')}
                         </span>
                         <span className={`text-[10px] font-bold tracking-[0.15em] text-[#8B7043] uppercase ${inter.className}`}>
                           {props.article.categoryLabel}
@@ -288,7 +291,7 @@ export function NewsDetail(props: { article: NewsArticle }) {
 
                       <div className="flex items-center justify-between border-b border-[#151926]/5 pb-3 text-xs">
                         <span className={`text-[10px] tracking-[0.15em] text-[#151926]/60 uppercase ${inter.className}`}>
-                          NGÀY ĐĂNG
+                          {tNews('published_date')}
                         </span>
                         <span className={`text-[10px] font-bold tracking-[0.15em] text-[#151926] uppercase ${inter.className}`}>
                           {props.article.date}
@@ -297,7 +300,7 @@ export function NewsDetail(props: { article: NewsArticle }) {
 
                       <div className="flex items-center justify-between border-b border-[#151926]/5 pb-3 text-xs">
                         <span className={`text-[10px] tracking-[0.15em] text-[#151926]/60 uppercase ${inter.className}`}>
-                          THỜI GIAN ĐỌC
+                          {tNews('reading_time')}
                         </span>
                         <span className={`text-[10px] font-bold tracking-[0.15em] text-[#151926] uppercase ${inter.className}`}>
                           {props.article.readTime}
@@ -306,10 +309,10 @@ export function NewsDetail(props: { article: NewsArticle }) {
 
                       <div className="flex items-center justify-between text-xs pt-1">
                         <span className={`text-[10px] tracking-[0.15em] text-[#151926]/60 uppercase ${inter.className}`}>
-                          ĐỊA ĐIỂM
+                          {tNews('location_label')}
                         </span>
                         <span className={`text-[10px] font-bold tracking-[0.15em] text-[#151926] uppercase ${inter.className}`}>
-                          MỸ KHÊ, ĐÀ NẴNG
+                          {tNews('location_val')}
                         </span>
                       </div>
                     </div>
@@ -339,7 +342,7 @@ export function NewsDetail(props: { article: NewsArticle }) {
                     </div>
                     <div className="flex flex-col">
                       <span className={`text-[9px] font-bold tracking-[0.2em] text-[#8B7043] uppercase ${inter.className}`}>
-                        BAN BIÊN TẬP
+                        {tNews('editorial_label')}
                       </span>
                       <h4 className={`text-base font-semibold text-[#151926] uppercase ${playfair.className}`}>
                         {props.article.author.name}
@@ -355,13 +358,13 @@ export function NewsDetail(props: { article: NewsArticle }) {
               {/* INTERACTIVE MAGNETIC CIRCLE BUTTON FOR SHARING */}
               <div className="flex flex-col items-center justify-center py-6">
                 <CircleButton
-                  text={copied ? 'ĐÃ SAO CHÉP LIÊN KẾT' : 'CHIA SẺ BÀI VIẾT'}
+                  text={copied ? tNews('link_copied') : tNews('share_article')}
                   variant="dark"
                   onClick={handleShare}
                   className="h-36 w-36 sm:h-44 sm:w-44 lg:h-48 lg:w-48"
                 />
                 <span className={`mt-3 text-[9px] tracking-[0.2em] text-[#151926]/40 uppercase ${inter.className}`}>
-                  {copied ? 'ĐÃ LƯU VÀO CLIPBOARD' : 'NHẤP ĐỂ SAO CHÉP LIÊN KẾT'}
+                  {copied ? tNews('copied_to_clipboard') : tNews('click_to_copy')}
                 </span>
               </div>
 
@@ -379,16 +382,16 @@ export function NewsDetail(props: { article: NewsArticle }) {
                   <h4
                     className={`mt-2 mb-4 text-xl font-medium text-white uppercase ${playfair.className}`}
                   >
-                    25 CĂN HỘ NGHỈ DƯỠNG THƯỢNG LƯU
+                    {tNews('promo_title')}
                   </h4>
                   <p className={`mb-6 text-xs text-white/70 ${inter.className}`}>
-                    Trải nghiệm tầm nhìn vô cực ra bãi biển Mỹ Khê cùng đặc quyền sống tinh hoa.
+                    {tNews('promo_desc')}
                   </p>
                   <Link
                     href="/apartments"
                     className={`inline-block border border-white/30 bg-white/10 px-6 py-3 text-[9px] font-bold tracking-[0.2em] text-white uppercase transition-colors hover:bg-white hover:text-[#151926] ${inter.className}`}
                   >
-                    XEM CÁC CĂN HỘ ĐANG BÁN
+                    {tNews('promo_explore')}
                   </Link>
                 </div>
               </div>

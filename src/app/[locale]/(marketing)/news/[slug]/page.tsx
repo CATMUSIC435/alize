@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { setRequestLocale } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Footer } from '@/components/landing/Footer';
 import { Header } from '@/components/landing/Header';
 import { NinthSection } from '@/components/landing/NinthSection';
@@ -9,7 +9,7 @@ import { TenthSection } from '@/components/landing/TenthSection';
 import { NewsDetail } from '@/components/news/NewsDetail';
 import { NewsSidebar } from '@/components/news/NewsSidebar';
 import { RelatedNews } from '@/components/news/RelatedNews';
-import { NEWS_ARTICLES } from '@/data/news';
+import { getLocalizedArticle, getLocalizedArticles, NEWS_ARTICLES } from '@/data/news';
 import { routing } from '@/libs/I18nRouting';
 
 type NewsDetailPageProps = {
@@ -24,14 +24,16 @@ export function generateStaticParams() {
 
 export async function generateMetadata(props: NewsDetailPageProps): Promise<Metadata> {
   const { locale, slug } = await props.params;
-  const article = NEWS_ARTICLES.find((item) => item.slug === slug);
+  const baseArticle = NEWS_ARTICLES.find((item) => item.slug === slug);
 
-  if (!article) {
+  if (!baseArticle) {
+    const tNews = await getTranslations({ locale, namespace: 'NewsPage' });
     return {
-      title: 'Không tìm thấy bài viết | Alizé Residence',
+      title: tNews('not_found_title'),
     };
   }
 
+  const article = getLocalizedArticle(baseArticle, locale);
   const title = `${article.title} | Alizé Residence Đà Nẵng`;
   const description = article.excerpt;
   const canonicalUrl = `https://alize-residence.com/${locale}/news/${article.slug}`;
@@ -102,11 +104,15 @@ export default async function NewsDetailPage(props: NewsDetailPageProps) {
   const { locale, slug } = await props.params;
   setRequestLocale(locale);
 
-  const article = NEWS_ARTICLES.find((item) => item.slug === slug);
+  const baseArticle = NEWS_ARTICLES.find((item) => item.slug === slug);
 
-  if (!article) {
+  if (!baseArticle) {
     notFound();
   }
+
+  const tNews = await getTranslations({ locale, namespace: 'NewsPage' });
+  const article = getLocalizedArticle(baseArticle, locale);
+  const allArticles = getLocalizedArticles(locale);
 
   const baseUrl = 'https://alize-residence.com';
 
@@ -160,13 +166,13 @@ export default async function NewsDetailPage(props: NewsDetailPageProps) {
           {
             '@type': 'ListItem',
             'position': 1,
-            'name': 'Trang chủ',
+            'name': tNews('breadcrumb_home'),
             'item': `${baseUrl}/${locale}`,
           },
           {
             '@type': 'ListItem',
             'position': 2,
-            'name': 'Tin tức',
+            'name': tNews('breadcrumb_journal'),
             'item': `${baseUrl}/${locale}/news`,
           },
           {
@@ -197,7 +203,7 @@ export default async function NewsDetailPage(props: NewsDetailPageProps) {
         <NewsDetail article={article} />
 
         {/* Arch Portal Related News */}
-        <RelatedNews currentSlug={article.slug} articles={NEWS_ARTICLES} />
+        <RelatedNews currentSlug={article.slug} articles={allArticles} />
       </main>
 
       {/* Signature Alizé bottom sections */}

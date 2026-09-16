@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { setRequestLocale } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Footer } from '@/components/landing/Footer';
 import { Header } from '@/components/landing/Header';
 import { NinthSection } from '@/components/landing/NinthSection';
@@ -8,7 +8,7 @@ import { TenthSection } from '@/components/landing/TenthSection';
 import { NewsHero } from '@/components/news/NewsHero';
 import { NewsList } from '@/components/news/NewsList';
 import { NewsSidebar } from '@/components/news/NewsSidebar';
-import { NEWS_ARTICLES } from '@/data/news';
+import { getLocalizedArticles } from '@/data/news';
 import { routing } from '@/libs/I18nRouting';
 
 type NewsPageProps = {
@@ -17,10 +17,10 @@ type NewsPageProps = {
 
 export async function generateMetadata(props: NewsPageProps): Promise<Metadata> {
   const { locale } = await props.params;
+  const tNews = await getTranslations({ locale, namespace: 'NewsPage' });
 
-  const title = 'Tin tức & Bản tin | Alizé Residence Đà Nẵng';
-  const description =
-    'Cập nhật tiến độ xây dựng mới nhất, triết lý kiến trúc Địa Trung Hải và nhịp sống bên bờ biển Mỹ Khê tại Alizé Residence Đà Nẵng.';
+  const title = tNews('meta_title');
+  const description = tNews('meta_description');
   const canonicalUrl = `https://alize-residence.com/${locale}/news`;
 
   const languages = Object.fromEntries(
@@ -85,6 +85,10 @@ export default async function NewsPage(props: NewsPageProps) {
   const { locale } = await props.params;
   setRequestLocale(locale);
 
+  const tNews = await getTranslations({ locale, namespace: 'NewsPage' });
+  const articles = getLocalizedArticles(locale);
+  const featuredArticle = articles.find((a) => a.featured) ?? articles[0];
+
   const baseUrl = 'https://alize-residence.com';
 
   const jsonLd = {
@@ -102,28 +106,27 @@ export default async function NewsPage(props: NewsPageProps) {
         '@type': 'CollectionPage',
         '@id': `${baseUrl}/${locale}/news#webpage`,
         'url': `${baseUrl}/${locale}/news`,
-        'name': 'Tin tức & Bản tin - Alizé Residence Đà Nẵng',
+        'name': `${tNews('editorial_journal')} - Alizé Residence`,
         'isPartOf': { '@id': `${baseUrl}/#website` },
-        'description':
-          'Cập nhật tiến độ xây dựng mới nhất, triết lý kiến trúc Địa Trung Hải và nhịp sống bên bờ biển Mỹ Khê tại Alizé Residence Đà Nẵng.',
+        'description': tNews('journal_subtitle'),
         'breadcrumb': {
           '@type': 'BreadcrumbList',
           'itemListElement': [
             {
               '@type': 'ListItem',
               'position': 1,
-              'name': 'Trang chủ',
+              'name': tNews('breadcrumb_home'),
               'item': `${baseUrl}/${locale}`,
             },
             {
               '@type': 'ListItem',
               'position': 2,
-              'name': 'Tin tức',
+              'name': tNews('breadcrumb_journal'),
               'item': `${baseUrl}/${locale}/news`,
             },
           ],
         },
-        'hasPart': NEWS_ARTICLES.map((article) => ({
+        'hasPart': articles.map((article) => ({
           '@type': 'NewsArticle',
           'headline': article.title,
           'description': article.excerpt,
@@ -165,11 +168,11 @@ export default async function NewsPage(props: NewsPageProps) {
         {/* Fixed Left Vertical Sidebar */}
         <NewsSidebar />
 
-        {/* Hero Section with bougainvillea video and giant typography */}
-        <NewsHero totalArticles={NEWS_ARTICLES.length} />
+        {/* Hero Section with bougainvillea video, giant typography & featured main article */}
+        <NewsHero totalArticles={articles.length} featuredArticle={featuredArticle} />
 
         {/* Dual-layer chamfered Filter Tabs & Articles Grid */}
-        <NewsList articles={NEWS_ARTICLES} />
+        <NewsList articles={articles} featuredArticleId={featuredArticle?.id} />
       </main>
 
       {/* Signature Alizé bottom sections */}

@@ -5,6 +5,21 @@ export type NewsContentBlock =
   | { type: 'image'; src: string; caption?: string; alt?: string }
   | { type: 'takeaway'; title: string; items: string[] };
 
+export type LocalizedNewsData = {
+  title?: string;
+  excerpt?: string;
+  categoryLabel?: string;
+  date?: string;
+  readTime?: string;
+  tags?: string[];
+  content?: NewsContentBlock[];
+  author?: {
+    name: string;
+    role: string;
+    avatar: string;
+  };
+};
+
 export type NewsArticle = {
   id: string;
   slug: string;
@@ -25,6 +40,7 @@ export type NewsArticle = {
   };
   tags: string[];
   content: NewsContentBlock[];
+  translations?: Record<string, LocalizedNewsData>;
 };
 
 export const NEWS_ARTICLES: NewsArticle[] = [
@@ -96,6 +112,114 @@ export const NEWS_ARTICLES: NewsArticle[] = [
         ],
       },
     ],
+    translations: {
+      en: {
+        title: 'Alizé Residence Construction Milestones: A New Icon on My Khe Beach',
+        excerpt:
+          'Latest construction progress update for the luxury hotel, residences and beachfront villa complex Alizé Residence along Vo Nguyen Giap coastal boulevard, Da Nang.',
+        categoryLabel: 'Project',
+        date: 'September 15, 2026',
+        readTime: '4 min read',
+        tags: ['Milestones', 'Infrastructure', 'My Khe Beach', 'Da Nang'],
+        author: {
+          name: 'Project Management Board',
+          role: 'Alizé Residence & DXMD Vietnam',
+          avatar:
+            'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200',
+        },
+        content: [
+          {
+            type: 'paragraph',
+            text: 'Located in a diamond beachfront position right on Vo Nguyen Giap boulevard with unobstructed vistas of My Khe Beach—voted one of the planet’s most pristine shorelines—Alizé Residence is steadily rising as a landmark of ultra-luxury coastal living.',
+          },
+          {
+            type: 'pullQuote',
+            quote:
+              'We are not simply building a residential tower; we are forging a timeless icon where boundless ocean meets refined Mediterranean architectural artistry.',
+            author: 'Representative of DXMD Vietnam Project Development',
+          },
+          {
+            type: 'heading',
+            level: 2,
+            text: 'Completion of Deep Foundation and Substructure Engineering',
+          },
+          {
+            type: 'paragraph',
+            text: 'As of Q3 2026, deep bored piles and diaphragm wall engineering adhering to strict international criteria have passed comprehensive quality audits. The general contractor is actively advancing the multi-level subterranean infrastructure to guarantee handover in Q4 2026.',
+          },
+          {
+            type: 'image',
+            src: 'https://images.unsplash.com/photo-1541888946425-d0fbb186f5f7?auto=format&fit=crop&q=85&w=1600',
+            caption: 'Alizé Residence active construction site adhering to rigorous safety standards',
+            alt: 'Alizé Residence construction progress',
+          },
+          {
+            type: 'heading',
+            level: 2,
+            text: 'Five-Star International Finishes and Smart Green Technologies',
+          },
+          {
+            type: 'paragraph',
+            text: 'Alongside structural works, supply agreements for Villeroy & Boch sanitaryware, European triple-glazed Low-E solar-control facade glazing, and high-efficiency Aerothermal fresh-air ventilation have been signed and mobilized.',
+          },
+          {
+            type: 'takeaway',
+            title: 'Key Project Highlights',
+            items: [
+              'Direct beachfront position along My Khe Beach, Da Nang.',
+              'Sculptural 39-storey tower with 3 intelligent basement levels.',
+              'Exclusive lifestyle amenities: Horizon infinity pool, Sky Bar, signature wellness spa.',
+              'Target handover by late 2026 with 5-star international finishing standards.',
+            ],
+          },
+        ],
+      },
+      fr: {
+        title: "Avancement des travaux d'Alizé Residence : La nouvelle icône de My Khe",
+        excerpt:
+          "Dernières nouvelles sur l'état d'avancement du complexe de résidences hôtelières et villas de luxe Alizé Residence le long du boulevard côtier Vo Nguyen Giap à Da Nang.",
+        categoryLabel: 'Projet',
+        date: '15 septembre 2026',
+        readTime: '4 min de lecture',
+        tags: ['Chantier', 'Infrastructure', 'Plage de My Khe', 'Da Nang'],
+        author: {
+          name: 'Direction de Projet',
+          role: 'Alizé Residence & DXMD Vietnam',
+          avatar:
+            'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200',
+        },
+      },
+      ru: {
+        title: 'Ход строительства Alizé Residence: Новый символ побережья Ми Кхе',
+        excerpt:
+          'Свежий отчет о ходе строительства элитного комплекса резиденций и вилл Alizé Residence на первой береговой линии Дананга.',
+        categoryLabel: 'Проект',
+        date: '15 сентября 2026',
+        readTime: '4 мин чтения',
+        tags: ['Строительство', 'Инфраструктура', 'Пляж Ми Кхе', 'Дананг'],
+        author: {
+          name: 'Дирекция проекта',
+          role: 'Alizé Residence & DXMD Vietnam',
+          avatar:
+            'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200',
+        },
+      },
+      zh: {
+        title: 'Alizé Residence 工程进度速递：美溪海滩璀璨新地标',
+        excerpt:
+          '探索位于岘港武元甲沿海大道的奢华滨海公馆与度假酒店 Alizé Residence 的最新施工进展。',
+        categoryLabel: '工程进度',
+        date: '2026年9月15日',
+        readTime: '4 分钟阅读',
+        tags: ['工程进度', '地标建筑', '美溪海滩', '岘港'],
+        author: {
+          name: '项目工程部',
+          role: 'Alizé Residence & DXMD Vietnam',
+          avatar:
+            'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200',
+        },
+      },
+    },
   },
   {
     id: '2',
@@ -150,6 +274,50 @@ export const NEWS_ARTICLES: NewsArticle[] = [
         text: 'Bảng màu của Alizé được chắt lọc từ thiên nhiên miền biển: sắc cát mịn màng (#F4F3ED), tông gỗ óc chó ấm áp, điểm xuyết màu xanh lam thăm thẳm của đại dương (#0D2D40).',
       },
     ],
+    translations: {
+      en: {
+        title: 'Contemporary Mediterranean Architectural Philosophy at Alizé Residence',
+        excerpt:
+          'Discover the poetic language of archways, sculpted lines and natural ocean light woven into every living space at Alizé.',
+        categoryLabel: 'Architecture',
+        date: 'September 10, 2026',
+        readTime: '6 min read',
+        tags: ['Architecture', 'Design', 'Interior', 'Mediterranean'],
+        author: {
+          name: 'Elena Rostova',
+          role: 'Architectural Design Director',
+          avatar:
+            'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=200',
+        },
+      },
+      fr: {
+        title: 'Philosophie architecturale méditerranéenne contemporaine à Alizé',
+        excerpt:
+          'Découvrez la beauté des arches sculptées, des courbes douces et de la lumière naturelle célébrées dans chaque résidence Alizé.',
+        categoryLabel: 'Architecture',
+        date: '10 septembre 2026',
+        readTime: '6 min de lecture',
+        tags: ['Architecture', 'Design', 'Intérieur', 'Méditerranée'],
+      },
+      ru: {
+        title: 'Современная средиземноморская архитектурная философия в Alizé',
+        excerpt:
+          'Исследуйте поэтику арочных порталов, мягких линий и естественного морского света в резиденциях Alizé.',
+        categoryLabel: 'Архитектура',
+        date: '10 сентября 2026',
+        readTime: '6 мин чтения',
+        tags: ['Архитектура', 'Дизайн', 'Интерьер', 'Средиземноморье'],
+      },
+      zh: {
+        title: 'Alizé Residence 当代地中海建筑哲学',
+        excerpt:
+          '探索柔美拱廊、典雅弧线与充盈自然海光在 Alizé 每一寸生活空间中的诗意交融。',
+        categoryLabel: '建筑设计',
+        date: '2026年9月10日',
+        readTime: '6 分钟阅读',
+        tags: ['建筑', '设计', '室内', '地中海美学'],
+      },
+    },
   },
   {
     id: '3',
@@ -197,6 +365,50 @@ export const NEWS_ARTICLES: NewsArticle[] = [
         ],
       },
     ],
+    translations: {
+      en: {
+        title: 'Da Nang Prime Coastal Branded Real Estate: 2026 Investment Magnet',
+        excerpt:
+          'In-depth analysis of long-term capital preservation and asset appreciation in luxury branded coastal residences along Central Vietnam’s premier beach.',
+        categoryLabel: 'Market',
+        date: 'September 02, 2026',
+        readTime: '5 min read',
+        tags: ['Investment', 'Market', 'Real Estate', 'Branded Residences'],
+        author: {
+          name: 'Tran Minh Duc',
+          role: 'Senior Market Research Analyst',
+          avatar:
+            'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200',
+        },
+      },
+      fr: {
+        title: "Immobilier de prestige côtier à Da Nang : L'attractivité en 2026",
+        excerpt:
+          "Analyse de la valeur patrimoniale pérenne et des perspectives de valorisation des résidences de marque en bord de mer à Da Nang.",
+        categoryLabel: 'Marché',
+        date: '02 septembre 2026',
+        readTime: '5 min de lecture',
+        tags: ['Investissement', 'Marché', 'Immobilier', 'Résidences de Marque'],
+      },
+      ru: {
+        title: 'Брендовая прибрежная недвижимость Дананга: Инвестиционный фокус 2026',
+        excerpt:
+          'Анализ потенциала сохранения капитала и доходности в сегменте премиальных курортных резиденций на побережье Ми Кхе.',
+        categoryLabel: 'Рынок',
+        date: '02 сентября 2026',
+        readTime: '5 мин чтения',
+        tags: ['Инвестиции', 'Рынок', 'Недвижимость', 'Branded Residences'],
+      },
+      zh: {
+        title: '岘港一线滨海奢华品牌物业：2026 价值投资焦点',
+        excerpt:
+          '深度解析中越黄金海岸线上稀缺品牌公馆在财富传承与长期资产增值层面的非凡潜力。',
+        categoryLabel: '度假市场',
+        date: '2026年9月02日',
+        readTime: '5 分钟阅读',
+        tags: ['投资', '度假地产', '品牌公寓', '岘港'],
+      },
+    },
   },
   {
     id: '4',
@@ -236,5 +448,70 @@ export const NEWS_ARTICLES: NewsArticle[] = [
         text: 'Mỗi ngày tại Alizé Residence là một bản hòa ca giữa sự tĩnh lặng của thiên nhiên và những tiện ích xa xỉ được chăm chút đến từng giác quan.',
       },
     ],
+    translations: {
+      en: {
+        title: 'The Art of Slow Living and Ocean Mindfulness at My Khe Beach',
+        excerpt:
+          'Experience the daily rhythm of Alizé residents: dawn walks along the tide, afternoon tea in the breeze and tropical dusk horizons.',
+        categoryLabel: 'Lifestyle',
+        date: 'August 25, 2026',
+        readTime: '3 min read',
+        tags: ['Lifestyle', 'My Khe Beach', 'Slow Living', 'Resort Living'],
+        author: {
+          name: 'Le Thao Nguyen',
+          role: 'Lifestyle Editor',
+          avatar:
+            'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=200',
+        },
+      },
+      fr: {
+        title: 'L’art de vivre au ralenti au bord de la plage de My Khe',
+        excerpt:
+          'Découvrez le quotidien apaisant des résidents d’Alizé : aube sur la mer, thé de l’après-midi et crépuscule tropical.',
+        categoryLabel: 'Art de vivre',
+        date: '25 août 2026',
+        readTime: '3 min de lecture',
+        tags: ['Art de vivre', 'Plage de My Khe', 'Sérénité', 'Villégiature'],
+      },
+      ru: {
+        title: 'Искусство неспешной жизни на побережье Ми Кхе',
+        excerpt:
+          'Откройте для себя ритм жизни резидентов Alizé: рассветы над морем, дневной бриз и золотые закаты.',
+        categoryLabel: 'Стиль жизни',
+        date: '25 августа 2026',
+        readTime: '3 мин чтения',
+        tags: ['Стиль жизни', 'Пляж Ми Кхе', 'Slow Living', 'Курортная жизнь'],
+      },
+      zh: {
+        title: '美溪海滩慢调艺术与海韵诗意生活',
+        excerpt:
+          '探寻 Alizé 业主的日常韵律：迎着晨光初醒的海浪漫步，在午后海风中品茗，沉醉于热带日落的绚烂暮色。',
+        categoryLabel: '生活方式',
+        date: '2026年8月25日',
+        readTime: '3 分钟阅读',
+        tags: ['生活方式', '美溪海滩', '慢活哲学', '度假生活'],
+      },
+    },
   },
 ];
+
+export function getLocalizedArticle(article: NewsArticle, locale: string): NewsArticle {
+  const trans = article.translations?.[locale];
+  if (!trans) return article;
+
+  return {
+    ...article,
+    title: trans.title ?? article.title,
+    excerpt: trans.excerpt ?? article.excerpt,
+    categoryLabel: trans.categoryLabel ?? article.categoryLabel,
+    date: trans.date ?? article.date,
+    readTime: trans.readTime ?? article.readTime,
+    tags: trans.tags ?? article.tags,
+    content: trans.content ?? article.content,
+    author: trans.author ?? article.author,
+  };
+}
+
+export function getLocalizedArticles(locale: string): NewsArticle[] {
+  return NEWS_ARTICLES.map((article) => getLocalizedArticle(article, locale));
+}

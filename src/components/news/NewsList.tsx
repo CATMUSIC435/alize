@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { Inter, Playfair_Display } from 'next/font/google';
 import Image from 'next/image';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { NewsArticle } from '@/data/news';
 import { Link } from '@/libs/I18nNavigation';
 import { NewsCard } from './NewsCard';
@@ -17,22 +17,8 @@ const clipPathPolygon =
 const dropdownClip =
   'polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px)';
 
-const CATEGORIES = [
-  { id: 'ALL', label: 'TẤT CẢ' },
-  { id: 'project', label: 'DỰ ÁN' },
-  { id: 'architecture', label: 'KIẾN TRÚC' },
-  { id: 'market', label: 'THỊ TRƯỜNG' },
-  { id: 'lifestyle', label: 'PHONG CÁCH SỐNG' },
-] as const;
-
-const SORTS = [
-  { id: 'NEWEST', label: 'MỚI NHẤT' },
-  { id: 'OLDEST', label: 'CŨ NHẤT' },
-  { id: 'READ_TIME', label: 'THỜI GIAN ĐỌC' },
-] as const;
-
-export function NewsList(props: { articles: NewsArticle[] }) {
-  const t = useTranslations('Index');
+export function NewsList(props: { articles: NewsArticle[]; featuredArticleId?: string }) {
+  const tNews = useTranslations('NewsPage');
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
   const [sortBy, setSortBy] = useState<string>('NEWEST');
   const [searchQuery, setSearchQuery] = useState('');
@@ -56,34 +42,46 @@ export function NewsList(props: { articles: NewsArticle[] }) {
     };
   }, []);
 
-  const filteredAndSorted = useMemo(() => {
-    let result = [...props.articles];
+  const categories = [
+    { id: 'ALL', label: tNews('all_topics') },
+    { id: 'project', label: tNews('category_project') },
+    { id: 'architecture', label: tNews('category_architecture') },
+    { id: 'market', label: tNews('category_market') },
+    { id: 'lifestyle', label: tNews('category_lifestyle') },
+  ] as const;
 
-    // Filter by Category
-    if (selectedCategory !== 'ALL') {
-      result = result.filter((a) => a.category === selectedCategory);
-    }
+  const sorts = [
+    { id: 'NEWEST', label: tNews('sort_newest') },
+    { id: 'OLDEST', label: tNews('sort_oldest') },
+    { id: 'READ_TIME', label: tNews('sort_read_time') },
+  ] as const;
 
-    // Search query
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase();
-      result = result.filter(
-        (a) =>
-          a.title.toLowerCase().includes(q) ||
-          a.excerpt.toLowerCase().includes(q) ||
-          a.tags.some((tag) => tag.toLowerCase().includes(q)),
-      );
-    }
+  let filteredAndSorted = [...props.articles];
 
-    // Sort
-    if (sortBy === 'OLDEST') {
-      result.reverse();
-    } else if (sortBy === 'READ_TIME') {
-      result.sort((a, b) => parseInt(a.readTime, 10) - parseInt(b.readTime, 10));
-    }
+  // If in default view (ALL and no search), omit the hero featured article to prevent duplication
+  if (selectedCategory === 'ALL' && !searchQuery.trim() && props.featuredArticleId) {
+    filteredAndSorted = filteredAndSorted.filter((a) => a.id !== props.featuredArticleId);
+  } else if (selectedCategory !== 'ALL') {
+    filteredAndSorted = filteredAndSorted.filter((a) => a.category === selectedCategory);
+  }
 
-    return result;
-  }, [props.articles, selectedCategory, searchQuery, sortBy]);
+  // Search query
+  if (searchQuery.trim()) {
+    const q = searchQuery.toLowerCase();
+    filteredAndSorted = filteredAndSorted.filter(
+      (a) =>
+        a.title.toLowerCase().includes(q) ||
+        a.excerpt.toLowerCase().includes(q) ||
+        a.tags.some((tag) => tag.toLowerCase().includes(q)),
+    );
+  }
+
+  // Sort
+  if (sortBy === 'OLDEST') {
+    filteredAndSorted.reverse();
+  } else if (sortBy === 'READ_TIME') {
+    filteredAndSorted.sort((a, b) => parseInt(a.readTime, 10) - parseInt(b.readTime, 10));
+  }
 
   const toggleDropdown = (dropdown: 'category' | 'sort') => {
     setActiveDropdown((prev) => (prev === dropdown ? null : dropdown));
@@ -97,8 +95,8 @@ export function NewsList(props: { articles: NewsArticle[] }) {
   };
 
   const activeCategoryLabel =
-    CATEGORIES.find((c) => c.id === selectedCategory)?.label ?? 'TẤT CẢ';
-  const activeSortLabel = SORTS.find((s) => s.id === sortBy)?.label ?? 'MỚI NHẤT';
+    categories.find((c) => c.id === selectedCategory)?.label ?? tNews('all_topics');
+  const activeSortLabel = sorts.find((s) => s.id === sortBy)?.label ?? tNews('sort_newest');
 
   return (
     <section className="relative w-full bg-[#F4F3ED] px-6 py-12 md:px-12 md:py-20">
@@ -127,7 +125,7 @@ export function NewsList(props: { articles: NewsArticle[] }) {
                   }}
                   className="flex items-center gap-2 transition-opacity hover:opacity-70 focus:outline-none"
                 >
-                  <span className="opacity-60">CHỦ ĐỀ:</span>
+                  <span className="opacity-60">{tNews('filter_topic')}</span>
                   <span className="text-[#8B7043]">{activeCategoryLabel}</span>
                   <svg
                     width="10"
@@ -157,7 +155,7 @@ export function NewsList(props: { articles: NewsArticle[] }) {
                         className="flex h-full w-full flex-col bg-[#F4F3ED] py-2"
                         style={{ clipPath: dropdownClip }}
                       >
-                        {CATEGORIES.map((cat) => (
+                        {categories.map((cat) => (
                           <button
                             key={cat.id}
                             onClick={() => {
@@ -183,7 +181,7 @@ export function NewsList(props: { articles: NewsArticle[] }) {
                   }}
                   className="flex items-center gap-2 transition-opacity hover:opacity-70 focus:outline-none"
                 >
-                  <span className="opacity-60">SẮP XẾP:</span>
+                  <span className="opacity-60">{tNews('filter_sort')}</span>
                   <span>{activeSortLabel}</span>
                   <svg
                     width="10"
@@ -213,7 +211,7 @@ export function NewsList(props: { articles: NewsArticle[] }) {
                         className="flex h-full w-full flex-col bg-[#F4F3ED] py-2"
                         style={{ clipPath: dropdownClip }}
                       >
-                        {SORTS.map((s) => (
+                        {sorts.map((s) => (
                           <button
                             key={s.id}
                             onClick={() => {
@@ -249,8 +247,8 @@ export function NewsList(props: { articles: NewsArticle[] }) {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="TÌM KIẾM BÀI VIẾT..."
-                  className="w-32 bg-transparent text-[10px] tracking-[0.15em] text-[#151926] placeholder-[#151926]/40 uppercase focus:w-44 focus:outline-none transition-all duration-300 md:text-xs"
+                  placeholder={tNews('search_placeholder')}
+                  className="w-32 bg-transparent text-[10px] tracking-[0.15em] text-[#151926] placeholder-[#151926]/40 uppercase transition-all duration-300 focus:w-44 focus:outline-none md:text-xs"
                 />
               </div>
             </div>
@@ -260,7 +258,7 @@ export function NewsList(props: { articles: NewsArticle[] }) {
               onClick={handleReset}
               className={`text-[10px] font-bold tracking-[0.2em] text-[#151926]/50 uppercase transition-colors hover:text-[#151926] focus:outline-none md:text-xs ${inter.className}`}
             >
-              {t('reset')}
+              {tNews('reset')}
             </button>
           </div>
         </div>
@@ -272,7 +270,7 @@ export function NewsList(props: { articles: NewsArticle[] }) {
               <NewsCard key={article.id} article={article} />
             ))}
 
-            {/* Editorial Concept Promo Card (matching ApartmentList promo card) */}
+            {/* Editorial Concept Promo Card */}
             <div
               className="group relative h-[600px] w-full cursor-pointer overflow-hidden lg:h-auto"
               style={{ clipPath: clipPathPolygon }}
@@ -292,7 +290,7 @@ export function NewsList(props: { articles: NewsArticle[] }) {
                   <span
                     className={`text-[9px] font-bold tracking-[0.25em] text-[#E0AC87] uppercase md:text-[10px] ${inter.className}`}
                   >
-                    BẢN SẮC KIẾN TRÚC
+                    {tNews('editorial_journal')}
                   </span>
                   <span className="h-[1px] w-12 bg-white/30" />
                 </div>
@@ -301,18 +299,18 @@ export function NewsList(props: { articles: NewsArticle[] }) {
                   <h4
                     className={`mb-4 text-2xl leading-tight text-white uppercase sm:text-3xl ${playfair.className}`}
                   >
-                    MỘT NƠI ĐỂ TRỞ VỀ, KHÔNG PHẢI ĐỂ DI CHUYỂN
+                    {tNews('promo_title')}
                   </h4>
                   <p
                     className={`mb-8 text-xs leading-relaxed text-white/80 ${inter.className}`}
                   >
-                    Alizé Residence kết hợp tinh hoa kiến trúc Địa Trung Hải với hơi thở đại dương Mỹ Khê – kiệt tác dành riêng cho 25 chủ nhân tôn quý.
+                    {tNews('promo_desc')}
                   </p>
                   <Link
                     href="/apartments"
                     className={`inline-flex items-center gap-3 text-[10px] font-bold tracking-[0.2em] text-[#E0AC87] uppercase transition-colors hover:text-white ${inter.className}`}
                   >
-                    <span>KHÁM PHÁ CĂN HỘ</span>
+                    <span>{tNews('promo_explore')}</span>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>
@@ -324,13 +322,13 @@ export function NewsList(props: { articles: NewsArticle[] }) {
         ) : (
           <div className="flex flex-col items-center justify-center py-24 text-center">
             <p className={`text-sm tracking-[0.2em] text-[#151926]/50 uppercase ${inter.className}`}>
-              KHÔNG TÌM THẤY BÀI VIẾT NÀO PHÙ HỢP
+              {tNews('no_articles')}
             </p>
             <button
               onClick={handleReset}
               className={`mt-4 text-xs font-bold tracking-[0.2em] text-[#8B7043] uppercase underline underline-offset-4 hover:opacity-70 ${inter.className}`}
             >
-              LÀM MỚI BỘ LỌC
+              {tNews('clear_filters')}
             </button>
           </div>
         )}

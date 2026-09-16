@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { Inter, Playfair_Display } from 'next/font/google';
 import type { NewsArticle } from '@/data/news';
 import { NewsCard } from './NewsCard';
@@ -8,6 +9,7 @@ const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400', '500', '
 const inter = Inter({ subsets: ['latin'], weight: ['400', '600', '700'] });
 
 export function RelatedNews(props: { currentSlug: string; articles: NewsArticle[] }) {
+  const tNews = useTranslations('NewsPage');
   const currentArticle = props.articles.find((a) => a.slug === props.currentSlug);
   const related = props.articles
     .filter((a) => a.slug !== props.currentSlug)
@@ -30,14 +32,14 @@ export function RelatedNews(props: { currentSlug: string; articles: NewsArticle[
       {/* Title & Hairline Divider matching SimilarApartments */}
       <div className="mb-20 flex w-full flex-col items-center px-6 text-center md:mb-28">
         <span className={`text-[10px] font-bold tracking-[0.25em] text-[#8B7043] uppercase md:text-xs ${inter.className}`}>
-          KHÁM PHÁ THÊM
+          {tNews('continue_reading')}
         </span>
 
         <h2
           className={`mt-4 flex flex-col items-center text-[7vw] leading-[0.85] font-medium tracking-tighter text-[#151926] uppercase md:text-[5vw] ${playfair.className}`}
           style={{ transform: 'scaleY(1.3)' }}
         >
-          BÀI VIẾT LIÊN QUAN
+          {tNews('related_articles')}
         </h2>
 
         <div className="mt-12 h-20 w-[1px] bg-[#151926]/30 md:mt-16 md:h-28" />
@@ -45,7 +47,7 @@ export function RelatedNews(props: { currentSlug: string; articles: NewsArticle[
         <p
           className={`mt-10 max-w-sm text-[10px] font-bold tracking-widest text-[#151926]/70 uppercase md:text-xs ${inter.className}`}
         >
-          Cập nhật những chuyển động mới nhất từ không gian sống Alizé Residence
+          {tNews('related_subtitle')}
         </p>
       </div>
 
