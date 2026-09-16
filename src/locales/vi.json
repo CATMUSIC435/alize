@@ -270,5 +270,25 @@
     "breadcrumb_journal": "BẢN TIN",
     "not_found_title": "Không tìm thấy bài viết | Alizé Residence",
     "not_found_desc": "Bài viết bạn đang tìm kiếm không tồn tại hoặc đã được di chuyển."
+  },
+  "Menu": {
+    "title": "MENU",
+    "close": "ĐÓNG",
+    "home": "TRANG CHỦ",
+    "home_sub": "MỘT NƠI ĐỂ TRỞ VỀ — BỜ BIỂN MỸ KHÊ",
+    "apartments": "BỘ SƯU TẬP CĂN HỘ",
+    "apartments_sub": "25 CĂN HỘ & PENTHOUSE THƯỢNG LƯU",
+    "news": "NHẬT KÝ & TIN TỨC",
+    "news_sub": "TIẾN ĐỘ THI CÔNG & KIẾN TRÚC",
+    "concept": "Ý TƯỞNG KIẾN TRÚC",
+    "concept_sub": "CẢM HỨNG ĐỊA TRUNG HẢI",
+    "contact": "ĐẶT LỊCH HẸN TƯ VẤN",
+    "contact_sub": "ĐẶC QUYỀN TIẾP ĐÓN RIÊNG TƯ",
+    "tagline": "BỘ SƯU TẬP GIỚI HẠN 25 CĂN HỘ",
+    "inquiry": "HOTLINE TƯ VẤN",
+    "email": "THƯ ĐIỆN TỬ",
+    "address": "Võ Nguyên Giáp, Bãi biển Mỹ Khê, Đà Nẵng",
+    "language": "NGÔN NGỮ",
+    "copyright": "© 2026 ALIZÉ RESIDENCE. TẤT CẢ QUYỀN ĐƯỢC BẢO LƯU."
   }
 }

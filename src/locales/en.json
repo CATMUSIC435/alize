@@ -270,5 +270,25 @@
     "breadcrumb_journal": "JOURNAL",
     "not_found_title": "Article Not Found | Alizé Residence",
     "not_found_desc": "The article you are looking for does not exist or has been moved."
+  },
+  "Menu": {
+    "title": "MENU",
+    "close": "CLOSE",
+    "home": "HOME",
+    "home_sub": "A PLACE TO RETURN TO — MY KHE BEACH",
+    "apartments": "RESIDENCES COLLECTION",
+    "apartments_sub": "25 LUXURY APARTMENTS & PENTHOUSES",
+    "news": "JOURNAL & NEWS",
+    "news_sub": "CONSTRUCTION PROGRESS & ARCHITECTURE",
+    "concept": "THE CONCEPT",
+    "concept_sub": "MEDITERRANEAN ARCHITECTURAL ESSENCE",
+    "contact": "BOOK A PRIVATE VISIT",
+    "contact_sub": "BESPOKE CONCIERGE & APPOINTMENTS",
+    "tagline": "LIMITED COLLECTION OF 25 RESIDENCES",
+    "inquiry": "SALES INQUIRIES",
+    "email": "EMAIL US",
+    "address": "Vo Nguyen Giap, My Khe Beach, Da Nang",
+    "language": "LANGUAGE",
+    "copyright": "© 2026 ALIZÉ RESIDENCE. ALL RIGHTS RESERVED."
   }
 }

@@ -270,5 +270,25 @@
     "breadcrumb_journal": "专栏",
     "not_found_title": "未找到文章 | Alizé Residence",
     "not_found_desc": "您要查看的文章不存在或已被移动。"
+  },
+  "Menu": {
+    "title": "菜单",
+    "close": "关闭",
+    "home": "首页",
+    "home_sub": "一处心之归所 — 岘港美溪海滩",
+    "apartments": "公馆臻藏",
+    "apartments_sub": "限量 25 套一线滨海奢华公馆与顶层复式",
+    "news": "专栏与动态",
+    "news_sub": "工程进展与当代建筑哲学",
+    "concept": "设计哲学",
+    "concept_sub": "地中海永恒建筑美学",
+    "contact": "预约私人品鉴",
+    "contact_sub": "专属贵宾接待与管家服务",
+    "tagline": "限量 25 套一线滨海奢华公馆",
+    "inquiry": "尊贵专线",
+    "email": "联系我们",
+    "address": "岘港 武元甲路 美溪海滩",
+    "language": "语言",
+    "copyright": "© 2026 ALIZÉ RESIDENCE. 保留所有权利。"
   }
 }

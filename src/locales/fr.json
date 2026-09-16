@@ -270,5 +270,25 @@
     "breadcrumb_journal": "JOURNAL",
     "not_found_title": "Article non trouvé | Alizé Residence",
     "not_found_desc": "L'article que vous recherchez n'existe pas ou a été déplacé."
+  },
+  "Menu": {
+    "title": "MENU",
+    "close": "FERMER",
+    "home": "ACCUEIL",
+    "home_sub": "UN LIEU OÙ REVENIR — PLAGE DE MY KHE",
+    "apartments": "COLLECTION DE RÉSIDENCES",
+    "apartments_sub": "25 APPARTEMENTS ET PENTHOUSES D'EXCEPTION",
+    "news": "JOURNAL & ACTUALITÉS",
+    "news_sub": "AVANCEMENT DES TRAVAUX & ARCHITECTURE",
+    "concept": "LE CONCEPT",
+    "concept_sub": "ESSENCE ARCHITECTURALE MÉDITERRANÉENNE",
+    "contact": "PRENDRE RENDEZ-VOUS",
+    "contact_sub": "ACCUEIL PRIVÉ & CONCIERGERIE",
+    "tagline": "COLLECTION EXCLUSIVE DE 25 RÉSIDENCES",
+    "inquiry": "LIGNE PRIVÉE",
+    "email": "CONTACTEZ-NOUS",
+    "address": "Vo Nguyen Giap, Plage de My Khe, Da Nang",
+    "language": "LANGUE",
+    "copyright": "© 2026 ALIZÉ RESIDENCE. TOUS DROITS RÉSERVÉS."
   }
 }

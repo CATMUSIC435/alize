@@ -5,6 +5,8 @@ import { useTranslations, useLocale } from 'next-intl';
 import { Playfair_Display, Inter } from 'next/font/google';
 import { useState } from 'react';
 import { Link, usePathname } from '@/libs/I18nNavigation';
+import { useUIStore } from '@/store/useUIStore';
+import { MenuOverlay } from './MenuOverlay';
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -19,21 +21,35 @@ export function NavigationMenu({ isDark }: { isDark?: boolean }) {
   const t = useTranslations('Index');
   const locale = useLocale();
   const pathname = usePathname();
+  const isMenuOpen = useUIStore((state) => state.isMenuOpen);
+  const setIsMenuOpen = useUIStore((state) => state.setIsMenuOpen);
   const [isLangOpen, setIsLangOpen] = useState(false);
 
   return (
-    <div className="pointer-events-auto relative z-50 mt-0 flex flex-col items-end text-right md:mt-2">
-      <div className="flex items-start gap-6 md:gap-8">
-        {/* Menu and Language Switcher */}
-        <div className="mt-1 flex flex-col items-end gap-3">
-          {/* Custom Hamburger Menu */}
-          <button
-            aria-label="Menu"
-            className="group flex h-8 w-8 flex-col items-end justify-center gap-[4px] transition-opacity hover:opacity-70"
-          >
-            <div className="h-[2px] w-8 bg-current transition-all group-hover:w-6"></div>
-            <div className="h-[2px] w-6 bg-current transition-all group-hover:w-8"></div>
-          </button>
+    <>
+      <MenuOverlay />
+      <div className="pointer-events-auto relative z-50 mt-0 flex flex-col items-end text-right md:mt-2">
+        <div className="flex items-start gap-6 md:gap-8">
+          {/* Menu and Language Switcher */}
+          <div className="mt-1 flex flex-col items-end gap-3">
+            {/* Custom Animated Hamburger Menu */}
+            <button
+              type="button"
+              aria-label={isMenuOpen ? 'Close Menu' : 'Open Menu'}
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="group flex h-8 w-8 flex-col items-end justify-center gap-[5px] transition-opacity hover:opacity-70 focus:outline-none"
+            >
+              <div
+                className={`h-[2px] bg-current transition-all duration-300 ${
+                  isMenuOpen ? 'w-7 translate-y-[3.5px] rotate-45' : 'w-8 group-hover:w-6'
+                }`}
+              />
+              <div
+                className={`h-[2px] bg-current transition-all duration-300 ${
+                  isMenuOpen ? 'w-7 -translate-y-[3.5px] -rotate-45' : 'w-6 group-hover:w-8'
+                }`}
+              />
+            </button>
 
           {/* Custom Interactive Language Selector */}
           <motion.div
@@ -129,5 +145,6 @@ export function NavigationMenu({ isDark }: { isDark?: boolean }) {
         </div>
       </div>
     </div>
+  </>
   );
 }
