@@ -45,6 +45,9 @@ export function SmoothScroll(props: { children: React.ReactNode }) {
     });
 
     lenisRef.current = lenis;
+    if (typeof window !== 'undefined') {
+      (window as unknown as { __lenis?: Lenis }).__lenis = lenis;
+    }
 
     // Only lock scroll initially if on the home page AND intro is not yet completed
     const currentIsHome = isHomePage(typeof window !== 'undefined' ? window.location.pathname : pathname);
@@ -75,6 +78,9 @@ export function SmoothScroll(props: { children: React.ReactNode }) {
     return () => {
       clearTimeout(resizeTimer);
       resizeObserver?.disconnect();
+      if (typeof window !== 'undefined') {
+        delete (window as unknown as { __lenis?: Lenis }).__lenis;
+      }
       document.documentElement.style.overflow = '';
       document.body.style.overflow = '';
       lenis.destroy();

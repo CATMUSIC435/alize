@@ -5,6 +5,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { Inter, Playfair_Display } from 'next/font/google';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { SmartVideo } from '@/components/SmartVideo';
 import { Link, usePathname } from '@/libs/I18nNavigation';
 import { useUIStore } from '@/store/useUIStore';
@@ -34,18 +35,26 @@ export function MenuOverlay() {
   const isMenuOpen = useUIStore((state) => state.isMenuOpen);
   const setIsMenuOpen = useUIStore((state) => state.setIsMenuOpen);
 
+  const [mounted, setMounted] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number>(0);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Auto close menu on route change
   useEffect(() => {
     setIsMenuOpen(false);
   }, [pathname, setIsMenuOpen]);
 
-  // Lock body scroll and handle Escape key when menu is active
+  // Lock body scroll, pause Lenis, and handle Escape key when menu is active
   useEffect(() => {
     if (!isMenuOpen) {
       return () => {};
     }
+
+    const lenis = (window as unknown as { __lenis?: { stop: () => void; start: () => void } }).__lenis;
+    lenis?.stop();
 
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
@@ -59,9 +68,38 @@ export function MenuOverlay() {
     window.addEventListener('keydown', handleKeyDown);
     return () => {
       document.body.style.overflow = originalOverflow;
+      lenis?.start();
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [isMenuOpen, setIsMenuOpen]);
+
+  const handleItemClick = (href: string) => {
+    setIsMenuOpen(false);
+
+    if (href === '/') {
+      if (pathname === '/' || pathname === '') {
+        const lenis = (window as unknown as { __lenis?: { scrollTo: (target: number, opts?: { duration?: number }) => void } }).__lenis;
+        if (lenis) {
+          lenis.scrollTo(0, { duration: 1.2 });
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }
+    } else if (href.includes('#')) {
+      const hash = href.substring(href.indexOf('#'));
+      if (pathname === '/' || pathname === '') {
+        setTimeout(() => {
+          const lenis = (window as unknown as { __lenis?: { scrollTo: (target: string, opts?: { offset?: number; duration?: number }) => void } }).__lenis;
+          if (lenis) {
+            lenis.scrollTo(hash, { offset: -40, duration: 1.5 });
+          } else {
+            const el = document.querySelector(hash);
+            el?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }, 150);
+      }
+    }
+  };
 
   const menuItems = [
     {
@@ -123,11 +161,16 @@ export function MenuOverlay() {
 
   const activeItem = menuItems[hoveredIndex] ?? fallbackItem;
 
-  return (
+  if (!mounted) {
+    return null;
+  }
+
+  return createPortal(
     <AnimatePresence>
       {isMenuOpen && (
         <motion.div
           key="menu-overlay"
+          data-lenis-prevent="true"
           initial={{ opacity: 0, clipPath: 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)' }}
           animate={{
             opacity: 1,
@@ -139,32 +182,36 @@ export function MenuOverlay() {
             clipPath: 'polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)',
             transition: { duration: 0.5, ease: [0.76, 0, 0.24, 1] },
           }}
-          className="fixed inset-0 z-[100] flex h-screen w-screen flex-col justify-between overflow-y-auto bg-[#0E141E] text-[#F4F3ED] select-none"
+          className="pointer-events-auto fixed inset-0 z-[9999] flex flex-col overflow-x-hidden overflow-y-auto bg-[#0E141E] text-[#F4F3ED] select-none"
           style={{
             backgroundImage:
               'radial-gradient(circle at 80% 30%, rgba(224, 172, 135, 0.08) 0%, transparent 60%)',
           }}
         >
           {/* Subtle Ambient Decorative Flowers */}
-          <div className="pointer-events-none absolute -top-10 -right-10 z-0 h-[60vw] max-h-[500px] w-[60vw] max-w-[500px] rotate-180 opacity-20 filter blur-[1px]">
-            <SmartVideo
-              src="/bougainvillea-flowers_02.webm"
-              autoPlay
-              loop
-              muted
-              playsInline
-              aria-label="Decorative Flowers Watermark"
-              className="h-full w-full object-contain"
-            />
+          <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+            <div className="absolute -top-10 -right-10 h-[60vw] max-h-[500px] w-[60vw] max-w-[500px] rotate-180 opacity-20 filter blur-[1px]">
+              <SmartVideo
+                src="/bougainvillea-flowers_02.webm"
+                autoPlay
+                loop
+                muted
+                playsInline
+                aria-label="Decorative Flowers Watermark"
+                className="h-full w-full object-contain"
+              />
+            </div>
           </div>
 
-          {/* TOP HEADER ROW */}
-          <div className="relative z-10 flex w-full items-center justify-between px-6 py-6 sm:px-10 md:px-14 md:py-8">
+          {/* TOP HEADER ROW - STICKY TO STAY VISIBLE ON ANY VIEWPORT HEIGHT */}
+          <div className="sticky top-0 z-50 flex w-full shrink-0 items-center justify-between bg-[#0E141E]/95 px-6 py-5 backdrop-blur-md sm:px-10 md:px-14 md:py-7">
             {/* Left Brand Identity */}
             <div className="flex items-center gap-4">
               <Link
                 href="/"
-                onClick={() => setIsMenuOpen(false)}
+                onClick={() => {
+                  handleItemClick('/');
+                }}
                 className="flex items-center gap-3 transition-opacity hover:opacity-80"
               >
                 <div className="relative h-10 w-8 md:h-12 md:w-10">
@@ -195,23 +242,25 @@ export function MenuOverlay() {
             <div className="flex items-center gap-6">
               <button
                 type="button"
-                aria-label="Close Menu"
-                onClick={() => setIsMenuOpen(false)}
-                className="group flex items-center gap-3 text-white/70 transition-colors hover:text-white focus:outline-none"
+                aria-label={tMenu('close')}
+                onClick={() => {
+                  setIsMenuOpen(false);
+                }}
+                className="group flex cursor-pointer items-center gap-3 text-white/80 transition-colors hover:text-white focus:outline-none"
               >
                 <span
                   className={`text-[10px] font-bold tracking-[0.25em] uppercase transition-colors group-hover:text-[#E0AC87] md:text-xs ${inter.className}`}
                 >
                   {tMenu('close')}
                 </span>
-                <div className="relative flex h-10 w-10 items-center justify-center rounded-full border border-white/20 transition-all duration-300 group-hover:rotate-90 group-hover:border-[#E0AC87] group-hover:bg-white/10 md:h-12 md:w-12">
+                <div className="relative flex h-10 w-10 items-center justify-center rounded-full border border-white/30 transition-all duration-300 group-hover:rotate-90 group-hover:border-[#E0AC87] group-hover:bg-white/10 md:h-12 md:w-12">
                   <svg
                     width="16"
                     height="16"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    strokeWidth="1.5"
+                    strokeWidth="1.8"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     className="text-white transition-colors group-hover:text-[#E0AC87]"
@@ -225,7 +274,7 @@ export function MenuOverlay() {
           </div>
 
           {/* MAIN MENU BODY: DUAL COLUMN MAGAZINE SPREAD */}
-          <div className="relative z-10 mx-auto my-auto flex w-full max-w-[1600px] flex-1 flex-col justify-center px-6 py-6 sm:px-10 md:px-14 lg:flex-row lg:items-center lg:gap-16 xl:gap-24">
+          <div className="relative z-10 mx-auto flex w-full max-w-[1600px] flex-1 flex-col justify-center px-6 py-6 sm:px-10 md:px-14 lg:flex-row lg:items-center lg:gap-16 xl:gap-24">
             {/* LEFT COLUMN: LARGE NUMBERED EDITORIAL NAVIGATION (60%) */}
             <nav
               aria-label="Main Navigation"
@@ -257,13 +306,17 @@ export function MenuOverlay() {
                           transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
                         },
                       }}
-                      onMouseEnter={() => setHoveredIndex(index)}
-                      className="group relative"
+                      onMouseEnter={() => {
+                        setHoveredIndex(index);
+                      }}
+                      className="group relative cursor-pointer"
                     >
                       <Link
                         href={item.href}
-                        onClick={() => setIsMenuOpen(false)}
-                        className="flex flex-col items-start focus:outline-none"
+                        onClick={() => {
+                          handleItemClick(item.href);
+                        }}
+                        className="flex w-full flex-col items-start focus:outline-none"
                       >
                         <div className="flex items-center gap-4 transition-transform duration-500 ease-out group-hover:translate-x-3 md:gap-6">
                           {/* Number badge */}
@@ -400,12 +453,20 @@ export function MenuOverlay() {
                     </a>
                   </div>
 
-                  <div className="flex items-start justify-between gap-4 text-xs pt-1">
+                  <div className="flex items-center justify-between text-xs pt-1">
                     <span
                       className={`shrink-0 text-[9px] tracking-[0.2em] text-white/50 uppercase ${inter.className}`}
                     >
-                      {tMenu('address')}
+                      {tMenu('location_label')}
                     </span>
+                    <a
+                      href="https://maps.google.com/?q=My+Khe+Beach+Da+Nang"
+                      target="_blank"
+                      rel="noreferrer"
+                      className={`text-right text-[10px] tracking-[0.1em] text-white/80 transition-colors hover:text-[#E0AC87] ${inter.className}`}
+                    >
+                      {tMenu('address')}
+                    </a>
                   </div>
 
                   {/* Language Selector Inside Menu */}
@@ -423,8 +484,10 @@ export function MenuOverlay() {
                             key={l}
                             href={pathname}
                             locale={l}
-                            onClick={() => setIsMenuOpen(false)}
-                            className={`px-2.5 py-1 text-[9px] font-bold tracking-[0.15em] uppercase transition-all ${
+                            onClick={() => {
+                              setIsMenuOpen(false);
+                            }}
+                            className={`cursor-pointer px-2.5 py-1 text-[9px] font-bold tracking-[0.15em] uppercase transition-all ${
                               isActive
                                 ? 'border border-[#E0AC87] bg-[#E0AC87]/20 text-[#E0AC87]'
                                 : 'border border-white/10 bg-white/5 text-white/60 hover:border-white/30 hover:text-white'
@@ -443,7 +506,7 @@ export function MenuOverlay() {
           </div>
 
           {/* BOTTOM FOOTER BAR */}
-          <div className="relative z-10 flex w-full flex-col items-center justify-between gap-4 border-t border-white/10 px-6 py-4 text-center sm:px-10 md:flex-row md:px-14 md:py-6 md:text-left">
+          <div className="relative z-10 flex w-full shrink-0 flex-col items-center justify-between gap-4 border-t border-white/10 px-6 py-4 text-center sm:px-10 md:flex-row md:px-14 md:py-6 md:text-left">
             {/* Coordinates */}
             <div
               className={`text-[9px] font-bold tracking-[0.25em] text-white/40 uppercase md:text-[10px] ${inter.className}`}
@@ -473,7 +536,9 @@ export function MenuOverlay() {
               </a>
               <Link
                 href="/apartments"
-                onClick={() => setIsMenuOpen(false)}
+                onClick={() => {
+                  setIsMenuOpen(false);
+                }}
                 className="text-[#E0AC87] transition-colors hover:text-white"
               >
                 Residences
@@ -482,6 +547,7 @@ export function MenuOverlay() {
           </div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   );
 }

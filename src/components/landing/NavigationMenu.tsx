@@ -130,13 +130,13 @@ export function NavigationMenu({ isDark }: { isDark?: boolean }) {
               {t('news')}
             </Link>
             <Link
-              href="/"
+              href="/#contact"
               className={`text-[8px] font-bold tracking-[0.2em] uppercase transition-opacity hover:opacity-70 md:text-[9px] ${inter.className}`}
             >
               {t('book_call')}
             </Link>
             <Link
-              href="/"
+              href="/#contact"
               className={`text-[8px] font-bold tracking-[0.2em] uppercase transition-opacity hover:opacity-70 md:text-[9px] ${inter.className}`}
             >
               {t('contact')}

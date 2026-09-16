@@ -15,7 +15,7 @@ export function Footer() {
   const t = useTranslations('Index');
 
   return (
-    <footer className="bg-textured-sand relative z-10 flex min-h-[80vh] w-full flex-col items-center justify-between overflow-hidden  px-6 py-12 text-[#F4F3ED] md:px-12 md:py-20">
+    <footer id="contact" className="bg-textured-sand relative z-10 flex min-h-[80vh] w-full flex-col items-center justify-between overflow-hidden  px-6 py-12 text-[#F4F3ED] md:px-12 md:py-20">
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
