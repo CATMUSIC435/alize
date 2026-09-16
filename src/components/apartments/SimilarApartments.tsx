@@ -32,7 +32,7 @@ export function SimilarApartments({ currentId }: { currentId: string }) {
   const similarApts = APARTMENTS_DATA.filter((apt) => apt.id !== currentId).slice(0, 4);
 
   return (
-    <section className="relative z-20 w-full [border-top-left-radius:50vw] [border-top-right-radius:50vw] bg-[#F4F3ED] pt-[15vh] pb-32 text-[#151926] md:pt-[15vw] md:pb-48">
+    <section className="bg-textured-sand relative z-20 w-full [border-top-left-radius:50vw] [border-top-right-radius:50vw] pt-[15vh] pb-32 text-[#151926] md:pt-[15vw] md:pb-48">
       {/* SIMILAR OPTIONS Title */}
       <div className="mb-24 flex w-full flex-col items-center px-6 text-center md:mb-32">
         <h2

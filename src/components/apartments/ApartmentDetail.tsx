@@ -37,7 +37,7 @@ export function ApartmentDetail(props: { data: ApartmentData }) {
   };
 
   return (
-    <article className="min-h-screen bg-[#F4F3ED] pt-28 text-[#151926] md:pt-36">
+    <article className="bg-textured-sand min-h-screen pt-28 text-[#151926] md:pt-36">
       <div className="mx-auto w-full max-w-[1600px] px-6 pb-24 md:px-12">
         {/* Top Breadcrumb & Project Tagline */}
         <div className="mb-10 flex flex-col justify-between gap-4 border-b border-[#151926]/10 pb-6 md:flex-row md:items-center">
@@ -82,20 +82,27 @@ export function ApartmentDetail(props: { data: ApartmentData }) {
                 </span>
               </div>
 
-              <div
-                className="relative aspect-[4/3] w-full overflow-hidden bg-white/60 p-4 shadow-sm md:aspect-[16/10] md:p-8"
-                style={{ clipPath: clipPathPolygon }}
-              >
-                <div className="relative h-full w-full">
-                  <Image
-                    src={props.data.image}
-                    alt={`Floor plan for apartment ${props.data.number}`}
-                    fill
-                    priority
-                    sizes="(max-width: 1024px) 100vw, 62vw"
-                    className="object-contain"
-                    unoptimized
-                  />
+              <div className="w-full drop-shadow-md filter">
+                <div
+                  className="bg-[#D6D3C8] p-[1px]"
+                  style={{ clipPath: clipPathPolygon }}
+                >
+                  <div
+                    className="relative aspect-[4/3] w-full overflow-hidden bg-[#F4F3ED] p-4 md:aspect-[16/10] md:p-8"
+                    style={{ clipPath: clipPathPolygon }}
+                  >
+                    <div className="relative h-full w-full">
+                      <Image
+                        src={props.data.image}
+                        alt={`Floor plan for apartment ${props.data.number}`}
+                        fill
+                        priority
+                        sizes="(max-width: 1024px) 100vw, 62vw"
+                        className="object-contain"
+                        unoptimized
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

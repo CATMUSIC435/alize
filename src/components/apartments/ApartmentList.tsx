@@ -110,7 +110,7 @@ export function ApartmentList() {
   };
 
   return (
-    <section className="relative w-full bg-[#F4F3ED] px-6 py-12 md:px-12 md:py-24">
+    <section className="relative w-full px-6 py-12 md:px-12 md:py-24">
       <div className="mx-auto w-full max-w-[1600px]">
         {/* Filter Bar */}
         <div className="relative z-20 mb-12 w-full">

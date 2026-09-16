@@ -118,7 +118,7 @@ export function Footer() {
             <div className="flex w-full flex-row justify-between md:flex-col md:items-end md:space-y-1">
               <p className="opacity-80">{t('made_by')}</p>
               <p className="cursor-pointer transition-opacity hover:opacity-80">
-                {t('thefirstthelast')}
+                {t('DXMDVIETNAM')}
               </p>
             </div>
           </div>

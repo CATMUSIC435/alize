@@ -38,9 +38,13 @@ export function ApartmentCard({ data }: { data: ApartmentData }) {
       className="group relative block w-full cursor-pointer drop-shadow-md filter transition-all duration-500 hover:drop-shadow-2xl"
     >
       <div
-        className="flex h-full w-full flex-col items-center justify-between bg-[#F4F3ED] p-8 transition-colors duration-500 group-hover:bg-[#FCFBF8] md:p-12"
+        className="h-full w-full bg-[#D6D3C8] p-[1px] transition-colors duration-500 group-hover:bg-[#8B7043]/40"
         style={{ clipPath: clipPathPolygon }}
       >
+        <div
+          className="flex h-full w-full flex-col items-center justify-between bg-[#F4F3ED] p-8 transition-colors duration-500 group-hover:bg-[#FCFBF8] md:p-12"
+          style={{ clipPath: clipPathPolygon }}
+        >
         {/* TOP SECTION */}
         <div className="mb-10 flex w-full flex-col items-center text-center">
           <h3
@@ -97,6 +101,7 @@ export function ApartmentCard({ data }: { data: ApartmentData }) {
           )}
         </div>
       </div>
-    </Link>
+    </div>
+  </Link>
   );
 }

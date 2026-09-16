@@ -24,7 +24,7 @@ export function ApartmentHero() {
   };
 
   return (
-    <section className="relative w-full overflow-hidden bg-[#F4F3ED] pt-[20vh] pb-[10vh]">
+    <section className="relative w-full overflow-hidden pt-[20vh] pb-[10vh]">
       {/* Floral Decorative Image - Top Right */}
       <div className="pointer-events-none absolute top-0 right-0 z-0 h-[80vw] max-h-[600px] w-[80vw] max-w-[600px] translate-x-[20%] translate-y-0 rotate-y-[180deg] opacity-90">
         <SmartVideo
