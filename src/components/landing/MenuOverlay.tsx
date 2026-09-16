@@ -182,15 +182,11 @@ export function MenuOverlay() {
             clipPath: 'polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)',
             transition: { duration: 0.5, ease: [0.76, 0, 0.24, 1] },
           }}
-          className="pointer-events-auto fixed inset-0 z-[9999] flex flex-col overflow-x-hidden overflow-y-auto bg-[#0E141E] text-[#F4F3ED] select-none"
-          style={{
-            backgroundImage:
-              'radial-gradient(circle at 80% 30%, rgba(224, 172, 135, 0.08) 0%, transparent 60%)',
-          }}
+          className="bg-textured-sand pointer-events-auto fixed inset-0 z-[9999] flex flex-col overflow-x-hidden overflow-y-auto text-[#151926] select-none"
         >
           {/* Subtle Ambient Decorative Flowers */}
           <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-            <div className="absolute -top-10 -right-10 h-[60vw] max-h-[500px] w-[60vw] max-w-[500px] rotate-180 opacity-20 filter blur-[1px]">
+            <div className="absolute -top-10 -right-10 h-[60vw] max-h-[500px] w-[60vw] max-w-[500px] rotate-180 opacity-40 mix-blend-multiply filter blur-[0.5px]">
               <SmartVideo
                 src="/bougainvillea-flowers_02.webm"
                 autoPlay
@@ -204,7 +200,7 @@ export function MenuOverlay() {
           </div>
 
           {/* TOP HEADER ROW - STICKY TO STAY VISIBLE ON ANY VIEWPORT HEIGHT */}
-          <div className="sticky top-0 z-50 flex w-full shrink-0 items-center justify-between bg-[#0E141E]/95 px-6 py-5 backdrop-blur-md sm:px-10 md:px-14 md:py-7">
+          <div className="sticky top-0 z-50 flex w-full shrink-0 items-center justify-between border-b border-[#151926]/10 bg-[#F0EBE1]/90 px-6 py-5 backdrop-blur-md sm:px-10 md:px-14 md:py-7">
             {/* Left Brand Identity */}
             <div className="flex items-center gap-4">
               <Link
@@ -225,12 +221,12 @@ export function MenuOverlay() {
                 </div>
                 <div className="flex flex-col">
                   <span
-                    className={`text-sm font-bold tracking-[0.25em] text-[#E0AC87] uppercase md:text-base ${inter.className}`}
+                    className={`text-sm font-bold tracking-[0.25em] text-[#8B7043] uppercase md:text-base ${inter.className}`}
                   >
                     ALIZÉ
                   </span>
                   <span
-                    className={`text-[9px] tracking-[0.3em] text-[#F4F3ED]/50 uppercase md:text-[10px] ${inter.className}`}
+                    className={`text-[9px] tracking-[0.3em] text-[#151926]/50 uppercase md:text-[10px] ${inter.className}`}
                   >
                     RESIDENCE
                   </span>
@@ -246,14 +242,14 @@ export function MenuOverlay() {
                 onClick={() => {
                   setIsMenuOpen(false);
                 }}
-                className="group flex cursor-pointer items-center gap-3 text-white/80 transition-colors hover:text-white focus:outline-none"
+                className="group flex cursor-pointer items-center gap-3 text-[#151926]/75 transition-colors hover:text-[#151926] focus:outline-none"
               >
                 <span
-                  className={`text-[10px] font-bold tracking-[0.25em] uppercase transition-colors group-hover:text-[#E0AC87] md:text-xs ${inter.className}`}
+                  className={`text-[10px] font-bold tracking-[0.25em] uppercase transition-colors group-hover:text-[#8B7043] md:text-xs ${inter.className}`}
                 >
                   {tMenu('close')}
                 </span>
-                <div className="relative flex h-10 w-10 items-center justify-center rounded-full border border-white/30 transition-all duration-300 group-hover:rotate-90 group-hover:border-[#E0AC87] group-hover:bg-white/10 md:h-12 md:w-12">
+                <div className="relative flex h-10 w-10 items-center justify-center rounded-full border border-[#151926]/25 transition-all duration-300 group-hover:rotate-90 group-hover:border-[#8B7043] group-hover:bg-white/60 md:h-12 md:w-12">
                   <svg
                     width="16"
                     height="16"
@@ -263,7 +259,7 @@ export function MenuOverlay() {
                     strokeWidth="1.8"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="text-white transition-colors group-hover:text-[#E0AC87]"
+                    className="text-[#151926] transition-colors group-hover:text-[#8B7043]"
                   >
                     <line x1="18" y1="6" x2="6" y2="18" />
                     <line x1="6" y1="6" x2="18" y2="18" />
@@ -322,7 +318,7 @@ export function MenuOverlay() {
                           {/* Number badge */}
                           <span
                             className={`text-xs font-bold tracking-[0.2em] transition-colors duration-300 md:text-sm ${
-                              isHovered ? 'text-[#E0AC87]' : 'text-white/30'
+                              isHovered ? 'text-[#8B7043]' : 'text-[#151926]/35'
                             } ${inter.className}`}
                           >
                             {item.number}
@@ -330,7 +326,7 @@ export function MenuOverlay() {
 
                           {/* Animated expansion line */}
                           <span
-                            className={`h-[1px] bg-[#E0AC87] transition-all duration-500 ${
+                            className={`h-[1.5px] bg-[#8B7043] transition-all duration-500 ${
                               isHovered ? 'w-6 opacity-100 md:w-10' : 'w-0 opacity-0'
                             }`}
                           />
@@ -338,7 +334,7 @@ export function MenuOverlay() {
                           {/* Title */}
                           <h2
                             className={`text-2xl font-medium tracking-tight uppercase transition-colors duration-300 sm:text-4xl md:text-5xl lg:text-[54px] xl:text-[62px] ${
-                              isHovered ? 'text-[#E0AC87]' : 'text-white/85'
+                              isHovered ? 'text-[#8B7043]' : 'text-[#151926]'
                             } ${playfair.className}`}
                             style={{ transform: 'scaleY(1.15)', transformOrigin: 'bottom left' }}
                           >
@@ -353,7 +349,7 @@ export function MenuOverlay() {
                           }`}
                         >
                           <span
-                            className={`text-[9px] font-bold tracking-[0.2em] text-[#E0AC87]/80 uppercase md:text-[10px] ${inter.className}`}
+                            className={`text-[9px] font-bold tracking-[0.2em] text-[#8B7043] uppercase md:text-[10px] ${inter.className}`}
                           >
                             {item.sub}
                           </span>
@@ -367,137 +363,144 @@ export function MenuOverlay() {
 
             {/* RIGHT COLUMN: DYNAMIC PREVIEW & CONTACT SPOTLIGHT (40%) */}
             <div className="mt-8 hidden w-full flex-col lg:mt-0 lg:flex lg:w-[40%]">
-              <div
-                className="relative overflow-hidden bg-[#151D2A] p-6 drop-shadow-2xl sm:p-8"
-                style={{ clipPath: clipPathPolygon }}
-              >
-                {/* Dynamic Preview Image */}
+              <div className="w-full drop-shadow-xl filter">
                 <div
-                  className="relative aspect-[16/10] w-full overflow-hidden"
+                  className="bg-[#D6D3C8] p-[1px]"
                   style={{ clipPath: clipPathPolygon }}
                 >
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={activeItem.id}
-                      initial={{ opacity: 0, scale: 1.08 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 1.04 }}
-                      transition={{ duration: 0.6, ease: 'easeOut' }}
-                      className="relative h-full w-full"
+                  <div
+                    className="relative overflow-hidden bg-[#F4F3ED] p-6 sm:p-8"
+                    style={{ clipPath: clipPathPolygon }}
+                  >
+                    {/* Dynamic Preview Image */}
+                    <div
+                      className="relative aspect-[16/10] w-full overflow-hidden drop-shadow-md"
+                      style={{ clipPath: clipPathPolygon }}
                     >
-                      <Image
-                        src={activeItem.image}
-                        alt={activeItem.title}
-                        fill
-                        priority
-                        sizes="(max-width: 1200px) 40vw, 30vw"
-                        className="object-cover"
-                        unoptimized
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0E141E]/90 via-[#0E141E]/30 to-transparent" />
-                    </motion.div>
-                  </AnimatePresence>
+                      <AnimatePresence mode="wait">
+                        <motion.div
+                          key={activeItem.id}
+                          initial={{ opacity: 0, scale: 1.08 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 1.04 }}
+                          transition={{ duration: 0.6, ease: 'easeOut' }}
+                          className="relative h-full w-full"
+                        >
+                          <Image
+                            src={activeItem.image}
+                            alt={activeItem.title}
+                            fill
+                            priority
+                            sizes="(max-width: 1200px) 40vw, 30vw"
+                            className="object-cover"
+                            unoptimized
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-[#151926]/85 via-[#151926]/20 to-transparent" />
+                        </motion.div>
+                      </AnimatePresence>
 
-                  {/* Gold Badge */}
-                  <div className="absolute top-4 left-4 z-10 flex items-center gap-2 rounded-full border border-[#8B7043]/40 bg-[#0E141E]/85 px-3 py-1 backdrop-blur-md">
-                    <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#E0AC87]" />
-                    <span
-                      className={`text-[8px] font-bold tracking-[0.2em] text-[#E0AC87] uppercase md:text-[9px] ${inter.className}`}
-                    >
-                      {tMenu('tagline')}
-                    </span>
-                  </div>
+                      {/* Gold Badge */}
+                      <div className="absolute top-4 left-4 z-10 flex items-center gap-2 rounded-full border border-[#8B7043]/40 bg-[#151926]/90 px-3 py-1 backdrop-blur-md">
+                        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#E0AC87]" />
+                        <span
+                          className={`text-[8px] font-bold tracking-[0.2em] text-[#E0AC87] uppercase md:text-[9px] ${inter.className}`}
+                        >
+                          {tMenu('tagline')}
+                        </span>
+                      </div>
 
-                  {/* Dynamic caption inside preview */}
-                  <div className="absolute right-4 bottom-4 left-4 z-10">
-                    <span
-                      className={`block text-[8px] font-bold tracking-[0.2em] text-[#E0AC87] uppercase md:text-[9px] ${inter.className}`}
-                    >
-                      {activeItem.number} / 05
-                    </span>
-                    <h3
-                      className={`text-lg font-medium text-white uppercase sm:text-xl ${playfair.className}`}
-                    >
-                      {activeItem.title}
-                    </h3>
-                  </div>
-                </div>
+                      {/* Dynamic caption inside preview */}
+                      <div className="absolute right-4 bottom-4 left-4 z-10">
+                        <span
+                          className={`block text-[8px] font-bold tracking-[0.2em] text-[#E0AC87] uppercase md:text-[9px] ${inter.className}`}
+                        >
+                          {activeItem.number} / 05
+                        </span>
+                        <h3
+                          className={`text-lg font-medium text-white uppercase sm:text-xl ${playfair.className}`}
+                        >
+                          {activeItem.title}
+                        </h3>
+                      </div>
+                    </div>
 
-                {/* Direct Concierge Contact Row */}
-                <div className="mt-6 flex flex-col space-y-4 border-t border-white/10 pt-6">
-                  <div className="flex items-center justify-between text-xs">
-                    <span
-                      className={`text-[9px] tracking-[0.2em] text-white/50 uppercase ${inter.className}`}
-                    >
-                      {tMenu('inquiry')}
-                    </span>
-                    <a
-                      href="tel:+84901234567"
-                      className={`text-[10px] font-bold tracking-[0.15em] text-[#E0AC87] transition-colors hover:text-white ${inter.className}`}
-                    >
-                      +84 (0) 90 123 4567
-                    </a>
-                  </div>
+                    {/* Direct Concierge Contact Row */}
+                    <div className="mt-6 flex flex-col space-y-4 border-t border-[#151926]/10 pt-6">
+                      <div className="flex items-center justify-between text-xs">
+                        <span
+                          className={`text-[9px] tracking-[0.2em] text-[#151926]/50 uppercase ${inter.className}`}
+                        >
+                          {tMenu('inquiry')}
+                        </span>
+                        <a
+                          href="tel:+84901234567"
+                          className={`text-[10px] font-bold tracking-[0.15em] text-[#8B7043] transition-colors hover:text-[#151926] ${inter.className}`}
+                        >
+                          +84 (0) 90 123 4567
+                        </a>
+                      </div>
 
-                  <div className="flex items-center justify-between text-xs">
-                    <span
-                      className={`text-[9px] tracking-[0.2em] text-white/50 uppercase ${inter.className}`}
-                    >
-                      {tMenu('email')}
-                    </span>
-                    <a
-                      href="mailto:contact@alize-residence.com"
-                      className={`text-[10px] font-bold tracking-[0.15em] text-white/80 transition-colors hover:text-[#E0AC87] ${inter.className}`}
-                    >
-                      contact@alize-residence.com
-                    </a>
-                  </div>
+                      <div className="flex items-center justify-between text-xs">
+                        <span
+                          className={`text-[9px] tracking-[0.2em] text-[#151926]/50 uppercase ${inter.className}`}
+                        >
+                          {tMenu('email')}
+                        </span>
+                        <a
+                          href="mailto:contact@alize-residence.com"
+                          className={`text-[10px] font-bold tracking-[0.15em] text-[#151926]/80 transition-colors hover:text-[#8B7043] ${inter.className}`}
+                        >
+                          contact@alize-residence.com
+                        </a>
+                      </div>
 
-                  <div className="flex items-center justify-between text-xs pt-1">
-                    <span
-                      className={`shrink-0 text-[9px] tracking-[0.2em] text-white/50 uppercase ${inter.className}`}
-                    >
-                      {tMenu('location_label')}
-                    </span>
-                    <a
-                      href="https://maps.google.com/?q=My+Khe+Beach+Da+Nang"
-                      target="_blank"
-                      rel="noreferrer"
-                      className={`text-right text-[10px] tracking-[0.1em] text-white/80 transition-colors hover:text-[#E0AC87] ${inter.className}`}
-                    >
-                      {tMenu('address')}
-                    </a>
-                  </div>
+                      <div className="flex items-center justify-between text-xs pt-1">
+                        <span
+                          className={`shrink-0 text-[9px] tracking-[0.2em] text-[#151926]/50 uppercase ${inter.className}`}
+                        >
+                          {tMenu('location_label')}
+                        </span>
+                        <a
+                          href="https://maps.google.com/?q=My+Khe+Beach+Da+Nang"
+                          target="_blank"
+                          rel="noreferrer"
+                          className={`text-right text-[10px] tracking-[0.1em] text-[#151926]/80 transition-colors hover:text-[#8B7043] ${inter.className}`}
+                        >
+                          {tMenu('address')}
+                        </a>
+                      </div>
 
-                  {/* Language Selector Inside Menu */}
-                  <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-4">
-                    <span
-                      className={`text-[9px] font-bold tracking-[0.2em] text-white/50 uppercase ${inter.className}`}
-                    >
-                      {tMenu('language')}
-                    </span>
-                    <div className="flex items-center gap-2">
-                      {languages.map((l) => {
-                        const isActive = l === locale;
-                        return (
-                          <Link
-                            key={l}
-                            href={pathname}
-                            locale={l}
-                            onClick={() => {
-                              setIsMenuOpen(false);
-                            }}
-                            className={`cursor-pointer px-2.5 py-1 text-[9px] font-bold tracking-[0.15em] uppercase transition-all ${
-                              isActive
-                                ? 'border border-[#E0AC87] bg-[#E0AC87]/20 text-[#E0AC87]'
-                                : 'border border-white/10 bg-white/5 text-white/60 hover:border-white/30 hover:text-white'
-                            } ${inter.className}`}
-                            style={{ clipPath: dropdownClip }}
-                          >
-                            {l}
-                          </Link>
-                        );
-                      })}
+                      {/* Language Selector Inside Menu */}
+                      <div className="mt-4 flex items-center justify-between border-t border-[#151926]/10 pt-4">
+                        <span
+                          className={`text-[9px] font-bold tracking-[0.2em] text-[#151926]/50 uppercase ${inter.className}`}
+                        >
+                          {tMenu('language')}
+                        </span>
+                        <div className="flex items-center gap-2">
+                          {languages.map((l) => {
+                            const isActive = l === locale;
+                            return (
+                              <Link
+                                key={l}
+                                href={pathname}
+                                locale={l}
+                                onClick={() => {
+                                  setIsMenuOpen(false);
+                                }}
+                                className={`cursor-pointer px-2.5 py-1 text-[9px] font-bold tracking-[0.15em] uppercase transition-all ${
+                                  isActive
+                                    ? 'border border-[#8B7043] bg-[#8B7043] text-white shadow-sm'
+                                    : 'border border-[#151926]/15 bg-white/50 text-[#151926]/70 hover:border-[#151926] hover:text-[#151926]'
+                                } ${inter.className}`}
+                                style={{ clipPath: dropdownClip }}
+                              >
+                                {l}
+                              </Link>
+                            );
+                          })}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -506,23 +509,23 @@ export function MenuOverlay() {
           </div>
 
           {/* BOTTOM FOOTER BAR */}
-          <div className="relative z-10 flex w-full shrink-0 flex-col items-center justify-between gap-4 border-t border-white/10 px-6 py-4 text-center sm:px-10 md:flex-row md:px-14 md:py-6 md:text-left">
+          <div className="relative z-10 flex w-full shrink-0 flex-col items-center justify-between gap-4 border-t border-[#151926]/10 bg-[#F0EBE1]/70 px-6 py-4 text-center backdrop-blur-sm sm:px-10 md:flex-row md:px-14 md:py-6 md:text-left">
             {/* Coordinates */}
             <div
-              className={`text-[9px] font-bold tracking-[0.25em] text-white/40 uppercase md:text-[10px] ${inter.className}`}
+              className={`text-[9px] font-bold tracking-[0.25em] text-[#151926]/50 uppercase md:text-[10px] ${inter.className}`}
             >
               16°03&apos;32.6&quot;N 108°14&apos;45.2&quot;E — ESTEPONA • ĐÀ NẴNG 2026
             </div>
 
             {/* Social & Direct Links */}
             <div
-              className={`flex items-center gap-6 text-[9px] font-bold tracking-[0.2em] text-white/60 uppercase md:gap-8 md:text-[10px] ${inter.className}`}
+              className={`flex items-center gap-6 text-[9px] font-bold tracking-[0.2em] text-[#151926]/70 uppercase md:gap-8 md:text-[10px] ${inter.className}`}
             >
               <a
                 href="https://instagram.com"
                 target="_blank"
                 rel="noreferrer"
-                className="transition-colors hover:text-[#E0AC87]"
+                className="transition-colors hover:text-[#8B7043]"
               >
                 Instagram
               </a>
@@ -530,7 +533,7 @@ export function MenuOverlay() {
                 href="https://facebook.com"
                 target="_blank"
                 rel="noreferrer"
-                className="transition-colors hover:text-[#E0AC87]"
+                className="transition-colors hover:text-[#8B7043]"
               >
                 Facebook
               </a>
@@ -539,7 +542,7 @@ export function MenuOverlay() {
                 onClick={() => {
                   setIsMenuOpen(false);
                 }}
-                className="text-[#E0AC87] transition-colors hover:text-white"
+                className="font-bold text-[#8B7043] transition-colors hover:text-[#151926]"
               >
                 Residences
               </Link>
