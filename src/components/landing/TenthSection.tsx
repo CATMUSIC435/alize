@@ -37,12 +37,11 @@ export function TenthSection() {
   const imageY = useTransform(scrollYProgress, [0, 1], ['0%', '5%']);
 
   const exitScale = useTransform(exitProgress, [0, 1], [1, 0.65]);
-  const exitBorderRadius = useTransform(exitProgress, [0, 1], ['0px', '56px']);
 
   return (
-    <section ref={targetRef} className="relative h-[200vh] w-full bg-[#2A141D]">
+    <section ref={targetRef} className="bg-textured-sand relative h-[200vh] w-full ">
       <motion.div
-        style={{ scale: exitScale, borderRadius: exitBorderRadius }}
+        style={{ scale: exitScale }}
         className="sticky top-0 h-screen w-full overflow-hidden will-change-transform"
       >
         {/* Background Image */}
@@ -67,7 +66,7 @@ export function TenthSection() {
           className="absolute inset-0 flex flex-col items-center justify-center will-change-transform"
         >
           <h2
-            className={`text-center text-[12vw] leading-[0.85] font-medium tracking-tight text-white uppercase md:text-[9vw] lg:text-[7vw] ${playfair.className}`}
+            className={`text-center text-[12vw] leading-[0.95] font-medium tracking-tight text-white uppercase md:text-[9vw] lg:text-[7vw] ${playfair.className}`}
             style={{ transform: 'scaleY(1.2)', textShadow: '0 10px 30px rgba(0,0,0,0.3)' }}
           >
             {t('perfect_sea_views')

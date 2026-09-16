@@ -57,32 +57,29 @@ export function SeventhSection() {
   ];
 
   return (
-    <>
-      {/* Invisible layout tracker to correctly measure scroll progress without wrapping the sticky element */}
-      <div
-        ref={sectionRef}
-        className="pointer-events-none relative w-full opacity-0"
-        style={{ height: '100vh', marginBottom: '-100vh' }}
-        aria-hidden="true"
-      />
-      <section className="sticky top-0 h-screen min-h-[600px] w-full overflow-hidden bg-[#151926] perspective-[1000px] md:min-h-[800px]">
-        {/* Background Image with 3D Transition */}
-        <motion.div
-          style={{ scale: bgScale }}
-          className="absolute inset-0 h-full w-full origin-center will-change-transform"
-        >
-          <WebGLSlider
-            images={backgroundImages}
-            activeIndex={activeIdx}
-            hideControls
-            absoluteFill
-            noRounded
-          />
+    <section
+      ref={sectionRef}
+      className="relative min-h-[600px] w-full overflow-hidden bg-[#151926] perspective-[1000px] md:min-h-screen"
+    >
+      {/* Background Image with 3D Transition */}
+      <motion.div
+        style={{ scale: bgScale }}
+        className="absolute inset-0 h-full w-full origin-center will-change-transform"
+      >
+        <WebGLSlider
+          images={backgroundImages}
+          activeIndex={activeIdx}
+          hideControls
+          absoluteFill
+          noRounded
+        />
 
-          {/* Soft Gradient Overlay for better text readability */}
-          <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-          <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-r from-black/40 via-transparent to-black/60"></div>
-        </motion.div>
+        {/* Soft Gradient Overlay for better text readability */}
+        <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+        <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-r from-black/40 via-transparent to-black/60"></div>
+        {/* Seamless bottom blend into #151926 */}
+        <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 h-48 bg-gradient-to-b from-transparent to-[#151926]"></div>
+      </motion.div>
 
         {/* Absolute positioning for Amenities List (Top Right on mobile, Middle Right on desktop) */}
         <div className="absolute top-28 right-6 z-30 md:top-[25%] md:right-24 lg:right-32 xl:top-[20%] xl:right-40">
@@ -162,7 +159,7 @@ export function SeventhSection() {
                     className="absolute top-0 left-0 w-full"
                   >
                     <p
-                      className={`text-[12px] leading-[1.4] tracking-tight text-white uppercase sm:text-[14px] md:text-[1.6vw] lg:text-[24px] ${playfair.className} origin-top-left [transform:scaleY(1)] md:[transform:scaleY(1.5)]`}
+                      className={`text-[12px] leading-[1.2] tracking-tight text-white uppercase sm:text-[14px] md:text-[1.6vw] lg:text-[24px] ${playfair.className} origin-top-left [transform:scaleY(1)] md:[transform:scaleY(1.5)]`}
                     >
                       <span className="flex w-full flex-wrap justify-start gap-x-[0.2em] gap-y-[0.1em] md:gap-y-[0.3em]">
                         {(quotes[activeIdx] ?? '').split(' ').map((word, i) => (
@@ -199,6 +196,5 @@ export function SeventhSection() {
           </div>
         </div>
       </section>
-    </>
   );
 }

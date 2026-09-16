@@ -177,7 +177,7 @@ export function SixthSection() {
           </div>
 
           {/* Center Column (Image Carousel) */}
-          <div className="relative z-10 mb-24 h-[55vh] w-full md:mb-0 md:h-[70vh] md:w-[55%]">
+          <div className="relative z-10 mb-24 h-[55vh] w-full md:mb-0 md:h-[70vh] md:w-[65%]">
             <div
               className="h-full w-full overflow-hidden rounded-lg md:rounded-none"
               ref={emblaRef}
@@ -214,7 +214,7 @@ export function SixthSection() {
                     className={`flex justify-center text-[4vw] leading-none tracking-tighter whitespace-nowrap text-[#151926] uppercase lg:text-[4.5vw] ${playfair.className}`}
                     style={{
                       transform: 'scaleY(1.2)',
-                      textShadow: '0 0 15px #B1C6D4, 0 0 30px #B1C6D4, 0 0 45px #B1C6D4',
+                      textShadow: '0 0 15px #B1C6D4, 0 0 15px #B1C6D4, 0 0 15px #B1C6D4',
                       WebkitFontSmoothing: 'antialiased',
                       WebkitBackfaceVisibility: 'hidden',
                       transformOrigin: 'center center',
@@ -374,20 +374,8 @@ export function SixthSection() {
           hidden: {},
           visible: { transition: { staggerChildren: 0.2 } },
         }}
-        className="relative flex min-h-[50vh] w-full flex-col items-center justify-center overflow-hidden pt-8 pb-16 md:min-h-[100vh] md:pt-[10vh] md:pb-[10vh]"
+        className="relative flex min-h-[50vh] w-full flex-col items-center justify-center overflow-hidden pt-8 pb-16"
       >
-        {/* Flower Graphics Left */}
-        <div className="pointer-events-none absolute bottom-0 left-[-5vw] z-10 h-[70vh] w-[40vw] md:w-[25vw]">
-          {/* We use a bougainvillea placeholder image */}
-          <Image
-            src="https://images.unsplash.com/photo-1596700508000-0e1075bd8ce1?q=80&w=1000&auto=format&fit=crop"
-            alt="Bougainvillea flowers decoration for Alizé Residence"
-            fill
-            sizes="(max-width: 768px) 50vw, 30vw"
-            className="[mask-image:linear-gradient(to_right,black,transparent)] object-cover opacity-80 mix-blend-multiply [-webkit-mask-image:linear-gradient(to_right,black,transparent)]"
-          />
-        </div>
-
         {/* Content */}
         <div className="relative z-20 flex w-full max-w-[1200px] cursor-default flex-col items-center pr-6 pl-16 text-center md:px-6">
           {/* Vertical Line & Small Text */}
@@ -398,6 +386,33 @@ export function SixthSection() {
             }}
             className="mb-16 flex flex-col items-center md:mb-24"
           >
+            <div>
+              
+          <svg
+            width="40"
+            height="40"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 2C12 2 15 5 15 9C15 11 13.5 12 12 12C10.5 12 9 11 9 9C9 5 12 2 12 2Z"
+              fill="currentColor"
+            />
+            <path
+              d="M12 22C12 22 9 19 9 15C9 13 10.5 12 12 12C13.5 12 15 13 15 15C15 19 12 22 12 22Z"
+              fill="currentColor"
+            />
+            <path
+              d="M22 12C22 12 19 9 15 9C13 9 12 10.5 12 12C12 13.5 13 15 15 15C19 15 22 12 22 12Z"
+              fill="currentColor"
+            />
+            <path
+              d="M2 12C2 12 5 15 9 15C11 15 12 13.5 12 12C12 10.5 11 9 9 9C5 9 2 12 2 12Z"
+              fill="currentColor"
+            />
+          </svg>
+            </div>
             <div className="mb-6 h-24 w-[1px] bg-[#151926]/30 md:h-40"></div>
             <p
               className={`max-w-[200px] text-[9px] font-bold tracking-[0.2em] text-[#151926] uppercase md:max-w-none ${inter.className}`}

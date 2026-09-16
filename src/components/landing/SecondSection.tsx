@@ -37,23 +37,12 @@ export function SecondSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative z-40 mt-[20vh] flex min-h-screen w-full flex-col bg-transparent lg:min-h-[150vh]"
+      className="relative z-40 mt-0 flex min-h-screen w-full flex-col bg-transparent md:mt-[20vh] lg:min-h-[150vh]"
     >
       <motion.div
         className="relative z-10 mx-auto flex w-full flex-col items-center"
         style={{ y: contentY, willChange: 'transform' }}
       >
-        {/* Project Map Background */}
-        <div className="pointer-events-none absolute top-[8vw] left-1/2 z-10 aspect-[2560/1440] w-full max-w-[1500px] -translate-x-1/2 overflow-visible">
-          <Image
-            src="/map.png"
-            alt="Bản đồ dự án"
-            fill
-            priority
-            sizes="(max-width: 768px) 100vw, 1500px"
-            className="object-contain object-top"
-          />
-        </div>
 
         {/* Unified SVG Curve and Text - Perfect Semi-Circle */}
         <svg
@@ -87,45 +76,33 @@ export function SecondSection() {
             </textPath>
           </text>
         </svg>
+        {/* Project Map Background */}
+        
         {/* Solid blue background for the rest of the section */}
         <div className="bg-textured-sand relative flex w-full flex-col items-center px-4 pt-0 pb-24 md:px-16 md:pb-48">
           <SandRipples position="left" />
           <SandRipples position="right" />
+          <div className='relative h-[30vh] md:h-[50vh] w-full'>
+<div className="pointer-events-none relative z-10 aspect-[2560/1440] w-full max-w-[1600px] overflow-visible md:-mt-[25vw]">
+          <Image
+            src="/map.png"
+            alt="Bản đồ dự án"
+            fill
+            priority
+            sizes="(max-width: 768px) 100vw, 1500px"
+            className="object-contain object-top"
+          />
+        </div>
+          </div>
           {/* Wrapper to pull content UP into the empty blue space of the SVG semi-circle */}
           {/* On mobile, we pull up much less because the curve is physically shorter (only 50vw tall) */}
-          <div className="relative z-20 -mt-[5vw] flex w-full flex-col items-center md:-mt-[25vw] lg:-mt-[22vw]">
+          <div className="relative z-20 flex w-full flex-col items-center">
             {/* Center Logo & Vertical Line */}
             <div className="mb-24 flex flex-col items-center md:mb-48">
               <div
                 className={`flex items-center gap-4 text-xs font-bold tracking-[0.2em] text-[#151926] uppercase md:gap-6 md:text-xs ${inter.className}`}
               >
                 <span>{t('costa')}</span>
-                {/* Minimalist Flower Logo */}
-                <svg
-                  width="24"
-                  height="24"
-                  className="md:h-8 md:w-8"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M12 2C12 2 15 5 15 9C15 11 13.5 12 12 12C10.5 12 9 11 9 9C9 5 12 2 12 2Z"
-                    fill="currentColor"
-                  />
-                  <path
-                    d="M12 22C12 22 9 19 9 15C9 13 10.5 12 12 12C13.5 12 15 13 15 15C15 19 12 22 12 22Z"
-                    fill="currentColor"
-                  />
-                  <path
-                    d="M22 12C22 12 19 9 15 9C13 9 12 10.5 12 12C12 13.5 13 15 15 15C19 15 22 12 22 12Z"
-                    fill="currentColor"
-                  />
-                  <path
-                    d="M2 12C2 12 5 15 9 15C11 15 12 13.5 12 12C12 10.5 11 9 9 9C5 9 2 12 2 12Z"
-                    fill="currentColor"
-                  />
-                </svg>
                 <span>{t('del_sol')}</span>
               </div>
 

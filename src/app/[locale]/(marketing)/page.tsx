@@ -139,7 +139,7 @@ export default async function EraResidencePage(props: { params: Promise<{ locale
         The hero section is now <header> within the page 
       */}
       <main>
-        <header className="relative h-[250vh] w-full">
+        <header className="relative h-[135vh] w-full md:h-[200vh]">
           {/* Background is globally fixed to stay behind all sections */}
           <BackgroundAnimation />
 

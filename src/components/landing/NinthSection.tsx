@@ -12,7 +12,7 @@ export function NinthSection() {
   const t = useTranslations('Index');
 
   const items = [t('developer'), t('sales_marketing'), t('license_obtained'), t('year_2026')];
-
+ 
   return (
     <section className="bg-textured-sand relative flex w-full flex-col items-center justify-start overflow-hidden py-32 text-[#151926] md:py-48">
       {/* Top indicator: RETURN YEAR AFTER YEAR */}
@@ -52,7 +52,7 @@ export function NinthSection() {
       </div>
 
       {/* Right side bleeding flowers */}
-      <div className="pointer-events-none absolute top-1/3 right-[-10%] z-0 w-[80vw] max-w-[700px] -translate-y-1/2 rotate-y-[175deg] rotate-z-[-40deg] md:right-[-10em] md:w-[55vw] lg:top-1/2 lg:right-0 lg:rotate-z-[-30deg]">
+      <div className="pointer-events-none absolute top-1/3 right-[-10%] z-0 w-[80vw] max-w-[700px] -translate-y-1/2 rotate-y-[175deg] rotate-z-[-40deg] md:right-[-10em] md:w-[55vw] lg:top-1/2 lg:right-[-5%] lg:rotate-z-[-30deg]">
         <SmartVideo
           autoPlay
           loop

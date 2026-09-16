@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { Playfair_Display, Inter } from 'next/font/google';
 
@@ -58,9 +58,12 @@ const AnimatedText = ({
 
 export function TypographyOverlay() {
   const t = useTranslations('Index');
+  const { scrollY } = useScroll();
+  const scrollOpacity = useTransform(scrollY, [0, 220], [1, 0]);
 
   return (
-    <div
+    <motion.div
+      style={{ opacity: scrollOpacity }}
       className={`pointer-events-none relative flex h-[100vh] w-full flex-col items-center justify-center ${playfair.className}`}
     >
       {/* Central Layout Container */}
@@ -112,6 +115,6 @@ export function TypographyOverlay() {
           <span className="max-w-[120px] text-right md:max-w-none">{t('to_return_to')}</span>
         </div>
       </motion.div>
-    </div>
+    </motion.div>
   );
 }

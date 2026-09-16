@@ -1,72 +1,247 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
-import { Playfair_Display, Inter } from 'next/font/google';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Inter, Playfair_Display } from 'next/font/google';
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 
 const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400', '500', '600', '700'] });
-const inter = Inter({ subsets: ['latin'], weight: ['300', '400', '500'] });
+const inter = Inter({ subsets: ['latin'], weight: ['300', '400', '500', '600'] });
 
-type HotspotProps = {
-  x: string;
-  y: string;
-  title: string;
-  description: string;
+type SpecItem = {
+  label: string;
+  value: string;
+  colSpan?: number;
 };
 
-export function Hotspot({ x, y, title, description }: HotspotProps) {
+type ProjectOverview = {
+  name: string;
+  subtitle: string;
+  specs: SpecItem[];
+};
+
+function HotspotCardContent(props: {
+  title?: string;
+  description?: string;
+  overview?: ProjectOverview;
+  onClose: () => void;
+  isMobile?: boolean;
+}) {
+  return (
+    <>
+      {/* Inner Decorative Chamfered Border */}
+      <div
+        className="pointer-events-none absolute inset-2 bg-[#B0B2A6]/60 sm:inset-3"
+        style={{
+          clipPath:
+            'polygon(16px 0, calc(100% - 16px) 0, 100% 16px, 100% calc(100% - 16px), calc(100% - 16px) 100%, 16px 100%, 0 calc(100% - 16px), 0 16px)',
+        }}
+      >
+        <div
+          className="absolute inset-[1px] bg-[#F4F3EC]"
+          style={{
+            clipPath:
+              'polygon(15px 0, calc(100% - 15px) 0, 100% 15px, 100% calc(100% - 15px), calc(100% - 15px) 100%, 15px 100%, 0 calc(100% - 15px), 0 15px)',
+          }}
+        />
+      </div>
+
+      {props.overview ? (
+        <div className="relative z-10 flex h-full flex-col justify-between">
+          {/* Close button */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              props.onClose();
+            }}
+            aria-label="Close"
+            className="absolute -top-1 -right-1 z-20 flex h-7 w-7 items-center justify-center rounded-full text-[#151926]/60 transition-colors hover:bg-black/5 hover:text-[#151926]"
+          >
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path
+                d="M1 1L13 13M1 13L13 1"
+                stroke="currentColor"
+                strokeWidth="1.75"
+                strokeLinecap="round"
+              />
+            </svg>
+          </button>
+
+          {/* Header */}
+          <div className={props.isMobile ? 'border-b border-[#D4CEBF]/80 pb-3 pr-6' : 'border-b border-[#D4CEBF]/80 pb-5 pr-8'}>
+            <h2
+              className={`font-semibold tracking-wider text-[#151926] uppercase ${
+                props.isMobile ? 'text-xl' : 'text-3xl md:text-[38px]'
+              } ${playfair.className}`}
+            >
+              {props.overview.name}
+            </h2>
+            <p
+              className={`font-medium text-[#8B7043] uppercase ${inter.className} ${
+                props.isMobile
+                  ? 'mt-1 text-[9px] leading-snug tracking-[0.14em]'
+                  : 'mt-2 text-[12px] md:text-[13px] tracking-[0.2em] leading-relaxed'
+              }`}
+            >
+              {props.overview.subtitle}
+            </p>
+          </div>
+
+          {/* Specifications Grid */}
+          <div
+            className={`grid grid-cols-2 ${
+              props.isMobile
+                ? 'gap-x-3 gap-y-2.5 pt-3 pb-1'
+                : 'gap-x-8 gap-y-4 pt-6 pb-2'
+            }`}
+          >
+            {props.overview.specs.map((item) => (
+              <div
+                key={item.label}
+                className={item.colSpan === 2 ? 'col-span-2' : 'col-span-1'}
+              >
+                <div
+                  className={`font-semibold text-[#7A7F8D] uppercase leading-tight ${
+                    props.isMobile ? 'text-[9px] tracking-[0.1em]' : 'text-[11px] md:text-[12px] tracking-[0.14em]'
+                  }`}
+                >
+                  {item.label}
+                </div>
+                <div
+                  className={`font-normal text-[#151926] ${inter.className} ${
+                    props.isMobile ? 'mt-0.5 text-[11px] leading-snug' : 'mt-1 text-[13px] md:text-[14px] leading-relaxed'
+                  }`}
+                >
+                  {item.value}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="relative z-10 flex h-full flex-col justify-between">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              props.onClose();
+            }}
+            aria-label="Close"
+            className="absolute -top-1 -right-1 z-20 flex h-8 w-8 items-center justify-center rounded-full text-[#151926]/60 transition-colors hover:bg-black/5 hover:text-[#151926]"
+          >
+            <svg width="15" height="15" viewBox="0 0 14 14" fill="none">
+              <path
+                d="M1 1L13 13M1 13L13 1"
+                stroke="currentColor"
+                strokeWidth="1.75"
+                strokeLinecap="round"
+              />
+            </svg>
+          </button>
+          <h2
+            className={`text-xl leading-snug tracking-tight text-[#151926] uppercase sm:text-4xl sm:leading-tight ${playfair.className}`}
+          >
+            {props.title}
+          </h2>
+          <p
+            className={`mt-4 text-xs leading-[1.6] font-light text-[#2D3346] sm:mt-6 sm:text-[13px] ${inter.className}`}
+          >
+            {props.description}
+          </p>
+        </div>
+      )}
+    </>
+  );
+}
+
+export function Hotspot(props: {
+  x: string;
+  y: string;
+  title?: string;
+  description?: string;
+  overview?: ProjectOverview;
+  isOpen?: boolean;
+  onHover?: () => void;
+  onToggle?: () => void;
+  onClose?: () => void;
+}) {
   const [isHovered, setIsHovered] = useState(false);
+
+  const isCardOpen = props.isOpen !== undefined ? (props.isOpen || isHovered) : isHovered;
+  const isRightSide = Number.parseFloat(props.x) > 50;
+
+  const handleToggle = () => {
+    if (props.onToggle) {
+      props.onToggle();
+    } else {
+      setIsHovered((prev) => !prev);
+    }
+  };
+
+  const handleClose = () => {
+    setIsHovered(false);
+    if (props.onClose) {
+      props.onClose();
+    }
+  };
 
   return (
     <div
       className="absolute z-40"
-      style={{ left: x, top: y, transform: 'translate(-50%, -50%)' }}
+      style={{ left: props.x, top: props.y, transform: 'translate(-50%, -50%)' }}
       onMouseEnter={() => {
         setIsHovered(true);
+        props.onHover?.();
       }}
       onMouseLeave={() => {
         setIsHovered(false);
       }}
     >
-      {/* Interaction target (Dot or X) */}
-      <div className="relative flex h-16 w-16 cursor-pointer items-center justify-center">
-        <AnimatePresence>
-          {isHovered ? (
-            // Active 'X' State (When hovered)
+      {/* Interaction target (Dot or Active state) */}
+      <button
+        type="button"
+        onClick={handleToggle}
+        aria-label={isCardOpen ? 'Close hotspot' : 'Open hotspot'}
+        className="relative flex h-14 w-14 cursor-pointer items-center justify-center focus:outline-none"
+      >
+        <AnimatePresence mode="wait">
+          {isCardOpen ? (
+            // Active beacon indicator
             <motion.div
-              key="close"
-              initial={{ scale: 0.5, opacity: 0, rotate: -90 }}
-              animate={{ scale: 1, opacity: 1, rotate: 0 }}
-              exit={{ scale: 0.5, opacity: 0, rotate: 90 }}
-              transition={{ duration: 0.2, ease: 'easeOut' }}
-              className="pointer-events-none absolute flex h-12 w-12 items-center justify-center rounded-full bg-[#F4F3EC] shadow-lg"
+              key="active-beacon"
+              initial={{ scale: 0.6, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.6, opacity: 0 }}
+              transition={{ duration: 0.25, ease: 'easeOut' }}
+              className="relative flex h-10 w-10 items-center justify-center"
             >
+              <div className="absolute inset-0 rounded-full border-2 border-[#151926]/40 bg-[#F4F3EC] shadow-xl" />
               <svg
-                width="18"
-                height="18"
+                width="14"
+                height="14"
                 viewBox="0 0 14 14"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M1 1L13 13M1 13L13 1"
+                  d="M2 2L12 12M2 12L12 2"
                   stroke="#151926"
-                  strokeWidth="1.5"
+                  strokeWidth="1.75"
                   strokeLinecap="round"
                 />
               </svg>
             </motion.div>
           ) : (
-            // Idle Dot State
+            // Idle Dot State with radiating pulse rings
             <motion.div
               key="dot"
               initial={{ scale: 0.5, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.5, opacity: 0 }}
-              transition={{ duration: 0.2, ease: 'easeOut' }}
+              transition={{ duration: 0.25, ease: 'easeOut' }}
               className="pointer-events-none absolute flex h-10 w-10 items-center justify-center"
             >
-              {/* Radiating rings */}
               {[0, 0.6, 1.2].map((delay, index) => (
                 <motion.div
                   key={`ring-${index}`}
@@ -75,62 +250,81 @@ export function Hotspot({ x, y, title, description }: HotspotProps) {
                   transition={{ duration: 2, repeat: Infinity, ease: 'easeOut', delay }}
                 />
               ))}
-
-              {/* Outer thin ring (always visible) */}
-              <div className="absolute inset-0 rounded-full border border-white/80 bg-white/5 backdrop-blur-[1px]"></div>
-
-              {/* Inner solid dot */}
-              <div className="relative z-10 h-2 w-2 rounded-full bg-white shadow-[0_0_10px_2px_rgba(255,255,255,0.8)]"></div>
+              <div className="absolute inset-0 rounded-full border border-white/80 bg-white/5 backdrop-blur-[1px]" />
+              <div className="relative z-10 h-2.5 w-2.5 rounded-full bg-white shadow-[0_0_10px_2px_rgba(255,255,255,0.8)]" />
             </motion.div>
+          )}
+        </AnimatePresence>
+      </button>
+
+      {/* Desktop Popup Card (Positioned next to pin) */}
+      <div className="hidden md:block">
+        <AnimatePresence>
+          {isCardOpen && (
+            <div
+              className={`absolute top-1/2 -translate-y-1/2 z-50 pointer-events-auto ${
+                isRightSide ? 'right-10 left-auto' : 'left-10 right-auto'
+              }`}
+            >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.92, y: 16 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.94, y: 12 }}
+                transition={{
+                  type: 'spring',
+                  damping: 26,
+                  stiffness: 240,
+                  mass: 0.8,
+                }}
+                className={`relative flex cursor-default flex-col justify-between rounded-sm bg-[#F4F3EC] shadow-2xl ${
+                  props.overview
+                    ? 'w-[460px] p-7 lg:w-[490px] lg:p-8'
+                    : 'w-[380px] min-h-[340px] p-8'
+                }`}
+              >
+                <HotspotCardContent
+                  title={props.title}
+                  description={props.description}
+                  overview={props.overview}
+                  onClose={handleClose}
+                />
+              </motion.div>
+            </div>
           )}
         </AnimatePresence>
       </div>
 
-      {/* Popup Card */}
-      <AnimatePresence>
-        {isHovered && (
-          <div className="pointer-events-none fixed inset-0 z-[100] flex items-center justify-center md:absolute md:inset-auto md:top-1/2 md:left-20 md:-translate-y-1/2">
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 10 }}
-              transition={{ duration: 0.3, ease: 'easeOut' }}
-              className="pointer-events-auto relative flex h-auto min-h-[360px] w-[320px] cursor-default flex-col justify-between rounded-sm bg-[#F4F3EC] p-6 shadow-2xl min-[400px]:w-[340px] sm:min-h-[420px] sm:w-[380px] sm:p-10 md:w-[400px]"
-            >
-              {/* Inner Decorative Chamfered Border */}
-              <div
-                className="pointer-events-none absolute inset-2 bg-[#B0B2A6] sm:inset-3"
-                style={{
-                  clipPath:
-                    'polygon(16px 0, calc(100% - 16px) 0, 100% 16px, 100% calc(100% - 16px), calc(100% - 16px) 100%, 16px 100%, 0 calc(100% - 16px), 0 16px)',
-                }}
-              >
-                <div
-                  className="absolute inset-[1px] bg-[#F4F3EC]"
-                  style={{
-                    clipPath:
-                      'polygon(15px 0, calc(100% - 15px) 0, 100% 15px, 100% calc(100% - 15px), calc(100% - 15px) 100%, 15px 100%, 0 calc(100% - 15px), 0 15px)',
+      {/* Mobile Popup (Docked at the bottom of the screen) */}
+      {typeof document !== 'undefined' &&
+        createPortal(
+          <AnimatePresence>
+            {isCardOpen && (
+              <div className="fixed inset-x-0 bottom-4 z-[9999] flex justify-center px-3 pb-[max(0.5rem,env(safe-area-inset-bottom,0px))] pointer-events-none md:hidden">
+                <motion.div
+                  initial={{ opacity: 0, y: 32, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 24, scale: 0.95 }}
+                  transition={{
+                    type: 'spring',
+                    damping: 26,
+                    stiffness: 240,
+                    mass: 0.8,
                   }}
-                ></div>
+                  className="pointer-events-auto relative flex w-[92vw] max-w-[370px] cursor-default flex-col justify-between rounded-sm bg-[#F4F3EC] p-4.5 shadow-2xl"
+                >
+                  <HotspotCardContent
+                    title={props.title}
+                    description={props.description}
+                    overview={props.overview}
+                    onClose={handleClose}
+                    isMobile={true}
+                  />
+                </motion.div>
               </div>
-
-              {/* Title */}
-              <h2
-                className={`relative z-10 text-xl leading-snug tracking-tight text-[#151926] uppercase sm:text-4xl sm:leading-tight ${playfair.className}`}
-              >
-                {title}
-              </h2>
-
-              {/* Description */}
-              <p
-                className={`relative z-10 mt-4 text-xs leading-[1.6] font-light text-[#2D3346] sm:mt-6 sm:text-[13px] ${inter.className}`}
-              >
-                {description}
-              </p>
-            </motion.div>
-          </div>
+            )}
+          </AnimatePresence>,
+          document.body
         )}
-      </AnimatePresence>
     </div>
   );
 }

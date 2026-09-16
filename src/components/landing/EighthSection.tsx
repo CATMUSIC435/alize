@@ -7,7 +7,6 @@ import { Playfair_Display, Inter, Pinyon_Script } from 'next/font/google';
 import Image from 'next/image';
 import { useRef } from 'react';
 import { CircleButton } from './CircleButton';
-import { CircularLogo } from './CircularLogo';
 import { WebGLSlider } from './WebGLSlider';
 
 const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400', '500', '600', '700'] });
@@ -32,10 +31,11 @@ export function EighthSection() {
   const rightColumnY = useTransform(scrollYProgress, [0, 1], [100, -200]);
 
   return (
-    <section
-      ref={sectionRef}
-      className="bg-textured-sand relative z-20 w-full [border-top-left-radius:50vw] [border-top-right-radius:50vw] pt-[10vh] pb-6 text-[#151926] md:pt-[20vw] lg:pb-44"
-    >
+    <div className="relative w-full bg-[#151926]">
+      <section
+        ref={sectionRef}
+        className="bg-textured-sand relative z-20 w-full [border-top-left-radius:50vw] [border-top-right-radius:50vw] pt-[10vh] pb-6 text-[#151926] md:pt-[20vw] lg:pb-44"
+      >
       {/* Center Title */}
       <div className="flex w-full flex-col items-center text-center">
         <h2
@@ -59,11 +59,7 @@ export function EighthSection() {
       <div className="relative mt-24 flex w-full flex-col md:mt-48 md:flex-row">
         {/* Left Column (Burgundy Box & Flowers) */}
         <div className="relative w-full md:w-[45%]">
-          <div className="relative flex h-[600px] w-full items-center justify-end rounded-r-xl bg-[#2D0D1D] md:h-[900px] md:w-full md:rounded-none lg:w-[90%]">
-            {/* Circular Logo */}
-            <div className="absolute top-12 left-12 z-20 scale-[0.6] text-white opacity-90 md:top-24 md:left-24 md:scale-75">
-              <CircularLogo />
-            </div>
+          <div className="relative flex h-[600px] w-full items-center justify-end rounded-r-xl md:h-[900px] md:w-full md:rounded-none lg:w-[90%]">
 
             {/* Flower Image */}
             <motion.div
@@ -172,5 +168,6 @@ export function EighthSection() {
         />
       </div>
     </section>
+    </div>
   );
 }

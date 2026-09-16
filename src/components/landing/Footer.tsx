@@ -15,7 +15,7 @@ export function Footer() {
   const t = useTranslations('Index');
 
   return (
-    <footer className="relative z-10 flex min-h-[80vh] w-full flex-col items-center justify-between overflow-hidden bg-[#2A141D] px-6 py-12 text-[#F4F3ED] md:px-12 md:py-20">
+    <footer className="bg-textured-sand relative z-10 flex min-h-[80vh] w-full flex-col items-center justify-between overflow-hidden  px-6 py-12 text-[#F4F3ED] md:px-12 md:py-20">
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -67,7 +67,7 @@ export function Footer() {
             className={`text-[12vw] leading-none tracking-tighter md:text-[10vw] lg:text-[8vw] ${playfair.className} italic`}
             style={{ transform: 'scaleY(1.3)' }}
           >
-            +34 (655) 408-648
+            +84 (965) 355-355 
           </h2>
 
           {/* Sales Office Info */}
