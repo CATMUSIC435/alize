@@ -14,7 +14,7 @@ export function Header(props: { alwaysDark?: boolean }) {
     <motion.header
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 2.8, duration: 0.8, ease: 'easeOut' }}
+      transition={{ delay: props.alwaysDark ? 0 : 2.8, duration: 0.8, ease: 'easeOut' }}
       className={`pointer-events-none fixed top-0 left-0 z-50 flex w-full items-start justify-between p-4 transition-colors duration-700 md:p-8 ${isDark ? 'text-[#151926]' : 'text-white'}`}
     >
       {/* Left side: Logo */}

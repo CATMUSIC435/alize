@@ -108,6 +108,12 @@ export function NavigationMenu({ isDark }: { isDark?: boolean }) {
           />
           <div className="mt-1 flex flex-col items-end gap-1">
             <Link
+              href="/news"
+              className={`text-[8px] font-bold tracking-[0.2em] uppercase transition-opacity hover:opacity-70 md:text-[9px] ${inter.className}`}
+            >
+              {t('news')}
+            </Link>
+            <Link
               href="/"
               className={`text-[8px] font-bold tracking-[0.2em] uppercase transition-opacity hover:opacity-70 md:text-[9px] ${inter.className}`}
             >

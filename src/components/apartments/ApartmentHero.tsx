@@ -47,7 +47,7 @@ export function ApartmentHero() {
         <div className="pb-4">
           <motion.div variants={itemVariants}>
             <h1
-              className={`truncate text-[10vw] leading-[0.85] text-[#151926] uppercase md:text-[120px] xl:text-[140px] ${playfair.className}`}
+              className={`truncate text-[10vw] leading-[0.9] py-8 text-[#151926] uppercase md:text-[100px] xl:text-[120px] ${playfair.className}`}
               style={{ transform: 'scaleY(1.3)', transformOrigin: 'bottom left' }}
             >
               {t('apartments')}

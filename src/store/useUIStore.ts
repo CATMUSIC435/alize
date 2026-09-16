@@ -5,10 +5,12 @@ type UIState = {
   activeSection: string;
   isMenuOpen: boolean;
   isIntroComplete: boolean;
+  heroMode: 'day' | 'night';
   setHeaderTheme: (theme: 'light' | 'dark') => void;
   setActiveSection: (section: string) => void;
   setIsMenuOpen: (isOpen: boolean) => void;
   setIsIntroComplete: (isComplete: boolean) => void;
+  setHeroMode: (mode: 'day' | 'night') => void;
 };
 
 export const useUIStore = create<UIState>((set) => ({
@@ -16,6 +18,7 @@ export const useUIStore = create<UIState>((set) => ({
   activeSection: 'hero',
   isMenuOpen: false,
   isIntroComplete: false,
+  heroMode: 'day',
   setHeaderTheme: (theme) => {
     set({ headerTheme: theme });
   },
@@ -27,5 +30,8 @@ export const useUIStore = create<UIState>((set) => ({
   },
   setIsIntroComplete: (isComplete) => {
     set({ isIntroComplete: isComplete });
+  },
+  setHeroMode: (mode) => {
+    set({ heroMode: mode });
   },
 }));

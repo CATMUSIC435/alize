@@ -7,6 +7,7 @@ import { useUIStore } from '@/store/useUIStore';
 export function BackgroundAnimation() {
   const isIntroComplete = useUIStore((state) => state.isIntroComplete);
   const setIsIntroComplete = useUIStore((state) => state.setIsIntroComplete);
+  const heroMode = useUIStore((state) => state.heroMode);
 
   const { scrollY } = useScroll();
   // As the user scrolls down, move the background up slightly for parallax
@@ -30,15 +31,40 @@ export function BackgroundAnimation() {
             className="absolute inset-0 h-full w-full"
             style={{ scale: scaleOnScroll, willChange: 'transform' }}
           >
-            <Image
-              src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=70&w=1920"
-              alt="Mediterranean Villa"
-              fill
-              priority
-              sizes="100vw"
-              className="object-cover object-center"
-            />
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 md:from-black/40 md:to-black/20" />
+            {/* Day Villa Image */}
+            <motion.div
+              className="absolute inset-0 h-full w-full"
+              initial={false}
+              animate={{ opacity: heroMode === 'day' ? 1 : 0 }}
+              transition={{ duration: 2.2, ease: 'easeInOut' }}
+            >
+              <Image
+                src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=70&w=1920"
+                alt="Mediterranean Villa - Day"
+                fill
+                priority
+                sizes="100vw"
+                className="object-cover object-center"
+              />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 md:from-black/40 md:to-black/20" />
+            </motion.div>
+
+            {/* Night Villa Image */}
+            <motion.div
+              className="absolute inset-0 h-full w-full"
+              initial={false}
+              animate={{ opacity: heroMode === 'night' ? 1 : 0 }}
+              transition={{ duration: 2.2, ease: 'easeInOut' }}
+            >
+              <Image
+                src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=70&w=1920"
+                alt="Mediterranean Villa - Night"
+                fill
+                sizes="100vw"
+                className="object-cover object-center"
+              />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0D2D40]/80 via-transparent to-black/50 md:from-[#0D2D40]/60 md:to-black/40" />
+            </motion.div>
           </motion.div>
         </div>
       </motion.div>
