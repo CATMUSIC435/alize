@@ -1,30 +1,23 @@
 'use client';
 
-import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { Inter, Playfair_Display } from 'next/font/google';
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import type { ApartmentData } from '@/data/apartments';
+import { Link } from '@/libs/I18nNavigation';
 
-const inter = Inter({ subsets: ['latin'], weight: ['400', '500', '600', '700'] });
+const inter = Inter({ subsets: ['latin'], weight: ['300', '400', '500', '600', '700'] });
 const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400', '500', '600', '700'] });
 
-export function ApartmentDetail({ data }: { data: ApartmentData }) {
-  const t = useTranslations('Index');
-  const [activeTab, setActiveTab] = useState<'info' | 'benefits'>('info');
-  const [isScrolled, setIsScrolled] = useState(false);
+const clipPathPolygon =
+  'polygon(16px 0, calc(100% - 16px) 0, 100% 16px, 100% calc(100% - 16px), calc(100% - 16px) 100%, 16px 100%, 0 calc(100% - 16px), 0 16px)';
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
+export function ApartmentDetail(props: { data: ApartmentData }) {
+  const t = useTranslations('Index');
+  const tMenu = useTranslations('Menu');
+  const [activeTab, setActiveTab] = useState<'info' | 'benefits'>('info');
 
   const getTypologyLabel = (typ: string) => {
     switch (typ) {
@@ -43,256 +36,360 @@ export function ApartmentDetail({ data }: { data: ApartmentData }) {
     }
   };
 
-  const slowTransition = { duration: 1.8, ease: [0.16, 1, 0.3, 1] as const };
-
-  const renderHeaderBlock = (layoutIdPrefix?: string, isAbsolute?: boolean) => {
-    const isAnimated = !!layoutIdPrefix;
-    const Container = isAnimated ? motion.div : 'div';
-    const H1 = isAnimated ? motion.h1 : 'h1';
-    const Div = isAnimated ? motion.div : 'div';
-    const P = isAnimated ? motion.p : 'p';
-
-    return (
-      <Container
-        {...(isAnimated
-          ? { layoutId: `${layoutIdPrefix}-container`, transition: slowTransition }
-          : {})}
-        className={`mb-16 flex flex-col ${isAbsolute ? 'absolute top-0 left-0 z-10 w-full' : ''}`}
-      >
-        <H1
-          {...(isAnimated ? { layout: 'position', transition: slowTransition } : {})}
-          className={`mb-4 text-[13vw] leading-[0.9] tracking-tight uppercase sm:text-6xl md:text-7xl xl:text-[80px] ${playfair.className}`}
-        >
-          NO. {data.number}
-        </H1>
-        <Div
-          {...(isAnimated ? { layout: 'position', transition: slowTransition } : {})}
-          className={`mb-6 flex flex-col gap-1 text-[10px] font-bold tracking-[0.2em] uppercase md:text-[11px] ${inter.className}`}
-        >
-          <p>{getTypologyLabel(data.typology)}</p>
-          <p className="opacity-60">
-            {t('completion')}: {data.completion}
-          </p>
-        </Div>
-
-        <P
-          {...(isAnimated ? { layout: 'position', transition: slowTransition } : {})}
-          className={`text-6xl leading-[0.8] opacity-80 md:text-7xl xl:text-[80px] ${playfair.className}`}
-        >
-          {data.bedrooms}
-        </P>
-      </Container>
-    );
-  };
-
   return (
-    <article className="min-h-screen bg-[#F4F3ED] pt-24 text-[#151926]">
+    <article className="min-h-screen bg-[#F4F3ED] pt-28 text-[#151926] md:pt-36">
       <div className="mx-auto w-full max-w-[1600px] px-6 pb-24 md:px-12">
-        <LayoutGroup>
-          <div className="flex flex-col gap-12 lg:flex-row xl:gap-24">
-            {/* LEFT COLUMN - SCROLLABLE MEDIA */}
-            <div className="flex w-full flex-col gap-6 md:gap-12 lg:w-[60%] xl:w-[65%]">
-              {/* Left Header Placeholder (Visible when NOT scrolled) */}
-              <div className="sticky top-32 z-20 hidden w-full lg:block">
-                <div className="invisible" aria-hidden="true">
-                  {renderHeaderBlock()}
-                </div>
-                {!isScrolled && renderHeaderBlock('header-block', true)}
+        {/* Top Breadcrumb & Project Tagline */}
+        <div className="mb-10 flex flex-col justify-between gap-4 border-b border-[#151926]/10 pb-6 md:flex-row md:items-center">
+          <nav
+            aria-label="Breadcrumb"
+            className={`flex items-center gap-2 text-[10px] font-bold tracking-[0.2em] text-[#151926]/60 uppercase md:text-[11px] ${inter.className}`}
+          >
+            <Link href="/" className="transition-colors hover:text-[#8B7043]">
+              {tMenu('home')}
+            </Link>
+            <span>/</span>
+            <Link href="/apartments" className="transition-colors hover:text-[#8B7043]">
+              {t('select_apartment')}
+            </Link>
+            <span>/</span>
+            <span className="text-[#8B7043]">NO. {props.data.number}</span>
+          </nav>
+
+          <span
+            className={`text-[9px] font-bold tracking-[0.25em] text-[#8B7043] uppercase md:text-[10px] ${inter.className}`}
+          >
+            ALIZÉ RESIDENCE • BỜ BIỂN MỸ KHÊ
+          </span>
+        </div>
+
+        {/* 2-COLUMN LAYOUT: MEDIA ON LEFT (60%), DETAILS STICKY ON RIGHT (40%) */}
+        <div className="flex flex-col gap-12 lg:flex-row xl:gap-20">
+          {/* LEFT COLUMN - SCROLLABLE MEDIA & GALLERY (60-65%) */}
+          <div className="flex w-full flex-col gap-10 lg:w-[58%] xl:w-[62%]">
+            {/* Primary Floor Plan Card */}
+            <div className="flex flex-col">
+              <div className="mb-4 flex items-center justify-between">
+                <span
+                  className={`text-[9px] font-bold tracking-[0.25em] text-[#151926]/60 uppercase md:text-[10px] ${inter.className}`}
+                >
+                  SƠ ĐỒ MẶT BẰNG CHI TIẾT
+                </span>
+                <span
+                  className={`text-[9px] tracking-[0.2em] text-[#8B7043] uppercase ${inter.className}`}
+                >
+                  TỶ LỆ CHUẨN 1:100
+                </span>
               </div>
-              <div className="lg:hidden">{renderHeaderBlock('header-block-mobile')}</div>
 
-              {/* Main Floor Plan */}
-              <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-                className="relative aspect-[4/3] w-full md:aspect-[16/9]"
+              <div
+                className="relative aspect-[4/3] w-full overflow-hidden bg-white/60 p-4 shadow-sm md:aspect-[16/10] md:p-8"
+                style={{ clipPath: clipPathPolygon }}
               >
-                <Image
-                  src={data.image}
-                  alt={`Floor plan for apartment ${data.number}`}
-                  fill
-                  priority
-                  sizes="(max-width: 1024px) 100vw, 65vw"
-                  className="object-cover"
-                  unoptimized
-                />
-              </motion.div>
-
-              {/* Gallery Images */}
-              {data.gallery && data.gallery.length > 0 && (
-                <div className="flex flex-col gap-6 md:gap-12">
-                  {data.gallery.map((img, idx) => (
-                    <motion.div
-                      key={idx}
-                      initial={{ opacity: 0, y: 50 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true, margin: '-100px' }}
-                      transition={{ duration: 0.8 }}
-                      className="relative aspect-[4/3] w-full md:aspect-[16/9]"
-                    >
-                      <Image
-                        src={img}
-                        alt={`Gallery image ${idx + 1}`}
-                        fill
-                        sizes="(max-width: 1024px) 100vw, 65vw"
-                        className="object-cover"
-                        unoptimized
-                      />
-                    </motion.div>
-                  ))}
+                <div className="relative h-full w-full">
+                  <Image
+                    src={props.data.image}
+                    alt={`Floor plan for apartment ${props.data.number}`}
+                    fill
+                    priority
+                    sizes="(max-width: 1024px) 100vw, 62vw"
+                    className="object-contain"
+                    unoptimized
+                  />
                 </div>
-              )}
+              </div>
             </div>
 
-            {/* RIGHT COLUMN - STICKY DETAILS */}
-            <section aria-label="Apartment Specifications" className="relative w-full lg:w-[40%] xl:w-[35%]">
-              <div className="flex flex-col pt-8 pb-12 lg:sticky lg:top-32 lg:max-h-[calc(100vh-8rem)] lg:pt-0">
-                {/* Right Header Placeholder (Visible when scrolled) */}
-                <div className="relative hidden shrink-0 lg:block">
-                  <div className="invisible" aria-hidden="true">
-                    {renderHeaderBlock()}
-                  </div>
-                  {isScrolled && renderHeaderBlock('header-block', true)}
+            {/* Gallery Images */}
+            {props.data.gallery && props.data.gallery.length > 0 && (
+              <div className="flex flex-col gap-8 md:gap-12">
+                <div className="flex items-center gap-4 border-t border-[#151926]/10 pt-8">
+                  <span
+                    className={`text-[9px] font-bold tracking-[0.25em] text-[#151926]/60 uppercase md:text-[10px] ${inter.className}`}
+                  >
+                    KHÔNG GIAN NỘI THẤT & PHỐI CẢNH BIỂN
+                  </span>
+                  <div className="h-[1px] flex-1 bg-[#151926]/10" />
                 </div>
 
-                {/* Scrollable Content */}
-                <div data-lenis-prevent="true" className="flex flex-col lg:overflow-y-auto lg:[&::-webkit-scrollbar]:hidden">
-                  {/* Specs block */}
-                  <motion.div
-                    initial={{ opacity: 0, x: 50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.8, delay: 0.3 }}
-                    className="mb-12 flex flex-col gap-6"
+                {props.data.gallery.map((img, idx) => (
+                  <div
+                    key={idx}
+                    className="group relative aspect-[16/10] w-full overflow-hidden drop-shadow-md filter"
+                    style={{ clipPath: clipPathPolygon }}
                   >
-                    <div>
-                      <p
-                        className={`mb-1 text-[10px] font-bold tracking-[0.2em] uppercase ${inter.className}`}
-                      >
-                        {t('interior_area')}
-                      </p>
-                      <p className={`text-3xl md:text-4xl ${playfair.className}`}>{data.area} M²</p>
+                    <Image
+                      src={img}
+                      alt={`Apartment ${props.data.number} perspective ${idx + 1}`}
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 62vw"
+                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                      unoptimized
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#151926]/40 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                    <div className="absolute bottom-4 left-6 text-[9px] font-bold tracking-[0.2em] text-white uppercase opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                      ALIZÉ RESIDENCE • PERSPECTIVE 0{idx + 1}
                     </div>
-                    {data.terrace && (
-                      <div>
-                        <p
-                          className={`mb-1 text-[10px] font-bold tracking-[0.2em] uppercase ${inter.className}`}
-                        >
-                          {t('terrace')}
-                        </p>
-                        <p className={`text-3xl md:text-4xl ${playfair.className}`}>
-                          {data.terrace} M²
-                        </p>
-                      </div>
-                    )}
-                    {data.garden && (
-                      <div>
-                        <p
-                          className={`mb-1 text-[10px] font-bold tracking-[0.2em] uppercase ${inter.className}`}
-                        >
-                          {t('garden')}
-                        </p>
-                        <p className={`text-3xl md:text-4xl ${playfair.className}`}>
-                          {data.garden} M²
-                        </p>
-                      </div>
-                    )}
-                  </motion.div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
 
-                  {/* Tabs block */}
-                  <motion.div
-                    initial={{ opacity: 0, x: 50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.8, delay: 0.4 }}
-                    className="mb-16 flex flex-col"
+          {/* RIGHT COLUMN - CLEAN SPECIFICATIONS & ACTIONS (STAYS ON RIGHT, NO FLYING ANIMATION) */}
+          <aside
+            aria-label="Apartment Specifications"
+            className="relative w-full lg:w-[42%] xl:w-[38%]"
+          >
+            <div className="flex flex-col space-y-8 lg:sticky lg:top-32">
+              {/* PRIMARY RESIDENCE IDENTIFIER CARD */}
+              <div className="w-full drop-shadow-md filter">
+                <div
+                  className="bg-[#D6D3C8] p-[1px]"
+                  style={{ clipPath: clipPathPolygon }}
+                >
+                  <div
+                    className="flex flex-col bg-[#F4F3ED] p-8 sm:p-10"
+                    style={{ clipPath: clipPathPolygon }}
                   >
+                    {/* Header Row */}
+                    <div className="mb-6 flex items-center justify-between border-b border-[#151926]/10 pb-4">
+                      <span
+                        className={`text-[9px] font-bold tracking-[0.25em] text-[#8B7043] uppercase md:text-[10px] ${inter.className}`}
+                      >
+                        BỘ SƯU TẬP GIỚI HẠN
+                      </span>
+                      <span
+                        className={`text-[9px] tracking-[0.2em] text-[#151926]/40 uppercase ${inter.className}`}
+                      >
+                        {t('block')} {props.data.block} • {t('floor')} {props.data.floor}
+                      </span>
+                    </div>
+
+                    {/* Big Bold Title */}
+                    <h1
+                      className={`text-6xl font-medium tracking-tight text-[#151926] uppercase sm:text-7xl xl:text-[82px] leading-none ${playfair.className}`}
+                      style={{ transform: 'scaleY(1.1)', transformOrigin: 'bottom left' }}
+                    >
+                      NO. {props.data.number}
+                    </h1>
+
+                    {/* Subtitle / Typology & Completion */}
                     <div
-                      className={`mb-6 flex gap-8 border-b border-[#151926]/10 pb-4 text-[10px] font-bold tracking-[0.2em] uppercase md:text-[11px] ${inter.className}`}
+                      className={`mt-6 flex flex-col gap-1.5 text-[10px] font-bold tracking-[0.2em] uppercase md:text-xs ${inter.className}`}
                     >
-                      <button
-                        onClick={() => {
-                          setActiveTab('info');
-                        }}
-                        className={`transition-opacity ${activeTab === 'info' ? 'opacity-100' : 'opacity-30'}`}
-                      >
-                        {t('info')}
-                      </button>
-                      <button
-                        onClick={() => {
-                          setActiveTab('benefits');
-                        }}
-                        className={`transition-opacity ${activeTab === 'benefits' ? 'opacity-100' : 'opacity-30'}`}
-                      >
-                        {t('benefits')}
-                      </button>
+                      <p className="text-[#151926]">{getTypologyLabel(props.data.typology)}</p>
+                      <p className="text-[#151926]/50">
+                        {t('completion')}: {props.data.completion}
+                      </p>
                     </div>
 
-                    <div className="relative min-h-[100px]">
-                      <AnimatePresence mode="wait">
-                        {activeTab === 'info' && (
-                          <motion.p
-                            key="info"
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            className={`text-sm leading-relaxed opacity-80 md:text-base ${inter.className}`}
+                    {/* KEY SPECS GRID */}
+                    <div className="mt-8 grid grid-cols-2 gap-6 border-t border-[#151926]/10 pt-8">
+                      {/* Bedrooms */}
+                      <div className="flex flex-col">
+                        <span
+                          className={`mb-1 text-[9px] font-bold tracking-[0.2em] text-[#151926]/50 uppercase md:text-[10px] ${inter.className}`}
+                        >
+                          {t('bedrooms')}
+                        </span>
+                        <div className="flex items-baseline gap-2">
+                          <span
+                            className={`text-4xl text-[#151926] md:text-5xl ${playfair.className}`}
                           >
-                            {data.description ?? '-'}
-                          </motion.p>
-                        )}
-                        {activeTab === 'benefits' && (
-                          <motion.div
-                            key="benefits"
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            className="flex flex-wrap gap-2"
+                            {props.data.bedrooms}
+                          </span>
+                          <span
+                            className={`text-[10px] font-bold tracking-[0.15em] text-[#8B7043] uppercase ${inter.className}`}
                           >
-                            {Array.isArray(data.benefits) ? (
-                              data.benefits.map((benefit, idx) => (
+                            {t('bed')}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Interior Area */}
+                      <div className="flex flex-col">
+                        <span
+                          className={`mb-1 text-[9px] font-bold tracking-[0.2em] text-[#151926]/50 uppercase md:text-[10px] ${inter.className}`}
+                        >
+                          {t('interior_area')}
+                        </span>
+                        <div className="flex items-baseline gap-2">
+                          <span
+                            className={`text-4xl text-[#151926] md:text-5xl ${playfair.className}`}
+                          >
+                            {props.data.area}
+                          </span>
+                          <span
+                            className={`text-[10px] font-bold tracking-[0.15em] text-[#8B7043] uppercase ${inter.className}`}
+                          >
+                            M²
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Terrace (if any) */}
+                      {props.data.terrace && (
+                        <div className="flex flex-col">
+                          <span
+                            className={`mb-1 text-[9px] font-bold tracking-[0.2em] text-[#151926]/50 uppercase md:text-[10px] ${inter.className}`}
+                          >
+                            {t('terrace')}
+                          </span>
+                          <div className="flex items-baseline gap-2">
+                            <span
+                              className={`text-3xl text-[#151926] md:text-4xl ${playfair.className}`}
+                            >
+                              {props.data.terrace}
+                            </span>
+                            <span
+                              className={`text-[10px] font-bold tracking-[0.15em] text-[#8B7043] uppercase ${inter.className}`}
+                            >
+                              M²
+                            </span>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Garden (if any) */}
+                      {props.data.garden && (
+                        <div className="flex flex-col">
+                          <span
+                            className={`mb-1 text-[9px] font-bold tracking-[0.2em] text-[#151926]/50 uppercase md:text-[10px] ${inter.className}`}
+                          >
+                            {t('garden')}
+                          </span>
+                          <div className="flex items-baseline gap-2">
+                            <span
+                              className={`text-3xl text-[#151926] md:text-4xl ${playfair.className}`}
+                            >
+                              {props.data.garden}
+                            </span>
+                            <span
+                              className={`text-[10px] font-bold tracking-[0.15em] text-[#8B7043] uppercase ${inter.className}`}
+                            >
+                              M²
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* TABS: THÔNG TIN & TIỆN ÍCH */}
+                    <div className="mt-8 flex flex-col border-t border-[#151926]/10 pt-6">
+                      <div className="mb-4 flex gap-8 border-b border-[#151926]/10 pb-3">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setActiveTab('info');
+                          }}
+                          className={`cursor-pointer text-[10px] font-bold tracking-[0.2em] uppercase transition-colors md:text-xs ${
+                            activeTab === 'info'
+                              ? 'text-[#8B7043] border-b-2 border-[#8B7043] -mb-[13px] pb-3'
+                              : 'text-[#151926]/40 hover:text-[#151926]'
+                          } ${inter.className}`}
+                        >
+                          {t('info')}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setActiveTab('benefits');
+                          }}
+                          className={`cursor-pointer text-[10px] font-bold tracking-[0.2em] uppercase transition-colors md:text-xs ${
+                            activeTab === 'benefits'
+                              ? 'text-[#8B7043] border-b-2 border-[#8B7043] -mb-[13px] pb-3'
+                              : 'text-[#151926]/40 hover:text-[#151926]'
+                          } ${inter.className}`}
+                        >
+                          {t('benefits')}
+                        </button>
+                      </div>
+
+                      <div className="min-h-[110px] pt-2">
+                        <AnimatePresence mode="wait">
+                          {activeTab === 'info' && (
+                            <motion.p
+                              key="info"
+                              initial={{ opacity: 0, y: 6 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: -6 }}
+                              transition={{ duration: 0.2 }}
+                              className={`text-xs leading-relaxed text-[#151926]/80 sm:text-sm ${inter.className}`}
+                            >
+                              {props.data.description ?? '-'}
+                            </motion.p>
+                          )}
+                          {activeTab === 'benefits' && (
+                            <motion.div
+                              key="benefits"
+                              initial={{ opacity: 0, y: 6 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: -6 }}
+                              transition={{ duration: 0.2 }}
+                              className="flex flex-wrap gap-2"
+                            >
+                              {Array.isArray(props.data.benefits) ? (
+                                props.data.benefits.map((benefit, idx) => (
+                                  <span
+                                    key={idx}
+                                    className={`rounded-full border border-[#151926]/15 bg-white/50 px-3.5 py-1.5 text-[10px] font-bold tracking-[0.12em] text-[#151926] uppercase transition-colors hover:border-[#8B7043] hover:text-[#8B7043] ${inter.className}`}
+                                  >
+                                    #{benefit}
+                                  </span>
+                                ))
+                              ) : (
                                 <span
-                                  key={idx}
-                                  className={`rounded-full border border-[#151926]/10 px-4 py-2 text-[11px] opacity-70 ${inter.className}`}
+                                  className={`text-xs leading-relaxed text-[#151926]/80 ${inter.className}`}
                                 >
-                                  {benefit}
+                                  {props.data.benefits ?? '-'}
                                 </span>
-                              ))
-                            ) : (
-                              <span
-                                className={`text-sm leading-relaxed opacity-80 md:text-base ${inter.className}`}
-                              >
-                                {data.benefits ?? '-'}
-                              </span>
-                            )}
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
+                              )}
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
                     </div>
-                  </motion.div>
 
-                  {/* Action Buttons */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.5 }}
-                    className="mt-auto flex items-center gap-4"
-                  >
-                    <button
-                      className={`flex-1 rounded-full border border-[#151926] py-4 text-[10px] font-bold tracking-[0.2em] uppercase transition-colors duration-300 hover:bg-[#151926] hover:text-[#F4F3ED] md:text-[11px] ${inter.className}`}
-                    >
-                      {t('submit_request')}
-                    </button>
-                    <button
-                      className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[#151926] text-[10px] font-bold tracking-[0.2em] transition-colors duration-300 hover:bg-[#151926] hover:text-[#F4F3ED] ${inter.className}`}
-                    >
-                      {t('pdf')}
-                    </button>
-                  </motion.div>
+                    {/* ACTION BUTTONS */}
+                    <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                      <a
+                        href="#contact"
+                        className={`flex flex-1 items-center justify-center gap-2 rounded-full border border-[#151926] bg-[#151926] py-4 text-center text-[10px] font-bold tracking-[0.2em] text-white uppercase transition-all duration-300 hover:border-[#8B7043] hover:bg-[#8B7043] md:text-xs ${inter.className}`}
+                      >
+                        {t('submit_request')}
+                      </a>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          window.print();
+                        }}
+                        className={`flex items-center justify-center gap-2 rounded-full border border-[#151926]/20 bg-white/60 px-6 py-4 text-[10px] font-bold tracking-[0.2em] text-[#151926] uppercase transition-all duration-300 hover:border-[#151926] hover:bg-white md:text-xs ${inter.className}`}
+                      >
+                        {t('pdf')}
+                      </button>
+                    </div>
+
+                    {/* Direct Contact Shortcut */}
+                    <div className="mt-6 flex items-center justify-between border-t border-[#151926]/10 pt-4 text-[10px]">
+                      <span
+                        className={`tracking-[0.15em] text-[#151926]/50 uppercase ${inter.className}`}
+                      >
+                        HOTLINE TƯ VẤN
+                      </span>
+                      <a
+                        href="tel:+84901234567"
+                        className={`font-bold tracking-[0.15em] text-[#8B7043] transition-colors hover:text-[#151926] ${inter.className}`}
+                      >
+                        +84 (0) 90 123 4567
+                      </a>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </section>
-          </div>
-        </LayoutGroup>
+            </div>
+          </aside>
+        </div>
       </div>
     </article>
   );
