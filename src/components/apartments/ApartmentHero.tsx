@@ -42,29 +42,25 @@ export function ApartmentHero() {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="relative z-10 mx-auto mt-[10vh] flex w-full max-w-[1400px] flex-row items-end justify-between gap-4 px-6 md:px-12"
+        className="relative z-10 mx-auto mt-[10vh] flex w-full max-w-[1400px] flex-row items-end justify-between gap-4 px-6 pb-4 md:px-12 md:pb-6"
       >
-        <div className="pb-4">
-          <motion.div variants={itemVariants}>
-            <h1
-              className={`truncate text-[10vw] leading-[0.9] py-8 text-[#151926] uppercase md:text-[100px] xl:text-[120px] ${playfair.className}`}
-              style={{ transform: 'scaleY(1.3)', transformOrigin: 'bottom left' }}
-            >
-              {t('apartments')}
-            </h1>
-          </motion.div>
-        </div>
+        <motion.div variants={itemVariants}>
+          <h1
+            className={`whitespace-nowrap text-[9vw] leading-[0.85] text-[#151926] uppercase sm:text-[10vw] md:text-[100px] xl:text-[120px] ${playfair.className}`}
+            style={{ transform: 'scaleY(1.3)', transformOrigin: 'bottom left' }}
+          >
+            {t('apartments')}
+          </h1>
+        </motion.div>
 
-        <div className="pb-4">
-          <motion.div variants={itemVariants}>
-            <span
-              className={`shrink-0 text-[10vw] leading-[0.85] tracking-tighter text-[#151926] md:text-[120px] xl:text-[140px] ${playfair.className}`}
-              style={{ transform: 'scaleY(1.3)', transformOrigin: 'bottom right' }}
-            >
-              25
-            </span>
-          </motion.div>
-        </div>
+        <motion.div variants={itemVariants}>
+          <span
+            className={`block shrink-0 text-[9vw] leading-[0.85] tracking-tighter text-[#151926] sm:text-[10vw] md:text-[100px] xl:text-[120px] ${playfair.className}`}
+            style={{ transform: 'scaleY(1.3)', transformOrigin: 'bottom right' }}
+          >
+            25
+          </span>
+        </motion.div>
       </motion.div>
     </section>
   );

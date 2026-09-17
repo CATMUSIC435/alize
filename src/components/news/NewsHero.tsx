@@ -37,18 +37,6 @@ export function NewsHero(props: { totalArticles?: number; featuredArticle?: News
 
   return (
     <section className="relative w-full overflow-hidden bg-transparent pt-[18vh] pb-[6vh] md:pt-[20vh] md:pb-[8vh]">
-      {/* Floral Decorative Video - Top Right */}
-      <div className="pointer-events-none absolute top-0 right-0 z-0 hidden h-[80vw] max-h-[600px] w-[80vw] max-w-[600px] translate-x-[20%] translate-y-0 rotate-y-[180deg] opacity-90 md:block">
-        <SmartVideo
-          src="/bougainvillea-flowers_02.webm"
-          autoPlay
-          loop
-          muted
-          playsInline
-          aria-label="Decorative Flowers"
-          className="safari-video-hide h-full w-full object-contain"
-        />
-      </div>
 
       <motion.div
         variants={containerVariants}
@@ -57,33 +45,29 @@ export function NewsHero(props: { totalArticles?: number; featuredArticle?: News
         className="relative z-10 mx-auto mt-[8vh] flex w-full max-w-[1400px] flex-col justify-between px-6 md:px-12"
       >
         {/* Main Hero Row: Title & Count */}
-        <div className="flex w-full flex-row items-end justify-between gap-4 pb-4">
-          <div>
-            <motion.div variants={itemVariants}>
-              <span
-                className={`block text-[10px] font-bold tracking-[0.25em] text-[#8B7043] uppercase md:text-xs ${inter.className}`}
-              >
-                ALIZÉ {tNews('editorial_journal')}
-              </span>
-              <h1
-                className={`truncate py-4 text-[10vw] leading-[0.9] text-[#151926] uppercase sm:text-[11vw] md:py-8 md:text-[100px] xl:text-[120px] ${playfair.className}`}
-                style={{ transform: 'scaleY(1.3)', transformOrigin: 'bottom left' }}
-              >
-                {t('news')}
-              </h1>
-            </motion.div>
-          </div>
+        <div className="flex w-full flex-row items-end justify-between gap-4 pb-4 md:pb-6">
+          <motion.div variants={itemVariants}>
+            <span
+              className={`mb-2 block text-[10px] font-bold tracking-[0.25em] text-[#8B7043] uppercase md:text-xs ${inter.className}`}
+            >
+              ALIZÉ {tNews('editorial_journal')}
+            </span>
+            <h1
+              className={`whitespace-nowrap text-[9vw] leading-[0.85] text-[#151926] uppercase sm:text-[10vw] md:text-[100px] xl:text-[120px] ${playfair.className}`}
+              style={{ transform: 'scaleY(1.3)', transformOrigin: 'bottom left' }}
+            >
+              {t('news')}
+            </h1>
+          </motion.div>
 
-          <div className="pb-4">
-            <motion.div variants={itemVariants}>
-              <span
-                className={`shrink-0 text-[10vw] leading-[0.85] tracking-tighter text-[#151926] sm:text-[11vw] md:text-[120px] xl:text-[140px] ${playfair.className}`}
-                style={{ transform: 'scaleY(1.3)', transformOrigin: 'bottom right' }}
-              >
-                {countDisplay}
-              </span>
-            </motion.div>
-          </div>
+          <motion.div variants={itemVariants}>
+            <span
+              className={`block shrink-0 text-[9vw] leading-[0.85] tracking-tighter text-[#151926] sm:text-[10vw] md:text-[100px] xl:text-[120px] ${playfair.className}`}
+              style={{ transform: 'scaleY(1.3)', transformOrigin: 'bottom right' }}
+            >
+              {countDisplay}
+            </span>
+          </motion.div>
         </div>
 
         {/* Hairline Divider & Subtitle */}
