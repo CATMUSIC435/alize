@@ -13,25 +13,19 @@ const inter = Inter({ subsets: ['latin'], weight: ['400', '500', '600', '700'] }
 const cursive = Pinyon_Script({ subsets: ['latin'], weight: ['400'] });
 
 // Helper component for vertical timeline points
-function VerticalTimelinePoint({
-  label,
-  time,
-  description,
-  align = 'left',
-  top,
-}: {
+function VerticalTimelinePoint(props: {
   label: string;
   time: string;
-  description?: string;
+  description: string;
   align?: 'left' | 'right';
   top: string;
 }) {
-  const isLeft = align === 'left';
+  const isLeft = props.align === 'left';
 
   return (
     <div
       className={`absolute flex w-full items-center justify-between md:justify-center ${isLeft ? 'flex-row' : 'flex-row-reverse'}`}
-      style={{ top, transform: 'translateY(-50%)' }}
+      style={{ top: props.top, transform: 'translateY(-50%)' }}
     >
       {/* Spacer for one side on desktop */}
       <div className="hidden w-1/2 md:block" />
@@ -55,7 +49,7 @@ function VerticalTimelinePoint({
         transition={{ duration: 0.6, ease: 'easeOut' }}
         className={`flex w-[calc(100%-40px)] md:w-[45%] ${isLeft ? 'md:justify-end md:pr-12' : 'md:justify-start md:pl-12'} ml-10 md:ml-0`}
       >
-        <div className="relative flex min-h-[160px] w-full max-w-[320px] flex-col justify-between rounded-sm bg-[#F4F3EC] p-5 shadow-2xl md:min-h-[220px] md:p-8">
+        <div className="relative flex min-h-[160px] w-full max-w-[340px] flex-col justify-between rounded-sm bg-[#F4F3EC] p-5 shadow-2xl md:min-h-[200px] md:max-w-[420px] md:p-8">
           {/* Inner Decorative Chamfered Border */}
           <div
             className="pointer-events-none absolute inset-2 bg-[#B0B2A6]"
@@ -79,19 +73,18 @@ function VerticalTimelinePoint({
               <h3
                 className={`text-xl leading-snug tracking-tight text-[#151926] uppercase md:text-2xl ${playfair.className}`}
               >
-                {label}
+                {props.label}
               </h3>
               <p
                 className={`mt-1 text-[10px] font-bold tracking-widest text-[#151926]/50 md:mt-2 md:text-[11px] ${inter.className}`}
               >
-                {time}
+                {props.time}
               </p>
             </div>
             <p
               className={`mt-4 text-[12px] leading-[1.6] font-light text-[#2D3346] normal-case md:mt-6 md:text-[14px] ${inter.className}`}
             >
-              {description ??
-                'Discover the exceptional lifestyle and amenities waiting for you at this exclusive location.'}
+              {props.description}
             </p>
           </div>
         </div>
@@ -110,6 +103,58 @@ export function FourthSection() {
     offset: ['start end', 'end start'],
   });
   const imageY = useTransform(scrollYProgress, [0, 1], ['-15%', '15%']);
+
+  const timelineItems = [
+    {
+      top: '0%',
+      align: 'left' as const,
+      label: t('timeline_love_bridge'),
+      time: t('timeline_love_bridge_time'),
+      description: t('timeline_love_bridge_desc'),
+    },
+    {
+      top: '16.67%',
+      align: 'right' as const,
+      label: t('timeline_admin_center'),
+      time: t('timeline_admin_center_time'),
+      description: t('timeline_admin_center_desc'),
+    },
+    {
+      top: '33.33%',
+      align: 'left' as const,
+      label: t('timeline_cham_museum'),
+      time: t('timeline_cham_museum_time'),
+      description: t('timeline_cham_museum_desc'),
+    },
+    {
+      top: '50%',
+      align: 'right' as const,
+      label: t('timeline_marble_mountains'),
+      time: t('timeline_marble_mountains_time'),
+      description: t('timeline_marble_mountains_desc'),
+    },
+    {
+      top: '66.67%',
+      align: 'left' as const,
+      label: t('timeline_son_tra'),
+      time: t('timeline_son_tra_time'),
+      description: t('timeline_son_tra_desc'),
+    },
+    {
+      top: '83.33%',
+      align: 'right' as const,
+      label: t('timeline_hoi_an'),
+      time: t('timeline_hoi_an_time'),
+      description: t('timeline_hoi_an_desc'),
+    },
+    {
+      top: '100%',
+      align: 'left' as const,
+      label: t('timeline_my_son'),
+      time: t('timeline_my_son_time'),
+      description: t('timeline_my_son_desc'),
+    },
+  ];
 
   return (
     <section className="bg-textured-sand relative z-20 w-full overflow-hidden">
@@ -328,20 +373,20 @@ export function FourthSection() {
           </div>
 
           {/* Timeline Container */}
-          <div className="relative mt-24 mb-10 h-[1200px] w-full sm:h-[1400px] md:h-[1800px]">
+          <div className="relative mt-24 mb-16 h-[1600px] w-full sm:h-[1850px] md:mb-24 md:h-[2350px]">
             {/* The Wavy SVG Line */}
             <div className="absolute top-0 bottom-0 left-[15px] z-0 w-[40px] -translate-x-1/2 md:left-1/2 md:w-[280px]">
               <svg
                 className="absolute inset-0 h-full w-full overflow-visible"
                 preserveAspectRatio="none"
-                viewBox="0 0 100 1000"
+                viewBox="0 0 100 1200"
               >
                 <motion.path
                   initial={{ pathLength: 0 }}
                   whileInView={{ pathLength: 1 }}
                   viewport={{ once: true, margin: '0px' }}
                   transition={{ duration: 2.5, ease: 'easeInOut' }}
-                  d="M 50 0 C 120 70 120 130 50 200 C -20 270 -20 330 50 400 C 120 470 120 530 50 600 C -20 670 -20 730 50 800 C 120 870 120 930 50 1000"
+                  d="M 50 0 C 120 70 120 130 50 200 C -20 270 -20 330 50 400 C 120 470 120 530 50 600 C -20 670 -20 730 50 800 C 120 870 120 930 50 1000 C -20 1070 -20 1130 50 1200"
                   fill="none"
                   stroke="#151926"
                   strokeWidth="1.5"
@@ -352,48 +397,16 @@ export function FourthSection() {
 
             {/* Timeline Points */}
             <div className="absolute inset-0 z-10 w-full">
-              <VerticalTimelinePoint
-                top="0%"
-                align="left"
-                label={t('timeline_gibraltar')}
-                time={t('min_50')}
-                description={t('timeline_desc')}
-              />
-              <VerticalTimelinePoint
-                top="20%"
-                align="right"
-                label={t('timeline_estepona')}
-                time={t('min_10')}
-                description={t('timeline_desc')}
-              />
-              <VerticalTimelinePoint
-                top="40%"
-                align="left"
-                label={t('timeline_kempinski')}
-                time={t('min_5')}
-                description={t('timeline_desc')}
-              />
-              <VerticalTimelinePoint
-                top="60%"
-                align="right"
-                label={t('timeline_puerto_banus')}
-                time={t('min_20')}
-                description={t('timeline_desc')}
-              />
-              <VerticalTimelinePoint
-                top="80%"
-                align="left"
-                label={t('timeline_marbella')}
-                time={t('min_25')}
-                description={t('timeline_desc')}
-              />
-              <VerticalTimelinePoint
-                top="100%"
-                align="right"
-                label={t('timeline_malaga')}
-                time={t('min_45')}
-                description={t('timeline_desc')}
-              />
+              {timelineItems.map((item, index) => (
+                <VerticalTimelinePoint
+                  key={index}
+                  top={item.top}
+                  align={item.align}
+                  label={item.label}
+                  time={item.time}
+                  description={item.description}
+                />
+              ))}
             </div>
           </div>
         </div>
