@@ -1,4 +1,4 @@
-import { setRequestLocale } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { ApartmentDetail } from '@/components/apartments/ApartmentDetail';
 import { ApartmentSidebar } from '@/components/apartments/ApartmentSidebar';
@@ -10,9 +10,8 @@ import { SeventhSection } from '@/components/landing/SeventhSection';
 import { SmoothScroll } from '@/components/landing/SmoothScroll';
 import { TenthSection } from '@/components/landing/TenthSection';
 import { APARTMENTS_DATA } from '@/data/apartments';
-
-import { routing } from '@/libs/I18nRouting';
 import { getBaseUrl, getI18nPath } from '@/utils/Helpers';
+import { getI18nAlternates, getOpenGraphLocales, LOCAL_BUSINESS_CONFIG } from '@/utils/Seo';
 
 type ApartmentDetailPageProps = {
   params: Promise<{ locale: string; id: string }>;
@@ -32,47 +31,59 @@ export async function generateMetadata(props: ApartmentDetailPageProps) {
     return {};
   }
 
-  const title = `Căn Hộ No. ${apartment.number} (${apartment.area}m²) | Alizé Residence Đà Nẵng`;
-  const description = apartment.description ?? `Căn hộ cao cấp No. ${apartment.number} gồm ${apartment.bedrooms} phòng ngủ, diện tích ${apartment.area}m² tại dự án Alizé Residence, bờ biển Mỹ Khê Đà Nẵng.`;
-  const baseUrl = getBaseUrl();
-  const routePath = `/apartments/${id}`;
-  const canonicalUrl = `${baseUrl}${getI18nPath(routePath, locale)}`;
+  const t = await getTranslations({ locale, namespace: 'ApartmentDetailPage' });
+  const title = t('meta_title', { number: apartment.number, area: apartment.area });
+  const description = t('meta_description', {
+    number: apartment.number,
+    bedrooms: apartment.bedrooms,
+    area: apartment.area,
+  });
+  const alternates = getI18nAlternates(`/apartments/${id}`, locale);
+  const og = getOpenGraphLocales(locale);
 
-  const languages = Object.fromEntries(
-    routing.locales.map((loc) => [loc, `${baseUrl}${getI18nPath(routePath, loc)}`]),
-  );
+  const keywords = locale === 'vi'
+    ? [
+        `Căn hộ ${apartment.number}`,
+        `Căn hộ Alizé ${apartment.number}`,
+        `Căn hộ ${apartment.bedrooms} phòng ngủ Mỹ Khê`,
+        'Căn hộ mặt biển Mỹ Khê',
+        'Dự án Alizé Đà Nẵng',
+      ]
+    : locale === 'zh'
+      ? [
+          `No. ${apartment.number} 公寓`,
+          `Alizé Residence ${apartment.number}`,
+          `岘港 ${apartment.bedrooms} 居室海景房`,
+          '美溪海滩一线海景豪宅',
+          '岘港 Alizé 豪华公寓',
+        ]
+      : [
+          `Apartment ${apartment.number}`,
+          `Apartment ${apartment.number} Alizé`,
+          `${apartment.bedrooms} bedroom beachfront condo Da Nang`,
+          'Alizé Residence Da Nang',
+          'Luxury My Khe beach apartment',
+        ];
 
   return {
     title,
     description,
-    keywords: [
-      `Căn hộ ${apartment.number}`,
-      `Apartment ${apartment.number} Alizé`,
-      `Alizé Residence ${apartment.typology}`,
-      'Căn hộ mặt biển Mỹ Khê',
-      'Đà Nẵng luxury apartment',
-      'Dự án Alizé Đà Nẵng',
-    ],
-    alternates: {
-      canonical: canonicalUrl,
-      languages: {
-        ...languages,
-        'x-default': `${baseUrl}${getI18nPath(routePath, routing.defaultLocale)}`,
-      },
-    },
+    keywords,
+    alternates,
     openGraph: {
       title,
       description,
-      url: canonicalUrl,
+      url: alternates.canonical,
       siteName: 'Alizé Residence Đà Nẵng',
-      locale: locale === 'vi' ? 'vi_VN' : locale === 'zh' ? 'zh_CN' : `${locale}_${locale.toUpperCase()}`,
+      locale: og.locale,
+      alternateLocale: og.alternateLocale,
       type: 'article',
       images: [
         {
           url: apartment.image,
           width: 1200,
           height: 630,
-          alt: `Căn hộ No. ${apartment.number} - Alizé Residence Đà Nẵng`,
+          alt: title,
           type: 'image/jpeg',
         },
       ],
@@ -96,14 +107,23 @@ export default async function ApartmentDetailPage(props: ApartmentDetailPageProp
     notFound();
   }
 
+  const t = await getTranslations({ locale, namespace: 'ApartmentDetailPage' });
+  const pageTitle = t('meta_title', { number: apartment.number, area: apartment.area });
+  const pageDescription = t('meta_description', {
+    number: apartment.number,
+    bedrooms: apartment.bedrooms,
+    area: apartment.area,
+  });
+
   const baseUrl = getBaseUrl();
   const routePath = `/apartments/${id}`;
 
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Apartment',
-    name: `Căn hộ No. ${apartment.number} - Alizé Residence Đà Nẵng`,
-    description: apartment.description,
+    inLanguage: locale,
+    name: pageTitle,
+    description: pageDescription,
     url: `${baseUrl}${getI18nPath(routePath, locale)}`,
     numberOfRooms: apartment.bedrooms,
     floorSize: {
@@ -111,23 +131,15 @@ export default async function ApartmentDetailPage(props: ApartmentDetailPageProp
       value: apartment.area,
       unitCode: 'MTK',
     },
-    address: {
-      '@type': 'PostalAddress',
-      streetAddress: 'Đường Võ Nguyên Giáp, Phường Phước Mỹ',
-      addressLocality: 'Sơn Trà',
-      addressRegion: 'Đà Nẵng',
-      postalCode: '550000',
-      addressCountry: 'VN',
-    },
-    geo: {
-      '@type': 'GeoCoordinates',
-      latitude: 16.0617,
-      longitude: 108.2435,
-    },
+    address: LOCAL_BUSINESS_CONFIG.address,
+    geo: LOCAL_BUSINESS_CONFIG.geo,
     containedInPlace: {
       '@type': 'ApartmentComplex',
-      name: 'Alizé Residence Đà Nẵng',
+      name: LOCAL_BUSINESS_CONFIG.name,
+      alternateName: LOCAL_BUSINESS_CONFIG.alternateName,
       url: `${baseUrl}${getI18nPath('', locale)}`,
+      hasMap: LOCAL_BUSINESS_CONFIG.hasMap,
+      telephone: LOCAL_BUSINESS_CONFIG.telephone,
     },
     breadcrumb: {
       '@type': 'BreadcrumbList',
@@ -135,13 +147,13 @@ export default async function ApartmentDetailPage(props: ApartmentDetailPageProp
         {
           '@type': 'ListItem',
           position: 1,
-          name: 'Trang chủ',
+          name: t('breadcrumb_home'),
           item: `${baseUrl}${getI18nPath('', locale)}`,
         },
         {
           '@type': 'ListItem',
           position: 2,
-          name: 'Căn hộ',
+          name: t('breadcrumb_apartments'),
           item: `${baseUrl}${getI18nPath('/apartments', locale)}`,
         },
         {

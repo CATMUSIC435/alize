@@ -9,8 +9,9 @@ import { NewsHero } from '@/components/news/NewsHero';
 import { NewsList } from '@/components/news/NewsList';
 import { NewsSidebar } from '@/components/news/NewsSidebar';
 import { getLocalizedArticles } from '@/data/news';
-import { routing } from '@/libs/I18nRouting';
 import { getBaseUrl, getI18nPath } from '@/utils/Helpers';
+
+import { getI18nAlternates, getLocalizedKeywords, getOpenGraphLocales } from '@/utils/Seo';
 
 type NewsPageProps = {
   params: Promise<{ locale: string }>;
@@ -22,40 +23,21 @@ export async function generateMetadata(props: NewsPageProps): Promise<Metadata> 
 
   const title = tNews('meta_title');
   const description = tNews('meta_description');
-  const baseUrl = getBaseUrl();
-  const routePath = '/news';
-  const canonicalUrl = `${baseUrl}${getI18nPath(routePath, locale)}`;
-
-  const languages = Object.fromEntries(
-    routing.locales.map((loc) => [loc, `${baseUrl}${getI18nPath(routePath, loc)}`]),
-  );
+  const alternates = getI18nAlternates('/news', locale);
+  const og = getOpenGraphLocales(locale);
 
   return {
     title,
     description,
-    keywords: [
-      'Alizé Residence',
-      'Tin tức Alizé',
-      'Tiến độ Alizé Residence',
-      'Căn hộ biển Mỹ Khê',
-      'Bất động sản Đà Nẵng',
-      'Branded Residences Da Nang',
-      'A&T Group Alizé',
-      'Kiến trúc Địa Trung Hải Đà Nẵng',
-    ],
-    alternates: {
-      canonical: canonicalUrl,
-      languages: {
-        ...languages,
-        'x-default': `${baseUrl}${getI18nPath(routePath, routing.defaultLocale)}`,
-      },
-    },
+    keywords: getLocalizedKeywords('news', locale),
+    alternates,
     openGraph: {
       title,
       description,
-      url: canonicalUrl,
+      url: alternates.canonical,
       siteName: 'Alizé Residence Đà Nẵng',
-      locale: locale === 'vi' ? 'vi_VN' : locale === 'zh' ? 'zh_CN' : `${locale}_${locale.toUpperCase()}`,
+      locale: og.locale,
+      alternateLocale: og.alternateLocale,
       type: 'website',
       images: [
         {

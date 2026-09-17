@@ -9,8 +9,9 @@ import { Header } from '@/components/landing/Header';
 import { NinthSection } from '@/components/landing/NinthSection';
 import { SmoothScroll } from '@/components/landing/SmoothScroll';
 import { TenthSection } from '@/components/landing/TenthSection';
-import { routing } from '@/libs/I18nRouting';
 import { getBaseUrl, getI18nPath } from '@/utils/Helpers';
+
+import { getI18nAlternates, getLocalizedKeywords, getOpenGraphLocales, LOCAL_BUSINESS_CONFIG } from '@/utils/Seo';
 
 type ContactPageProps = {
   params: Promise<{ locale: string }>;
@@ -25,40 +26,21 @@ export async function generateMetadata(props: ContactPageProps): Promise<Metadat
 
   const title = t('meta_title');
   const description = t('meta_description');
-  const baseUrl = getBaseUrl();
-  const routePath = '/contact';
-  const canonicalUrl = `${baseUrl}${getI18nPath(routePath, locale)}`;
-
-  const languages = Object.fromEntries(
-    routing.locales.map((loc) => [loc, `${baseUrl}${getI18nPath(routePath, loc)}`]),
-  );
+  const alternates = getI18nAlternates('/contact', locale);
+  const og = getOpenGraphLocales(locale);
 
   return {
     title,
     description,
-    keywords: [
-      'Alizé Residence',
-      'Liên hệ Alizé Residence',
-      'Contact Alizé Residence',
-      'Đặt lịch xem nhà mẫu Alizé',
-      'Căn hộ biển Mỹ Khê Đà Nẵng',
-      'Sales Gallery Alizé Đà Nẵng',
-      'Luxury beachfront condo Da Nang',
-      'Concierge Alizé Residence',
-    ],
-    alternates: {
-      canonical: canonicalUrl,
-      languages: {
-        ...languages,
-        'x-default': `${baseUrl}${getI18nPath(routePath, routing.defaultLocale)}`,
-      },
-    },
+    keywords: getLocalizedKeywords('contact', locale),
+    alternates,
     openGraph: {
       title,
       description,
-      url: canonicalUrl,
+      url: alternates.canonical,
       siteName: 'Alizé Residence Đà Nẵng',
-      locale: locale === 'vi' ? 'vi_VN' : locale === 'zh' ? 'zh_CN' : `${locale}_${locale.toUpperCase()}`,
+      locale: og.locale,
+      alternateLocale: og.alternateLocale,
       type: 'website',
       images: [
         {
@@ -140,36 +122,21 @@ export default async function ContactPage(props: ContactPageProps) {
       {
         '@type': 'RealEstateAgent',
         '@id': `${baseUrl}/#organization`,
-        'name': 'Alizé Residence Đà Nẵng',
+        'name': LOCAL_BUSINESS_CONFIG.name,
+        'alternateName': LOCAL_BUSINESS_CONFIG.alternateName,
         'url': baseUrl,
         'logo': `${baseUrl}/apple-touch-icon.png`,
         'image': 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1200',
-        'telephone': '+84965355355',
-        'email': 'contact@alize-residence.com',
-        'address': {
-          '@type': 'PostalAddress',
-          'streetAddress': 'Đường Võ Nguyên Giáp, Phường Phước Mỹ',
-          'addressLocality': 'Sơn Trà',
-          'addressRegion': 'Đà Nẵng',
-          'postalCode': '550000',
-          'addressCountry': 'VN',
-        },
-        'openingHoursSpecification': [
-          {
-            '@type': 'OpeningHoursSpecification',
-            'dayOfWeek': [
-              'Monday',
-              'Tuesday',
-              'Wednesday',
-              'Thursday',
-              'Friday',
-              'Saturday',
-              'Sunday',
-            ],
-            'opens': '08:30',
-            'closes': '18:30',
-          },
-        ],
+        'telephone': LOCAL_BUSINESS_CONFIG.telephone,
+        'email': LOCAL_BUSINESS_CONFIG.email,
+        'priceRange': LOCAL_BUSINESS_CONFIG.priceRange,
+        'currenciesAccepted': LOCAL_BUSINESS_CONFIG.currenciesAccepted,
+        'paymentAccepted': LOCAL_BUSINESS_CONFIG.paymentAccepted,
+        'areaServed': LOCAL_BUSINESS_CONFIG.areaServed,
+        'hasMap': LOCAL_BUSINESS_CONFIG.hasMap,
+        'address': LOCAL_BUSINESS_CONFIG.address,
+        'geo': LOCAL_BUSINESS_CONFIG.geo,
+        'openingHoursSpecification': LOCAL_BUSINESS_CONFIG.openingHoursSpecification,
       },
     ],
   };

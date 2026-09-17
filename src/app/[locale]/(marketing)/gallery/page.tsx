@@ -1,33 +1,33 @@
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { ApartmentHero } from '@/components/apartments/ApartmentHero';
-import { ApartmentList } from '@/components/apartments/ApartmentList';
-import { ApartmentSidebar } from '@/components/apartments/ApartmentSidebar';
+import { GalleryGrid } from '@/components/gallery/GalleryGrid';
+import { GalleryHero } from '@/components/gallery/GalleryHero';
 import { Footer } from '@/components/landing/Footer';
 import { Header } from '@/components/landing/Header';
 import { NinthSection } from '@/components/landing/NinthSection';
 import { SmoothScroll } from '@/components/landing/SmoothScroll';
 import { TenthSection } from '@/components/landing/TenthSection';
-
+import { getLocalizedGalleryItems } from '@/data/gallery';
 import { getBaseUrl, getI18nPath } from '@/utils/Helpers';
-
 import { getI18nAlternates, getLocalizedKeywords, getOpenGraphLocales, LOCAL_BUSINESS_CONFIG } from '@/utils/Seo';
 
-export async function generateMetadata(props: {
+type GalleryPageProps = {
   params: Promise<{ locale: string }>;
-}): Promise<Metadata> {
+};
+
+export async function generateMetadata(props: GalleryPageProps): Promise<Metadata> {
   const { locale } = await props.params;
-  const t = await getTranslations({ locale, namespace: 'ApartmentsPage' });
+  const t = await getTranslations({ locale, namespace: 'GalleryPage' });
+  const alternates = getI18nAlternates('/gallery', locale);
+  const og = getOpenGraphLocales(locale);
 
   const title = t('meta_title');
   const description = t('meta_description');
-  const alternates = getI18nAlternates('/apartments', locale);
-  const og = getOpenGraphLocales(locale);
 
   return {
     title,
     description,
-    keywords: getLocalizedKeywords('apartments', locale),
+    keywords: getLocalizedKeywords('gallery', locale),
     alternates,
     openGraph: {
       title,
@@ -39,7 +39,7 @@ export async function generateMetadata(props: {
       type: 'website',
       images: [
         {
-          url: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1200',
+          url: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=85&w=1200',
           width: 1200,
           height: 630,
           alt: title,
@@ -51,41 +51,36 @@ export async function generateMetadata(props: {
       card: 'summary_large_image',
       title,
       description,
-      images: ['https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1200'],
+      images: ['https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=85&w=1200'],
     },
   };
 }
 
-export default async function ApartmentsPage(props: { params: Promise<{ locale: string }> }) {
-  // Required by next-intl for SSR routing
+export default async function GalleryPage(props: GalleryPageProps) {
   const { locale } = await props.params;
   setRequestLocale(locale);
-  const t = await getTranslations({ locale, namespace: 'ApartmentsPage' });
 
+  const t = await getTranslations({ locale, namespace: 'GalleryPage' });
+  const items = getLocalizedGalleryItems(locale);
   const baseUrl = getBaseUrl();
+  const routePath = '/gallery';
+
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'CollectionPage',
+    '@type': 'ImageGallery',
     inLanguage: locale,
     name: t('meta_title'),
     description: t('meta_description'),
-    url: `${baseUrl}${getI18nPath('/apartments', locale)}`,
-    mainEntity: {
+    url: `${baseUrl}${getI18nPath(routePath, locale)}`,
+    publisher: {
       '@type': 'RealEstateAgent',
       name: LOCAL_BUSINESS_CONFIG.name,
       alternateName: LOCAL_BUSINESS_CONFIG.alternateName,
-      telephone: LOCAL_BUSINESS_CONFIG.telephone,
-      email: LOCAL_BUSINESS_CONFIG.email,
       url: baseUrl,
-      image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1200',
-      priceRange: LOCAL_BUSINESS_CONFIG.priceRange,
-      currenciesAccepted: LOCAL_BUSINESS_CONFIG.currenciesAccepted,
-      paymentAccepted: LOCAL_BUSINESS_CONFIG.paymentAccepted,
-      areaServed: LOCAL_BUSINESS_CONFIG.areaServed,
+      telephone: LOCAL_BUSINESS_CONFIG.telephone,
       hasMap: LOCAL_BUSINESS_CONFIG.hasMap,
       address: LOCAL_BUSINESS_CONFIG.address,
       geo: LOCAL_BUSINESS_CONFIG.geo,
-      openingHoursSpecification: LOCAL_BUSINESS_CONFIG.openingHoursSpecification,
     },
   };
 
@@ -96,19 +91,17 @@ export default async function ApartmentsPage(props: { params: Promise<{ locale: 
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <main className="bg-textured-sand relative min-h-screen w-full">
-        {/* Fixed Top Header (shared from main page) */}
+        {/* Fixed Top Header (Shared from main page) */}
         <Header alwaysDark={true} />
 
-        {/* Fixed Left Sidebar */}
-        <ApartmentSidebar />
+        {/* Hero Section with Cinematic Visual Intro */}
+        <GalleryHero totalItems={items.length} />
 
-        {/* Hero Section with "APARTMENTS" */}
-        <ApartmentHero />
-
-        {/* Interactive List and Filters */}
-        <ApartmentList />
+        {/* Staggered Luxury Gallery Grid & Lightbox */}
+        <GalleryGrid items={items} />
       </main>
 
+      {/* Signature Alizé bottom sections */}
       <NinthSection />
       <TenthSection />
       <Footer />

@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { Playfair_Display, Inter } from 'next/font/google';
 import { useState, useRef } from 'react';
 import { CircleButton } from './CircleButton';
-import { WebGLSlider } from './WebGLSlider';
+import { LazyWebGLSlider } from './LazyWebGLSlider';
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -66,7 +66,7 @@ export function SeventhSection() {
         style={{ scale: bgScale }}
         className="absolute inset-0 h-full w-full origin-center will-change-transform"
       >
-        <WebGLSlider
+        <LazyWebGLSlider
           images={backgroundImages}
           activeIndex={activeIdx}
           hideControls

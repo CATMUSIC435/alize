@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { useRef, useEffect } from 'react';
 import { useUIStore } from '@/store/useUIStore';
 import { SandRipples } from './SandRipples';
-import { WebGLSlider } from './WebGLSlider';
+import { LazyWebGLSlider } from './LazyWebGLSlider';
 
 const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400', '500', '600', '700'] });
 const inter = Inter({ subsets: ['latin'], weight: ['400', '500', '600'] });
@@ -132,7 +132,7 @@ export function SecondSection() {
                 viewport={{ once: true, margin: '-100px' }}
                 transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
               >
-                <WebGLSlider
+                <LazyWebGLSlider
                   images={[
                     'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1920',
                     'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1920',

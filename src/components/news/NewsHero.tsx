@@ -82,7 +82,7 @@ export function NewsHero(props: { totalArticles?: number; featuredArticle?: News
           <span
             className={`text-[9px] font-bold tracking-[0.2em] text-[#8B7043] uppercase md:text-[10px] ${inter.className}`}
           >
-            ESTEPONA — ĐÀ NẴNG 2026
+            MỸ KHÊ — ĐÀ NẴNG 2026
           </span>
         </motion.div>
 

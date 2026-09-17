@@ -385,10 +385,10 @@ export function ApartmentDetail(props: { data: ApartmentData }) {
                         HOTLINE TƯ VẤN
                       </span>
                       <a
-                        href="tel:+84901234567"
+                        href="tel:+84965355355"
                         className={`font-bold tracking-[0.15em] text-[#8B7043] transition-colors hover:text-[#151926] ${inter.className}`}
                       >
-                        +84 (0) 90 123 4567
+                        +84 (965) 355-355
                       </a>
                     </div>
                   </div>

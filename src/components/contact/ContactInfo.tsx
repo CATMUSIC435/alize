@@ -12,7 +12,7 @@ const dropdownClip =
   'polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px)';
 
 const googleMapsUrl =
-  'https://www.google.com/maps/search/?api=1&query=Vo+Nguyen+Giap+My+Khe+Beach+Da+Nang';
+  'https://maps.google.com/?q=16.0617,108.2435';
 
 /**
  * Information card displaying concierge contacts, sales gallery location, and map.

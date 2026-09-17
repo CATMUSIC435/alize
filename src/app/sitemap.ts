@@ -10,6 +10,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes: { path: string; priority: number; changeFrequency: MetadataRoute.Sitemap[number]['changeFrequency'] }[] = [
     { path: '', priority: 1.0, changeFrequency: 'daily' },
     { path: '/apartments', priority: 0.9, changeFrequency: 'daily' },
+    { path: '/floorplans', priority: 0.9, changeFrequency: 'daily' },
+    { path: '/gallery', priority: 0.85, changeFrequency: 'daily' },
     { path: '/news', priority: 0.85, changeFrequency: 'daily' },
     { path: '/contact', priority: 0.85, changeFrequency: 'weekly' },
   ];
@@ -27,36 +29,38 @@ export default function sitemap(): MetadataRoute.Sitemap {
     };
   };
 
-  const staticEntries: MetadataRoute.Sitemap = staticRoutes.map((route) => ({
-    url: `${baseUrl}${getI18nPath(route.path, routing.defaultLocale)}`,
-    lastModified: new Date(),
-    changeFrequency: route.changeFrequency,
-    priority: route.priority,
-    alternates: createAlternates(route.path),
-  }));
-
-  // Apartment detail entries
-  const apartmentEntries: MetadataRoute.Sitemap = APARTMENTS_DATA.map((apt) => {
-    const routePath = `/apartments/${apt.id}`;
-    return {
-      url: `${baseUrl}${getI18nPath(routePath, routing.defaultLocale)}`,
+  const staticEntries: MetadataRoute.Sitemap = staticRoutes.flatMap((route) =>
+    routing.locales.map((locale) => ({
+      url: `${baseUrl}${getI18nPath(route.path, locale)}`,
       lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.8,
+      changeFrequency: route.changeFrequency,
+      priority: locale === routing.defaultLocale ? route.priority : Number((route.priority * 0.95).toFixed(2)),
+      alternates: createAlternates(route.path),
+    })),
+  );
+
+  // Apartment detail entries for all locales
+  const apartmentEntries: MetadataRoute.Sitemap = APARTMENTS_DATA.flatMap((apt) => {
+    const routePath = `/apartments/${apt.id}`;
+    return routing.locales.map((locale) => ({
+      url: `${baseUrl}${getI18nPath(routePath, locale)}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: locale === routing.defaultLocale ? 0.8 : 0.75,
       alternates: createAlternates(routePath),
-    };
+    }));
   });
 
-  // News article entries
-  const newsEntries: MetadataRoute.Sitemap = NEWS_ARTICLES.map((article) => {
+  // News article entries for all locales
+  const newsEntries: MetadataRoute.Sitemap = NEWS_ARTICLES.flatMap((article) => {
     const routePath = `/news/${article.slug}`;
-    return {
-      url: `${baseUrl}${getI18nPath(routePath, routing.defaultLocale)}`,
+    return routing.locales.map((locale) => ({
+      url: `${baseUrl}${getI18nPath(routePath, locale)}`,
       lastModified: new Date(article.modifiedDate),
-      changeFrequency: 'monthly',
-      priority: 0.8,
+      changeFrequency: 'monthly' as const,
+      priority: locale === routing.defaultLocale ? 0.8 : 0.75,
       alternates: createAlternates(routePath),
-    };
+    }));
   });
 
   return [...staticEntries, ...apartmentEntries, ...newsEntries];

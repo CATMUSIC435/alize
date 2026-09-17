@@ -10,8 +10,8 @@ import { NewsDetail } from '@/components/news/NewsDetail';
 import { NewsSidebar } from '@/components/news/NewsSidebar';
 import { RelatedNews } from '@/components/news/RelatedNews';
 import { getLocalizedArticle, getLocalizedArticles, NEWS_ARTICLES } from '@/data/news';
-import { routing } from '@/libs/I18nRouting';
 import { getBaseUrl, getI18nPath } from '@/utils/Helpers';
+import { getI18nAlternates, getOpenGraphLocales } from '@/utils/Seo';
 
 type NewsDetailPageProps = {
   params: Promise<{ locale: string; slug: string }>;
@@ -37,39 +37,27 @@ export async function generateMetadata(props: NewsDetailPageProps): Promise<Meta
   const article = getLocalizedArticle(baseArticle, locale);
   const title = `${article.title} | Alizé Residence Đà Nẵng`;
   const description = article.excerpt;
-  const baseUrl = getBaseUrl();
-  const routePath = `/news/${article.slug}`;
-  const canonicalUrl = `${baseUrl}${getI18nPath(routePath, locale)}`;
+  const alternates = getI18nAlternates(`/news/${article.slug}`, locale);
+  const og = getOpenGraphLocales(locale);
 
-  const languages = Object.fromEntries(
-    routing.locales.map((loc) => [loc, `${baseUrl}${getI18nPath(routePath, loc)}`]),
-  );
+  const extraKeywords = locale === 'vi'
+    ? ['Alizé Residence', 'Đà Nẵng', 'Mỹ Khê', 'Căn hộ biển', 'Branded Residences', 'Kiến trúc Alizé']
+    : locale === 'zh'
+      ? ['Alizé Residence', '岘港', '美溪海滩', '一线海景豪宅', '越南品牌公寓', 'Alizé 建筑设计']
+      : ['Alizé Residence', 'Da Nang', 'My Khe Beach', 'Beachfront Condos', 'Branded Residences', 'Alizé Architecture'];
 
   return {
     title,
     description,
-    keywords: [
-      ...article.tags,
-      'Alizé Residence',
-      'Đà Nẵng',
-      'Mỹ Khê',
-      'Căn hộ biển',
-      'Branded Residences',
-      'Kiến trúc Alizé',
-    ],
-    alternates: {
-      canonical: canonicalUrl,
-      languages: {
-        ...languages,
-        'x-default': `${baseUrl}${getI18nPath(routePath, routing.defaultLocale)}`,
-      },
-    },
+    keywords: [...article.tags, ...extraKeywords],
+    alternates,
     openGraph: {
       title,
       description,
-      url: canonicalUrl,
+      url: alternates.canonical,
       siteName: 'Alizé Residence Đà Nẵng',
-      locale: locale === 'vi' ? 'vi_VN' : locale === 'zh' ? 'zh_CN' : `${locale}_${locale.toUpperCase()}`,
+      locale: og.locale,
+      alternateLocale: og.alternateLocale,
       type: 'article',
       publishedTime: article.isoDate,
       modifiedTime: article.modifiedDate,

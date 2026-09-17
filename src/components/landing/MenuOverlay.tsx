@@ -120,27 +120,36 @@ export function MenuOverlay() {
         'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=85&w=1400',
     },
     {
+      id: 'floorplans',
+      href: '/floorplans',
+      number: '03',
+      title: tMenu('floorplans'),
+      sub: tMenu('floorplans_sub'),
+      image:
+        'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=85&w=1400',
+    },
+    {
+      id: 'gallery',
+      href: '/gallery',
+      number: '04',
+      title: tMenu('gallery'),
+      sub: tMenu('gallery_sub'),
+      image:
+        'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&q=85&w=1400',
+    },
+    {
       id: 'news',
       href: '/news',
-      number: '03',
+      number: '05',
       title: tMenu('news'),
       sub: tMenu('news_sub'),
       image:
         'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=85&w=1400',
     },
     {
-      id: 'concept',
-      href: '/#concept',
-      number: '04',
-      title: tMenu('concept'),
-      sub: tMenu('concept_sub'),
-      image:
-        'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&q=85&w=1400',
-    },
-    {
       id: 'contact',
       href: '/contact',
-      number: '05',
+      number: '06',
       title: tMenu('contact'),
       sub: tMenu('contact_sub'),
       image:
@@ -170,21 +179,109 @@ export function MenuOverlay() {
         <motion.div
           key="menu-overlay"
           data-lenis-prevent="true"
-          initial={{ opacity: 0, clipPath: 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)' }}
+          initial={{ y: '-100%' }}
           animate={{
-            opacity: 1,
-            clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
-            transition: { duration: 0.65, ease: [0.76, 0, 0.24, 1] },
+            y: 0,
+            transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
           }}
           exit={{
-            opacity: 0,
-            clipPath: 'polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)',
-            transition: { duration: 0.5, ease: [0.76, 0, 0.24, 1] },
+            y: '-100%',
+            transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
           }}
-          className="bg-textured-sand pointer-events-auto fixed inset-0 z-[9999] flex flex-col overflow-x-hidden overflow-y-auto text-[#151926] select-none"
+          style={{ willChange: 'transform' }}
+          className="bg-textured-sand pointer-events-auto fixed inset-0 z-[9999] text-[#151926] select-none"
         >
-          {/* TOP HEADER ROW - STICKY TO STAY VISIBLE ON ANY VIEWPORT HEIGHT */}
-          <div className="sticky top-0 z-50 flex w-full shrink-0 items-center justify-between border-b border-[#151926]/10 bg-[#F0EBE1]/90 px-6 py-5 backdrop-blur-md sm:px-10 md:px-14 md:py-7">
+          {/* Leading SVG Wave Lines Curtain - 100% GPU-accelerated horizontal flow with 0% CPU overhead */}
+          <div className="pointer-events-none absolute bottom-0 left-0 z-30 w-full translate-y-[96%] overflow-visible leading-none">
+            <div className="relative h-20 w-full overflow-hidden sm:h-28 md:h-32">
+              <motion.div
+                className="flex w-[200%] shrink-0"
+                animate={{ x: ['0%', '-50%'] }}
+                transition={{ duration: 16, repeat: Infinity, ease: 'linear' }}
+                style={{ willChange: 'transform' }}
+              >
+                <svg
+                  viewBox="0 0 2880 140"
+                  fill="none"
+                  preserveAspectRatio="none"
+                  className="h-20 w-full sm:h-28 md:h-32"
+                >
+                  {/* Seamless Sand Wave Body spanning 2 cycles */}
+                  <path
+                    d="M 0,0 L 2880,0 L 2880,45 C 2640,10 2400,95 2160,55 C 1920,10 1680,95 1440,45 C 1200,10 960,95 720,55 C 480,10 240,95 0,45 Z"
+                    fill="#F0EBE1"
+                  />
+
+                  {/* Primary Gold Undulating Wave Line */}
+                  <path
+                    d="M 0,45 C 240,95 480,10 720,55 C 960,95 1200,10 1440,45 C 1680,95 1920,10 2160,55 C 2400,95 2640,10 2880,45"
+                    stroke="#8B7043"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                  />
+
+                  {/* Secondary Champagne Dashed Wave Line */}
+                  <path
+                    d="M 0,65 C 260,110 520,30 780,72 C 1040,115 1260,35 1440,65 C 1700,110 1960,30 2220,72 C 2480,115 2700,35 2880,65"
+                    stroke="#E0AC87"
+                    strokeWidth="1.8"
+                    strokeDasharray="8 8"
+                    strokeLinecap="round"
+                  />
+
+                  {/* Tertiary Delicate Floating Wave Line */}
+                  <path
+                    d="M 0,85 C 220,50 460,120 700,80 C 940,45 1180,115 1440,85 C 1660,50 1900,120 2140,80 C 2380,45 2620,115 2880,85"
+                    stroke="#8B7043"
+                    strokeWidth="1.2"
+                    strokeOpacity="0.5"
+                  />
+
+                  {/* Quaternary Soft Foam Ripple Wave Line */}
+                  <path
+                    d="M 0,105 C 280,135 560,75 840,110 C 1120,70 1300,130 1440,105 C 1720,135 2000,75 2280,110 C 2560,70 2740,130 2880,105"
+                    stroke="#E0AC87"
+                    strokeWidth="1"
+                    strokeOpacity="0.4"
+                    strokeDasharray="4 6"
+                  />
+                </svg>
+              </motion.div>
+            </div>
+          </div>
+
+          {/* Subtle Ambient Undulating Ocean Wave Lines in Menu Background */}
+          <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden opacity-25 select-none">
+            <svg
+              viewBox="0 0 1440 900"
+              fill="none"
+              preserveAspectRatio="none"
+              className="h-full w-full"
+            >
+              <path
+                d="M 0,220 C 360,160 720,300 1080,220 C 1260,180 1380,240 1440,210"
+                stroke="#8B7043"
+                strokeWidth="1.5"
+                strokeDasharray="4 8"
+              />
+              <path
+                d="M 0,520 C 320,590 680,450 1020,530 C 1240,580 1360,500 1440,540"
+                stroke="#E0AC87"
+                strokeWidth="1.2"
+              />
+              <path
+                d="M 0,780 C 400,720 800,840 1150,760 C 1300,730 1400,790 1440,770"
+                stroke="#8B7043"
+                strokeWidth="1"
+                strokeOpacity="0.4"
+              />
+            </svg>
+          </div>
+
+          {/* Inner Content Container - Viewport fitted on desktop, cleanly scrollable on compact devices */}
+          <div className="relative z-10 flex h-full w-full flex-col justify-between overflow-x-hidden overflow-y-auto">
+            {/* TOP HEADER ROW - STICKY TO STAY VISIBLE ON ANY VIEWPORT HEIGHT */}
+            <div className="sticky top-0 z-50 flex w-full shrink-0 items-center justify-between border-b border-[#151926]/10 bg-[#F0EBE1] px-6 py-3.5 sm:px-10 md:px-14 lg:py-4">
             {/* Left Brand Identity */}
             <div className="flex items-center gap-4">
               <Link
@@ -194,7 +291,7 @@ export function MenuOverlay() {
                 }}
                 className="flex items-center gap-3 transition-opacity hover:opacity-80"
               >
-                <div className="relative h-10 w-8 md:h-12 md:w-10">
+                <div className="relative h-8 w-7 md:h-10 md:w-8">
                   <Image
                     src="/logo-alize.png"
                     alt="Alizé Logo"
@@ -205,12 +302,12 @@ export function MenuOverlay() {
                 </div>
                 <div className="flex flex-col">
                   <span
-                    className={`text-sm font-bold tracking-[0.25em] text-[#8B7043] uppercase md:text-base ${inter.className}`}
+                    className={`text-xs font-bold tracking-[0.25em] text-[#8B7043] uppercase md:text-sm ${inter.className}`}
                   >
                     ALIZÉ
                   </span>
                   <span
-                    className={`text-[9px] tracking-[0.3em] text-[#151926]/50 uppercase md:text-[10px] ${inter.className}`}
+                    className={`text-[8px] tracking-[0.3em] text-[#151926]/50 uppercase md:text-[9px] ${inter.className}`}
                   >
                     RESIDENCE
                   </span>
@@ -233,10 +330,10 @@ export function MenuOverlay() {
                 >
                   {tMenu('close')}
                 </span>
-                <div className="relative flex h-10 w-10 items-center justify-center rounded-full border border-[#151926]/25 transition-all duration-300 group-hover:rotate-90 group-hover:border-[#8B7043] group-hover:bg-white/60 md:h-12 md:w-12">
+                <div className="relative flex h-8 w-8 items-center justify-center rounded-full border border-[#151926]/25 transition-all duration-300 group-hover:rotate-90 group-hover:border-[#8B7043] group-hover:bg-white/60 md:h-10 md:w-10">
                   <svg
-                    width="16"
-                    height="16"
+                    width="15"
+                    height="15"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -254,7 +351,7 @@ export function MenuOverlay() {
           </div>
 
           {/* MAIN MENU BODY: DUAL COLUMN MAGAZINE SPREAD */}
-          <div className="relative z-10 mx-auto flex w-full max-w-[1600px] flex-1 flex-col justify-center px-6 py-6 sm:px-10 md:px-14 lg:flex-row lg:items-center lg:gap-16 xl:gap-24">
+          <div className="relative z-10 mx-auto flex w-full max-w-[1550px] flex-1 flex-col justify-center px-6 py-4 sm:px-10 md:px-14 lg:flex-row lg:items-center lg:gap-12 xl:gap-20 2xl:gap-24">
             {/* LEFT COLUMN: LARGE NUMBERED EDITORIAL NAVIGATION (60%) */}
             <nav
               aria-label="Main Navigation"
@@ -266,12 +363,12 @@ export function MenuOverlay() {
                 variants={{
                   animate: {
                     transition: {
-                      staggerChildren: 0.08,
-                      delayChildren: 0.15,
+                      staggerChildren: 0.05,
+                      delayChildren: 0.22,
                     },
                   },
                 }}
-                className="flex flex-col space-y-4 md:space-y-6"
+                className="flex flex-col space-y-2.5 sm:space-y-3 md:space-y-3 lg:space-y-3.5 xl:space-y-4"
               >
                 {menuItems.map((item, index) => {
                   const isHovered = hoveredIndex === index;
@@ -279,11 +376,11 @@ export function MenuOverlay() {
                     <motion.li
                       key={item.id}
                       variants={{
-                        initial: { y: 40, opacity: 0 },
+                        initial: { y: 20, opacity: 0 },
                         animate: {
                           y: 0,
                           opacity: 1,
-                          transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+                          transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] },
                         },
                       }}
                       onMouseEnter={() => {
@@ -298,29 +395,41 @@ export function MenuOverlay() {
                         }}
                         className="flex w-full flex-col items-start focus:outline-none"
                       >
-                        <div className="flex items-center gap-4 transition-transform duration-500 ease-out group-hover:translate-x-3 md:gap-6">
+                        <div className="flex items-center gap-3.5 transition-transform duration-500 ease-out group-hover:translate-x-2 md:gap-5">
                           {/* Number badge */}
                           <span
-                            className={`text-xs font-bold tracking-[0.2em] transition-colors duration-300 md:text-sm ${
+                            className={`text-xs font-bold tracking-[0.2em] transition-colors duration-300 md:text-xs lg:text-sm ${
                               isHovered ? 'text-[#8B7043]' : 'text-[#151926]/35'
                             } ${inter.className}`}
                           >
                             {item.number}
                           </span>
 
-                          {/* Animated expansion line */}
-                          <span
-                            className={`h-[1.5px] bg-[#8B7043] transition-all duration-500 ${
-                              isHovered ? 'w-6 opacity-100 md:w-10' : 'w-0 opacity-0'
+                          {/* Animated SVG Wave Ripple Indicator */}
+                          <div
+                            className={`flex items-center overflow-hidden transition-all duration-500 ease-out ${
+                              isHovered ? 'w-6 opacity-100 md:w-9' : 'w-0 opacity-0'
                             }`}
-                          />
+                          >
+                            <svg
+                              viewBox="0 0 36 10"
+                              fill="none"
+                              className="h-2.5 w-6 shrink-0 text-[#8B7043] md:w-9"
+                            >
+                              <path
+                                d="M 0,5 C 4.5,1 9,9 13.5,5 C 18,1 22.5,9 27,5 C 31.5,1 36,9 40,5"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                              />
+                            </svg>
+                          </div>
 
                           {/* Title */}
                           <h2
-                            className={`text-2xl font-medium tracking-tight uppercase transition-colors duration-300 sm:text-4xl md:text-5xl lg:text-[54px] xl:text-[62px] ${
+                            className={`text-xl font-medium tracking-tight uppercase transition-colors duration-300 sm:text-2xl md:text-3xl lg:text-[32px] xl:text-[38px] 2xl:text-[44px] ${
                               isHovered ? 'text-[#8B7043]' : 'text-[#151926]'
                             } ${playfair.className}`}
-                            style={{ transform: 'scaleY(1.15)', transformOrigin: 'bottom left' }}
                           >
                             {item.title}
                           </h2>
@@ -328,12 +437,12 @@ export function MenuOverlay() {
 
                         {/* Subtitle */}
                         <div
-                          className={`mt-1 pl-8 transition-all duration-300 md:pl-16 ${
-                            isHovered ? 'opacity-90 translate-x-3' : 'opacity-0'
+                          className={`mt-0.5 pl-6 transition-all duration-300 md:pl-10 ${
+                            isHovered ? 'opacity-90 translate-x-2' : 'opacity-0'
                           }`}
                         >
                           <span
-                            className={`text-[9px] font-bold tracking-[0.2em] text-[#8B7043] uppercase md:text-[10px] ${inter.className}`}
+                            className={`text-[8.5px] font-bold tracking-[0.2em] text-[#8B7043] uppercase md:text-[9.5px] ${inter.className}`}
                           >
                             {item.sub}
                           </span>
@@ -345,29 +454,29 @@ export function MenuOverlay() {
               </motion.ul>
             </nav>
 
-            {/* RIGHT COLUMN: DYNAMIC PREVIEW & CONTACT SPOTLIGHT (40%) */}
-            <div className="mt-8 hidden w-full flex-col lg:mt-0 lg:flex lg:w-[40%]">
-              <div className="w-full drop-shadow-xl filter">
+            {/* RIGHT COLUMN: DYNAMIC PREVIEW & CONTACT SPOTLIGHT (36%) */}
+            <div className="mt-6 hidden w-full flex-col lg:mt-0 lg:flex lg:w-[38%] xl:w-[36%]">
+              <div className="w-full">
                 <div
                   className="bg-[#D6D3C8] p-[1px]"
                   style={{ clipPath: clipPathPolygon }}
                 >
                   <div
-                    className="relative overflow-hidden bg-[#F4F3ED] p-6 sm:p-8"
+                    className="relative overflow-hidden bg-[#F4F3ED] p-5 sm:p-6 lg:p-5 xl:p-6"
                     style={{ clipPath: clipPathPolygon }}
                   >
                     {/* Dynamic Preview Image */}
                     <div
-                      className="relative aspect-[16/10] w-full overflow-hidden drop-shadow-md"
+                      className="relative aspect-[16/9.5] w-full overflow-hidden"
                       style={{ clipPath: clipPathPolygon }}
                     >
                       <AnimatePresence mode="wait">
                         <motion.div
                           key={activeItem.id}
-                          initial={{ opacity: 0, scale: 1.08 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          exit={{ opacity: 0, scale: 1.04 }}
-                          transition={{ duration: 0.6, ease: 'easeOut' }}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.35, ease: 'easeOut' }}
                           className="relative h-full w-full"
                         >
                           <Image
@@ -398,10 +507,10 @@ export function MenuOverlay() {
                         <span
                           className={`block text-[8px] font-bold tracking-[0.2em] text-[#E0AC87] uppercase md:text-[9px] ${inter.className}`}
                         >
-                          {activeItem.number} / 05
+                          {activeItem.number} / {menuItems.length.toString().padStart(2, '0')}
                         </span>
                         <h3
-                          className={`text-lg font-medium text-white uppercase sm:text-xl ${playfair.className}`}
+                          className={`text-base font-medium text-white uppercase sm:text-lg ${playfair.className}`}
                         >
                           {activeItem.title}
                         </h3>
@@ -409,7 +518,7 @@ export function MenuOverlay() {
                     </div>
 
                     {/* Direct Concierge Contact Row */}
-                    <div className="mt-6 flex flex-col space-y-4 border-t border-[#151926]/10 pt-6">
+                    <div className="mt-4 flex flex-col space-y-2.5 border-t border-[#151926]/10 pt-3.5">
                       <div className="flex items-center justify-between text-xs">
                         <span
                           className={`text-[9px] tracking-[0.2em] text-[#151926]/50 uppercase ${inter.className}`}
@@ -417,10 +526,10 @@ export function MenuOverlay() {
                           {tMenu('inquiry')}
                         </span>
                         <a
-                          href="tel:+84901234567"
+                          href="tel:+84965355355"
                           className={`text-[10px] font-bold tracking-[0.15em] text-[#8B7043] transition-colors hover:text-[#151926] ${inter.className}`}
                         >
-                          +84 (0) 90 123 4567
+                          +84 (965) 355-355
                         </a>
                       </div>
 
@@ -438,7 +547,7 @@ export function MenuOverlay() {
                         </a>
                       </div>
 
-                      <div className="flex items-center justify-between text-xs pt-1">
+                      <div className="flex items-center justify-between text-xs pt-0.5">
                         <span
                           className={`shrink-0 text-[9px] tracking-[0.2em] text-[#151926]/50 uppercase ${inter.className}`}
                         >
@@ -455,7 +564,7 @@ export function MenuOverlay() {
                       </div>
 
                       {/* Language Selector Inside Menu */}
-                      <div className="mt-4 flex items-center justify-between border-t border-[#151926]/10 pt-4">
+                      <div className="mt-3 flex items-center justify-between border-t border-[#151926]/10 pt-3">
                         <span
                           className={`text-[9px] font-bold tracking-[0.2em] text-[#151926]/50 uppercase ${inter.className}`}
                         >
@@ -493,17 +602,17 @@ export function MenuOverlay() {
           </div>
 
           {/* BOTTOM FOOTER BAR */}
-          <div className="relative z-10 flex w-full shrink-0 flex-col items-center justify-between gap-4 border-t border-[#151926]/10 bg-[#F0EBE1]/70 px-6 py-4 text-center backdrop-blur-sm sm:px-10 md:flex-row md:px-14 md:py-6 md:text-left">
+          <div className="relative z-10 flex w-full shrink-0 flex-col items-center justify-between gap-3 border-t border-[#151926]/10 bg-[#F0EBE1]/70 px-6 py-3 text-center backdrop-blur-sm sm:px-10 md:flex-row md:px-14 md:py-3.5 md:text-left">
             {/* Coordinates */}
             <div
-              className={`text-[9px] font-bold tracking-[0.25em] text-[#151926]/50 uppercase md:text-[10px] ${inter.className}`}
+              className={`text-[8.5px] font-bold tracking-[0.25em] text-[#151926]/50 uppercase md:text-[9.5px] ${inter.className}`}
             >
-              16°03&apos;32.6&quot;N 108°14&apos;45.2&quot;E — ESTEPONA • ĐÀ NẴNG 2026
+              16°03&apos;42.1&quot;N 108°14&apos;36.6&quot;E — MỸ KHÊ • ĐÀ NẴNG
             </div>
 
             {/* Social & Direct Links */}
             <div
-              className={`flex items-center gap-6 text-[9px] font-bold tracking-[0.2em] text-[#151926]/70 uppercase md:gap-8 md:text-[10px] ${inter.className}`}
+              className={`flex items-center gap-6 text-[8.5px] font-bold tracking-[0.2em] text-[#151926]/70 uppercase md:gap-8 md:text-[9.5px] ${inter.className}`}
             >
               <a
                 href="https://instagram.com"
@@ -531,6 +640,7 @@ export function MenuOverlay() {
                 Residences
               </Link>
             </div>
+          </div>
           </div>
         </motion.div>
       )}

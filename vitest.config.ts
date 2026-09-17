@@ -19,7 +19,6 @@ export default defineConfig({
         test: {
           name: 'unit',
           include: ['src/**/*.test.{js,ts}'],
-          exclude: ['src/hooks/**/*.test.ts'],
           environment: 'node',
         },
       },
@@ -27,7 +26,7 @@ export default defineConfig({
         extends: true,
         test: {
           name: 'ui',
-          include: ['**/*.test.tsx', 'src/hooks/**/*.test.ts'],
+          include: ['**/*.test.tsx'],
           browser: {
             enabled: true,
             headless: true,

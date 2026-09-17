@@ -7,7 +7,7 @@ import { Playfair_Display, Inter, Pinyon_Script } from 'next/font/google';
 import Image from 'next/image';
 import { useRef } from 'react';
 import { CircleButton } from './CircleButton';
-import { WebGLSlider } from './WebGLSlider';
+import { LazyWebGLSlider } from './LazyWebGLSlider';
 
 const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400', '500', '600', '700'] });
 const inter = Inter({ subsets: ['latin'], weight: ['300', '400', '500', '600'] });
@@ -158,7 +158,7 @@ export function EighthSection() {
 
       {/* Full-height Image Slider */}
       <div className="mt-24 mb-32 w-full md:mt-32 md:mb-48">
-        <WebGLSlider
+        <LazyWebGLSlider
           images={eighthSectionImages}
           fullHeight
           alignRight

@@ -24,7 +24,7 @@ export default function robots(): MetadataRoute.Robots {
           'cohere-ai',
           'CCBot',
         ],
-        allow: ['/', '/news/', '/apartments/', '/contact/'],
+        allow: ['/', '/news/', '/apartments/', '/contact/', '/gallery/', '/floorplans/'],
         disallow: ['/dashboard', '/api/'],
       },
     ],

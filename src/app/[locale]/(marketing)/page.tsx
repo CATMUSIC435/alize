@@ -10,8 +10,9 @@ import { ScrollManager } from '@/components/landing/ScrollManager';
 import { SmoothScroll } from '@/components/landing/SmoothScroll';
 import { TypographyOverlay } from '@/components/landing/TypographyOverlay';
 
-import { routing } from '@/libs/I18nRouting';
 import { getBaseUrl, getI18nPath } from '@/utils/Helpers';
+
+import { getI18nAlternates, getLocalizedKeywords, getOpenGraphLocales, LOCAL_BUSINESS_CONFIG } from '@/utils/Seo';
 
 // Dynamically import below-the-fold heavy Client Components
 const ArchitectureSplit = dynamic(() => import('@/components/landing/ArchitectureSplit').then((m) => m.ArchitectureSplit));
@@ -31,46 +32,29 @@ export async function generateMetadata(props: {
 }): Promise<Metadata> {
   const { locale } = await props.params;
   const t = await getTranslations({ locale, namespace: 'Index' });
-
-  const baseUrl = getBaseUrl();
-  const canonicalUrl = `${baseUrl}${getI18nPath('', locale)}`;
-  const languages = Object.fromEntries(
-    routing.locales.map((loc) => [loc, `${baseUrl}${getI18nPath('', loc)}`]),
-  );
+  const og = getOpenGraphLocales(locale);
+  const alternates = getI18nAlternates('', locale);
 
   return {
     title: t('meta_title'),
     description: t('meta_description'),
-    keywords: [
-      'Alizé Residence',
-      'Căn hộ Alizé Đà Nẵng',
-      'Bất động sản Mỹ Khê',
-      'Căn hộ biển cao cấp Đà Nẵng',
-      'Branded Residences Da Nang',
-      'Alizé Residence Danang',
-      'Luxury beachfront residences Vietnam',
-    ],
-    alternates: {
-      canonical: canonicalUrl,
-      languages: {
-        ...languages,
-        'x-default': `${baseUrl}${getI18nPath('', routing.defaultLocale)}`,
-      },
-    },
+    keywords: getLocalizedKeywords('home', locale),
+    alternates,
     openGraph: {
       title: t('meta_title'),
       description: t('meta_description'),
-      url: canonicalUrl,
+      url: alternates.canonical,
       siteName: 'Alizé Residence Đà Nẵng',
       images: [
         {
           url: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2070&auto=format&fit=crop',
           width: 1200,
           height: 630,
-          alt: 'Alizé Residence - Căn hộ cao cấp mặt biển Mỹ Khê, Đà Nẵng',
+          alt: t('meta_title'),
         },
       ],
-      locale: locale === 'vi' ? 'vi_VN' : locale === 'zh' ? 'zh_CN' : `${locale}_${locale.toUpperCase()}`,
+      locale: og.locale,
+      alternateLocale: og.alternateLocale,
       type: 'website',
     },
     twitter: {
@@ -96,23 +80,22 @@ export default async function EraResidencePage(props: { params: Promise<{ locale
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'ApartmentComplex',
-    name: 'Alizé Residence Da Nang',
+    '@id': `${baseUrl}/#apartment-complex`,
+    inLanguage: locale,
+    name: LOCAL_BUSINESS_CONFIG.name,
+    alternateName: LOCAL_BUSINESS_CONFIG.alternateName,
     description: t('meta_description'),
     url: `${baseUrl}${getI18nPath('', locale)}`,
-    telephone: '+84 1900 0000', // Placeholder
-    address: {
-      '@type': 'PostalAddress',
-      streetAddress: 'Đường Võ Nguyên Giáp, mặt biển Mỹ Khê',
-      addressLocality: 'Sơn Trà',
-      addressRegion: 'Đà Nẵng',
-      postalCode: '550000',
-      addressCountry: 'VN',
-    },
-    geo: {
-      '@type': 'GeoCoordinates',
-      latitude: 16.0544,
-      longitude: 108.2443,
-    },
+    telephone: LOCAL_BUSINESS_CONFIG.telephone,
+    email: LOCAL_BUSINESS_CONFIG.email,
+    priceRange: LOCAL_BUSINESS_CONFIG.priceRange,
+    currenciesAccepted: LOCAL_BUSINESS_CONFIG.currenciesAccepted,
+    paymentAccepted: LOCAL_BUSINESS_CONFIG.paymentAccepted,
+    areaServed: LOCAL_BUSINESS_CONFIG.areaServed,
+    hasMap: LOCAL_BUSINESS_CONFIG.hasMap,
+    address: LOCAL_BUSINESS_CONFIG.address,
+    geo: LOCAL_BUSINESS_CONFIG.geo,
+    openingHoursSpecification: LOCAL_BUSINESS_CONFIG.openingHoursSpecification,
     image:
       'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2070&auto=format&fit=crop',
     containsPlace: [

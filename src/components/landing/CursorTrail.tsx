@@ -16,28 +16,24 @@ export function CursorTrail() {
   const trail = useRef(Array.from({ length: TRAIL_LENGTH }, () => ({ x: 0, y: 0 })));
 
   const rafId = useRef<number>(0);
+  const isRunning = useRef(false);
 
   useEffect(() => {
-    const onPointerMove = (e: PointerEvent) => {
-      mouse.current = { x: e.clientX, y: e.clientY };
-    };
-
     const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
     if (isTouchDevice) {
-      return () => {
-        window.removeEventListener('pointermove', onPointerMove);
-      };
+      return () => {};
     }
-
-    window.addEventListener('pointermove', onPointerMove, { passive: true });
 
     const render = () => {
       const points = trail.current;
       const [firstPoint] = points;
 
       if (!firstPoint) {
+        isRunning.current = false;
         return;
       }
+
+      let totalDelta = Math.abs(mouse.current.x - firstPoint.x) + Math.abs(mouse.current.y - firstPoint.y);
 
       // Slower lerp for the head (creates drag)
       points[0] = {
@@ -53,9 +49,13 @@ export function CursorTrail() {
           continue;
         }
 
+        const dx = prev.x - curr.x;
+        const dy = prev.y - curr.y;
+        totalDelta += Math.abs(dx) + Math.abs(dy);
+
         points[i] = {
-          x: curr.x + (prev.x - curr.x) * 0.15,
-          y: curr.y + (prev.y - curr.y) * 0.15,
+          x: curr.x + dx * 0.15,
+          y: curr.y + dy * 0.15,
         };
       }
 
@@ -71,7 +71,6 @@ export function CursorTrail() {
         if (i === 0) {
           const [p0, p1] = points;
           if (p0 && p1) {
-            // First segment: from point 0 to the midpoint of 0 and 1
             const nextMidX = (p0.x + p1.x) / 2;
             const nextMidY = (p0.y + p1.y) / 2;
             d = `M ${p0.x},${p0.y} L ${nextMidX},${nextMidY}`;
@@ -81,7 +80,6 @@ export function CursorTrail() {
           const curr = points[i];
           const next = points[i + 1];
           if (prev && curr && next) {
-            // Middle segments: from prev midpoint, using current point as control, to next midpoint
             const prevMidX = (prev.x + curr.x) / 2;
             const prevMidY = (prev.y + curr.y) / 2;
             const nextMidX = (curr.x + next.x) / 2;
@@ -93,7 +91,24 @@ export function CursorTrail() {
         path.setAttribute('d', d);
       }
 
-      rafId.current = requestAnimationFrame(render);
+      // Idle pause: When trail converges to the mouse position, stop RAF to save 100% CPU/battery
+      if (totalDelta > 0.1) {
+        rafId.current = requestAnimationFrame(render);
+      } else {
+        isRunning.current = false;
+      }
+    };
+
+    const startRender = () => {
+      if (!isRunning.current) {
+        isRunning.current = true;
+        rafId.current = requestAnimationFrame(render);
+      }
+    };
+
+    const onPointerMove = (e: PointerEvent) => {
+      mouse.current = { x: e.clientX, y: e.clientY };
+      startRender();
     };
 
     const onFirstMove = (e: PointerEvent) => {
@@ -101,15 +116,19 @@ export function CursorTrail() {
       mouse.current = { x: clientX, y: clientY };
       trail.current = Array.from({ length: TRAIL_LENGTH }, () => ({ x: clientX, y: clientY }));
       window.removeEventListener('pointermove', onFirstMove);
-      rafId.current = requestAnimationFrame(render);
+      startRender();
     };
 
     window.addEventListener('pointermove', onFirstMove, { passive: true });
+    window.addEventListener('pointermove', onPointerMove, { passive: true });
 
     return () => {
       window.removeEventListener('pointermove', onPointerMove);
       window.removeEventListener('pointermove', onFirstMove);
-      cancelAnimationFrame(rafId.current);
+      if (rafId.current) {
+        cancelAnimationFrame(rafId.current);
+      }
+      isRunning.current = false;
     };
   }, []);
 
