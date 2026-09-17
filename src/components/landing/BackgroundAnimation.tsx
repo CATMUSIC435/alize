@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import { useUIStore } from '@/store/useUIStore';
 
@@ -70,149 +70,162 @@ export function BackgroundAnimation() {
       </motion.div>
 
       {/* 2. Intro Loading Overlay: Elevated to z-[70] so nothing can overlap it during load */}
-      {!isIntroComplete && (
-        <div className="pointer-events-none fixed inset-0 z-[70] overflow-hidden">
-          {/* Static Decorative Outer Frame (Chamfered Corners) - Only during load */}
+      <AnimatePresence>
+        {!isIntroComplete && (
           <motion.div
-            className="pointer-events-none absolute inset-4 z-20 md:inset-8"
-            initial={{ opacity: 0 }}
-            animate={{
-              opacity: [0, 1, 1, 0],
-            }}
-            transition={{
-              duration: 2.8,
-              times: [0, 0.15, 0.75, 1],
-              ease: 'easeInOut',
-              delay: 0.15,
-            }}
+            key="intro-overlay"
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.45, ease: 'easeOut' }}
+            className="pointer-events-none fixed inset-0 z-[70] overflow-hidden"
           >
-            {/* Top edge */}
-            <div className="absolute top-0 right-[24px] left-[24px] h-[1px] bg-white/15" />
-            {/* Bottom edge */}
-            <div className="absolute right-[24px] bottom-0 left-[24px] h-[1px] bg-white/15" />
-            {/* Left edge */}
-            <div className="absolute top-[24px] bottom-[24px] left-0 w-[1px] bg-white/15" />
-            {/* Right edge */}
-            <div className="absolute top-[24px] right-0 bottom-[24px] w-[1px] bg-white/15" />
+            {/* Static Decorative Outer Frame (Chamfered Corners) - Only during load */}
+            <motion.div
+              className="pointer-events-none absolute inset-4 z-20 md:inset-8"
+              initial={{ opacity: 0 }}
+              animate={{
+                opacity: [0, 1, 1, 0],
+              }}
+              transition={{
+                duration: 2.3,
+                times: [0, 0.22, 0.55, 0.95],
+                ease: 'easeInOut',
+                delay: 0.08,
+              }}
+            >
+              {/* Top edge */}
+              <div className="absolute top-0 right-[24px] left-[24px] h-[1px] bg-white/15" />
+              {/* Bottom edge */}
+              <div className="absolute right-[24px] bottom-0 left-[24px] h-[1px] bg-white/15" />
+              {/* Left edge */}
+              <div className="absolute top-[24px] bottom-[24px] left-0 w-[1px] bg-white/15" />
+              {/* Right edge */}
+              <div className="absolute top-[24px] right-0 bottom-[24px] w-[1px] bg-white/15" />
 
-            {/* Top Left Chamfer */}
-            <svg width="24" height="24" className="absolute top-0 left-0" overflow="visible">
-              <line x1="0" y1="24" x2="24" y2="0" stroke="rgba(255, 255, 255, 0.15)" strokeWidth="1" />
-            </svg>
-            {/* Top Right Chamfer */}
-            <svg width="24" height="24" className="absolute top-0 right-0" overflow="visible">
-              <line x1="0" y1="0" x2="24" y2="24" stroke="rgba(255, 255, 255, 0.15)" strokeWidth="1" />
-            </svg>
-            {/* Bottom Right Chamfer */}
-            <svg width="24" height="24" className="absolute right-0 bottom-0" overflow="visible">
-              <line x1="0" y1="24" x2="24" y2="0" stroke="rgba(255, 255, 255, 0.15)" strokeWidth="1" />
-            </svg>
-            {/* Bottom Left Chamfer */}
-            <svg width="24" height="24" className="absolute bottom-0 left-0" overflow="visible">
-              <line x1="0" y1="0" x2="24" y2="24" stroke="rgba(255, 255, 255, 0.15)" strokeWidth="1" />
-            </svg>
-          </motion.div>
+              {/* Top Left Chamfer */}
+              <svg width="24" height="24" className="absolute top-0 left-0" overflow="visible">
+                <line x1="0" y1="24" x2="24" y2="0" stroke="rgba(255, 255, 255, 0.15)" strokeWidth="1" />
+              </svg>
+              {/* Top Right Chamfer */}
+              <svg width="24" height="24" className="absolute top-0 right-0" overflow="visible">
+                <line x1="0" y1="0" x2="24" y2="24" stroke="rgba(255, 255, 255, 0.15)" strokeWidth="1" />
+              </svg>
+              {/* Bottom Right Chamfer */}
+              <svg width="24" height="24" className="absolute right-0 bottom-0" overflow="visible">
+                <line x1="0" y1="24" x2="24" y2="0" stroke="rgba(255, 255, 255, 0.15)" strokeWidth="1" />
+              </svg>
+              {/* Bottom Left Chamfer */}
+              <svg width="24" height="24" className="absolute bottom-0 left-0" overflow="visible">
+                <line x1="0" y1="0" x2="24" y2="24" stroke="rgba(255, 255, 255, 0.15)" strokeWidth="1" />
+              </svg>
+            </motion.div>
 
-          {/* Opening Intro Logos (ATG on left, Alizé project in center, DXMD on right) */}
-          <motion.div
-            className="pointer-events-none absolute inset-x-0 top-[12vh] z-30 px-6 sm:top-[15vh] sm:px-10 md:top-[18vh] md:px-16 lg:top-[20vh] lg:px-24"
-            initial={{ opacity: 0, y: 15 }}
-            animate={{
-              opacity: [0, 1, 1, 0],
-              y: [15, 0, 0, -10],
-            }}
-            transition={{
-              duration: 2.8,
-              times: [0, 0.25, 0.75, 1],
-              ease: ['easeOut', 'linear', [0.45, 0, 0.15, 1]],
-              delay: 0.15,
-            }}
-          >
-            <div className="mx-auto flex w-full max-w-7xl items-center justify-between">
-              {/* Left: ATG Group Logo */}
-              <div className="flex w-1/3 items-center justify-start">
-                <Image
-                  src="/atg-logo.svg"
-                  alt="ATG Group"
-                  width={260}
-                  height={170}
-                  priority
-                  unoptimized
-                  className="h-11 w-auto object-contain drop-shadow-md sm:h-14 md:h-18 lg:h-22 xl:h-26"
-                />
+            {/* Opening Intro Logos (ATG on left, Alizé project in center, DXMD on right) */}
+            <motion.div
+              className="pointer-events-none absolute inset-x-0 top-[12vh] z-30 px-6 sm:top-[15vh] sm:px-10 md:top-[18vh] md:px-16 lg:top-[20vh] lg:px-24"
+              initial={{ opacity: 0, y: 14 }}
+              animate={{
+                opacity: [0, 1, 1, 0],
+                y: [14, 0, 0, -10],
+              }}
+              transition={{
+                duration: 2.3,
+                times: [0, 0.22, 0.55, 0.95],
+                ease: ['easeOut', 'linear', [0.16, 1, 0.3, 1]],
+                delay: 0.08,
+              }}
+            >
+              <div className="mx-auto flex w-full max-w-7xl items-center justify-between">
+                {/* Left: ATG Group Logo */}
+                <div className="flex w-1/3 items-center justify-start">
+                  <Image
+                    src="/atg-logo.svg"
+                    alt="ATG Group"
+                    width={260}
+                    height={170}
+                    priority
+                    unoptimized
+                    className="h-11 w-auto object-contain drop-shadow-md sm:h-14 md:h-18 lg:h-22 xl:h-26"
+                  />
+                </div>
+
+                {/* Center: Alizé Project Logo */}
+                <div className="flex w-1/3 items-center justify-center">
+                  <Image
+                    src="/logo-alize.png"
+                    alt="Alizé Hotel & Residences Da Nang"
+                    width={280}
+                    height={345}
+                    priority
+                    className="h-20 w-auto object-contain brightness-0 invert drop-shadow-[0_6px_20px_rgba(255,255,255,0.3)] sm:h-28 md:h-36 lg:h-44 xl:h-48"
+                  />
+                </div>
+
+                {/* Right: DXMD Logo */}
+                <div className="flex w-1/3 items-center justify-end">
+                  <Image
+                    src="/dxmd-logo.svg"
+                    alt="DXMD Vietnam"
+                    width={260}
+                    height={115}
+                    priority
+                    unoptimized
+                    className="h-9 w-auto object-contain drop-shadow-md sm:h-12 md:h-15 lg:h-18 xl:h-22"
+                  />
+                </div>
               </div>
+            </motion.div>
 
-              {/* Center: Alizé Project Logo */}
-              <div className="flex w-1/3 items-center justify-center">
-                <Image
-                  src="/logo-alize.png"
-                  alt="Alizé Hotel & Residences Da Nang"
-                  width={280}
-                  height={345}
-                  priority
-                  className="h-20 w-auto object-contain brightness-0 invert drop-shadow-[0_6px_20px_rgba(255,255,255,0.3)] sm:h-28 md:h-36 lg:h-44 xl:h-48"
-                />
-              </div>
-
-              {/* Right: DXMD Logo */}
-              <div className="flex w-1/3 items-center justify-end">
-                <Image
-                  src="/dxmd-logo.svg"
-                  alt="DXMD Vietnam"
-                  width={260}
-                  height={115}
-                  priority
-                  unoptimized
-                  className="h-9 w-auto object-contain drop-shadow-md sm:h-12 md:h-15 lg:h-18 xl:h-22"
-                />
+            {/* GPU Hardware-Accelerated Arch Portal */}
+            <div className="pointer-events-none absolute inset-0 flex items-end justify-center">
+              <div className="origin-bottom scale-[0.65] sm:scale-[0.8] md:scale-100">
+                <motion.div
+                  className="relative overflow-visible"
+                  style={{
+                    width: 350,
+                    height: 525,
+                    borderTopLeftRadius: 175,
+                    borderTopRightRadius: 175,
+                    boxShadow: '0 0 0 100vmax #0D2D40',
+                    willChange: 'transform, opacity',
+                    transformOrigin: '50% 100%',
+                  }}
+                  initial={{ y: 650, scale: 1, opacity: 1 }}
+                  animate={{
+                    y: [650, 0, 0, 0],
+                    scale: [1, 1, 1, 7],
+                    opacity: [1, 1, 1, 0],
+                  }}
+                  transition={{
+                    duration: 2.3,
+                    times: [0, 0.28, 0.55, 1],
+                    ease: ['easeOut', 'linear', [0.16, 1, 0.3, 1]],
+                    delay: 0.05,
+                  }}
+                  onAnimationComplete={() => {
+                    setIsIntroComplete(true);
+                    if (typeof window !== 'undefined') {
+                      sessionStorage.setItem('alize_intro_seen', 'true');
+                    }
+                  }}
+                >
+                  {/* 5 Concentric Architectural Stroke Rings with gentle fade-out before full expansion */}
+                  <motion.div
+                    animate={{ opacity: [1, 1, 0, 0] }}
+                    transition={{ duration: 2.3, times: [0, 0.52, 0.72, 1], delay: 0.05 }}
+                    className="pointer-events-none absolute inset-0"
+                  >
+                    <div className="pointer-events-none absolute -inset-[12px] bottom-0 rounded-t-[187px] border border-white/45 border-b-0" />
+                    <div className="pointer-events-none absolute -inset-[28px] bottom-0 rounded-t-[203px] border border-white/35 border-b-0" />
+                    <div className="pointer-events-none absolute -inset-[48px] bottom-0 rounded-t-[223px] border border-white/25 border-b-0" />
+                    <div className="pointer-events-none absolute -inset-[72px] bottom-0 rounded-t-[247px] border border-white/15 border-b-0" />
+                    <div className="pointer-events-none absolute -inset-[100px] bottom-0 rounded-t-[275px] border border-white/10 border-b-0" />
+                  </motion.div>
+                </motion.div>
               </div>
             </div>
           </motion.div>
-
-          {/* GPU Hardware-Accelerated Arch Portal: Eliminates CPU SVG mask re-rasterization lag */}
-          <div className="pointer-events-none absolute inset-0 flex items-end justify-center">
-            <div className="origin-bottom scale-[0.65] sm:scale-[0.8] md:scale-100">
-              <motion.div
-                className="relative overflow-visible"
-                style={{
-                  width: 350,
-                  height: 525,
-                  borderTopLeftRadius: 175,
-                  borderTopRightRadius: 175,
-                  boxShadow: '0 0 0 200vmax #0D2D40',
-                  willChange: 'transform, opacity',
-                  transformOrigin: '50% 100%',
-                }}
-                initial={{ y: 650, scale: 1, opacity: 1 }}
-                animate={{
-                  y: [650, 0, 0, 0],
-                  scale: [1, 1, 1, 14],
-                  opacity: [1, 1, 1, 0],
-                }}
-                transition={{
-                  duration: 2.2,
-                  times: [0, 0.28, 0.55, 1],
-                  ease: ['easeOut', 'linear', [0.22, 1, 0.36, 1]],
-                  delay: 0.08,
-                }}
-                onAnimationComplete={() => {
-                  setIsIntroComplete(true);
-                  if (typeof window !== 'undefined') {
-                    sessionStorage.setItem('alize_intro_seen', 'true');
-                  }
-                }}
-              >
-                {/* 5 Concentric Architectural Stroke Rings (Hardware Accelerated CSS) */}
-                <div className="pointer-events-none absolute -inset-[12px] bottom-0 rounded-t-[187px] border border-white/45 border-b-0" />
-                <div className="pointer-events-none absolute -inset-[28px] bottom-0 rounded-t-[203px] border border-white/35 border-b-0" />
-                <div className="pointer-events-none absolute -inset-[48px] bottom-0 rounded-t-[223px] border border-white/25 border-b-0" />
-                <div className="pointer-events-none absolute -inset-[72px] bottom-0 rounded-t-[247px] border border-white/15 border-b-0" />
-                <div className="pointer-events-none absolute -inset-[100px] bottom-0 rounded-t-[275px] border border-white/10 border-b-0" />
-              </motion.div>
-            </div>
-          </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
     </>
   );
 }

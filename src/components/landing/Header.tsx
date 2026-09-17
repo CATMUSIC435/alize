@@ -28,8 +28,15 @@ export function Header(props: { alwaysDark?: boolean }) {
   return (
     <motion.header
       initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: props.alwaysDark || isIntroComplete ? 0 : 2.0, duration: 0.6, ease: 'easeOut' }}
+      animate={{
+        opacity: props.alwaysDark || isIntroComplete ? 1 : 0,
+        y: props.alwaysDark || isIntroComplete ? 0 : -20,
+      }}
+      transition={{
+        duration: 0.8,
+        delay: props.alwaysDark ? 0 : 0.08,
+        ease: [0.16, 1, 0.3, 1],
+      }}
       className={`pointer-events-none fixed top-0 left-0 z-50 flex w-full items-start justify-between p-4 transition-colors duration-700 md:p-8 ${isDark ? 'text-[#151926]' : 'text-white'}`}
     >
       {/* Left side: Logo */}

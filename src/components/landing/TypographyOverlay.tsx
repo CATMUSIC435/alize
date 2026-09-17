@@ -19,53 +19,51 @@ const playfairItalic = Playfair_Display({
 });
 const inter = Inter({ subsets: ['latin'], weight: ['300', '400', '500'], display: 'swap' });
 
-/** Renders text with staggered fade-in and subtle upward motion per letter. */
-const AnimatedText = (props: {
+/** Renders words with smooth baseline slide-up and fade-in without character jitter. */
+const AnimatedWords = (props: {
   text: string;
+  active: boolean;
   delay?: number;
   className?: string;
 }) => {
   const words = props.text.split(' ');
-  let letterCounter = 0;
 
   return (
     <motion.span
       className={`inline-flex flex-wrap justify-center ${props.className ?? ''}`}
       initial="hidden"
-      animate="visible"
+      animate={props.active ? 'visible' : 'hidden'}
+      variants={{
+        hidden: {},
+        visible: {
+          transition: {
+            staggerChildren: 0.04,
+            delayChildren: props.delay ?? 0,
+          },
+        },
+      }}
     >
-      {words.map((word, wordIndex) => {
-        const letters = word.split('');
-        const startOffset = letterCounter;
-        letterCounter += letters.length + 1;
-
-        return (
-          <span key={wordIndex} className="inline-flex whitespace-nowrap">
-            {letters.map((char, charIndex) => (
-              <motion.span
-                key={charIndex}
-                variants={{
-                  hidden: { opacity: 0, y: 35, rotate: 6 },
-                  visible: {
-                    opacity: 1,
-                    y: 0,
-                    rotate: 0,
-                    transition: {
-                      duration: 1.1,
-                      delay: (props.delay ?? 0) + (startOffset + charIndex) * 0.025,
-                      ease: [0.2, 0.65, 0.3, 0.9],
-                    },
-                  },
-                }}
-                className="inline-block"
-              >
-                {char}
-              </motion.span>
-            ))}
-            {wordIndex < words.length - 1 && <span className="inline-block">&nbsp;</span>}
-          </span>
-        );
-      })}
+      {words.map((word, wordIndex) => (
+        <span key={wordIndex} className="inline-block overflow-hidden py-0.5">
+          <motion.span
+            variants={{
+              hidden: { opacity: 0, y: '110%' },
+              visible: {
+                opacity: 1,
+                y: '0%',
+                transition: {
+                  duration: 0.85,
+                  ease: [0.16, 1, 0.3, 1],
+                },
+              },
+            }}
+            className="inline-block"
+          >
+            {word}
+            {wordIndex < words.length - 1 && '\u00A0'}
+          </motion.span>
+        </span>
+      ))}
     </motion.span>
   );
 };
@@ -100,10 +98,10 @@ export function TypographyOverlay() {
         {/* Main Title */}
         <h1 className="flex flex-col items-center text-center text-white">
           <span className="text-3xl leading-none font-normal tracking-[0.28em] drop-shadow-md sm:text-5xl md:text-6xl lg:text-7xl">
-            <AnimatedText text={t('hero_brand')} delay={isIntroComplete ? 0.05 : 2.0} />
+            <AnimatedWords text={t('hero_brand')} active={isIntroComplete} delay={0.05} />
           </span>
           <span className="mt-2.5 flex max-w-4xl justify-center px-4 text-center text-lg font-light tracking-[0.1em] drop-shadow-md sm:mt-4 sm:text-2xl sm:tracking-[0.15em] md:text-3xl md:tracking-[0.2em] lg:text-4xl">
-            <AnimatedText text={t('hero_tagline')} delay={isIntroComplete ? 0.15 : 2.2} />
+            <AnimatedWords text={t('hero_tagline')} active={isIntroComplete} delay={0.18} />
           </span>
         </h1>
 
@@ -112,7 +110,7 @@ export function TypographyOverlay() {
           <span
             className={`text-base font-normal text-white/90 italic tracking-[0.15em] drop-shadow-[0_2px_10px_rgba(0,0,0,0.85)] sm:text-lg md:text-xl lg:text-2xl ${playfairItalic.className}`}
           >
-            <AnimatedText text={t('hero_developer')} delay={isIntroComplete ? 0.25 : 2.4} />
+            <AnimatedWords text={t('hero_developer')} active={isIntroComplete} delay={0.32} />
           </span>
         </div>
       </div>
@@ -120,9 +118,9 @@ export function TypographyOverlay() {
       {/* Horizontal Text Row (Bottom Center) */}
       <motion.div
         className="pointer-events-none absolute bottom-8 mx-auto flex w-full max-w-[1400px] items-center justify-between px-4 md:bottom-16 md:px-16"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: isIntroComplete ? 0.6 : 1.0, delay: isIntroComplete ? 0.3 : 2.6, ease: 'easeOut' }}
+        initial={{ opacity: 0, y: 18 }}
+        animate={{ opacity: isIntroComplete ? 1 : 0, y: isIntroComplete ? 0 : 18 }}
+        transition={{ duration: 0.8, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
       >
         <div className="w-1/3 text-left text-[9px] tracking-[0.1em] text-white uppercase min-[400px]:text-xs sm:text-sm md:text-2xl md:tracking-[0.2em]">
           {t('a_place')}

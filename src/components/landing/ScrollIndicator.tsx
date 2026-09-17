@@ -27,7 +27,7 @@ export function ScrollIndicator() {
       className={`pointer-events-none fixed bottom-8 left-4 z-50 flex flex-col items-center md:bottom-12 md:left-12 ${inter.className}`}
       initial={{ opacity: 0 }}
       animate={{ opacity: isIntroComplete ? 1 : 0 }}
-      transition={{ duration: 0.8, ease: 'easeOut' }}
+      transition={{ duration: 0.8, delay: isIntroComplete ? 0.35 : 0, ease: 'easeOut' }}
     >
       <div className="mb-4 flex h-[200px] w-8 flex-col items-center md:h-[300px]">
         <motion.div className="w-[1px] shrink-0 bg-white" style={{ height: topHeight }} />
