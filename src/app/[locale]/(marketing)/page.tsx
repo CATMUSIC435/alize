@@ -11,6 +11,7 @@ import { SmoothScroll } from '@/components/landing/SmoothScroll';
 import { TypographyOverlay } from '@/components/landing/TypographyOverlay';
 
 import { routing } from '@/libs/I18nRouting';
+import { getBaseUrl, getI18nPath } from '@/utils/Helpers';
 
 // Dynamically import below-the-fold heavy Client Components
 const ArchitectureSplit = dynamic(() => import('@/components/landing/ArchitectureSplit').then((m) => m.ArchitectureSplit));
@@ -31,9 +32,10 @@ export async function generateMetadata(props: {
   const { locale } = await props.params;
   const t = await getTranslations({ locale, namespace: 'Index' });
 
-  const canonicalUrl = `https://alize-residence.com/${locale}`;
+  const baseUrl = getBaseUrl();
+  const canonicalUrl = `${baseUrl}${getI18nPath('', locale)}`;
   const languages = Object.fromEntries(
-    routing.locales.map((loc) => [loc, `https://alize-residence.com/${loc}`]),
+    routing.locales.map((loc) => [loc, `${baseUrl}${getI18nPath('', loc)}`]),
   );
 
   return {
@@ -52,7 +54,7 @@ export async function generateMetadata(props: {
       canonical: canonicalUrl,
       languages: {
         ...languages,
-        'x-default': 'https://alize-residence.com/en',
+        'x-default': `${baseUrl}${getI18nPath('', routing.defaultLocale)}`,
       },
     },
     openGraph: {
@@ -88,13 +90,15 @@ export default async function EraResidencePage(props: { params: Promise<{ locale
   setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: 'Index' });
 
+  const baseUrl = getBaseUrl();
+
   // AIO Optimization: JSON-LD Structured Data
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'ApartmentComplex',
     name: 'Alizé Residence Da Nang',
     description: t('meta_description'),
-    url: `https://alize-residence.com/${locale}`,
+    url: `${baseUrl}${getI18nPath('', locale)}`,
     telephone: '+84 1900 0000', // Placeholder
     address: {
       '@type': 'PostalAddress',

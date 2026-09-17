@@ -14,35 +14,36 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/contact', priority: 0.85, changeFrequency: 'weekly' },
   ];
 
+  const createAlternates = (path: string) => {
+    const languages = Object.fromEntries(
+      routing.locales.map((locale) => [locale, `${baseUrl}${getI18nPath(path, locale)}`]),
+    );
+
+    return {
+      languages: {
+        ...languages,
+        'x-default': `${baseUrl}${getI18nPath(path, routing.defaultLocale)}`,
+      },
+    };
+  };
+
   const staticEntries: MetadataRoute.Sitemap = staticRoutes.map((route) => ({
-    url: `${baseUrl}${route.path}`,
+    url: `${baseUrl}${getI18nPath(route.path, routing.defaultLocale)}`,
     lastModified: new Date(),
     changeFrequency: route.changeFrequency,
     priority: route.priority,
-    alternates: {
-      languages: Object.fromEntries(
-        routing.locales
-          .filter((locale) => locale !== routing.defaultLocale)
-          .map((locale) => [locale, `${baseUrl}${getI18nPath(route.path, locale)}`]),
-      ),
-    },
+    alternates: createAlternates(route.path),
   }));
 
   // Apartment detail entries
   const apartmentEntries: MetadataRoute.Sitemap = APARTMENTS_DATA.map((apt) => {
     const routePath = `/apartments/${apt.id}`;
     return {
-      url: `${baseUrl}${routePath}`,
+      url: `${baseUrl}${getI18nPath(routePath, routing.defaultLocale)}`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.8,
-      alternates: {
-        languages: Object.fromEntries(
-          routing.locales
-            .filter((locale) => locale !== routing.defaultLocale)
-            .map((locale) => [locale, `${baseUrl}${getI18nPath(routePath, locale)}`]),
-        ),
-      },
+      alternates: createAlternates(routePath),
     };
   });
 
@@ -50,17 +51,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const newsEntries: MetadataRoute.Sitemap = NEWS_ARTICLES.map((article) => {
     const routePath = `/news/${article.slug}`;
     return {
-      url: `${baseUrl}${routePath}`,
+      url: `${baseUrl}${getI18nPath(routePath, routing.defaultLocale)}`,
       lastModified: new Date(article.modifiedDate),
       changeFrequency: 'monthly',
       priority: 0.8,
-      alternates: {
-        languages: Object.fromEntries(
-          routing.locales
-            .filter((locale) => locale !== routing.defaultLocale)
-            .map((locale) => [locale, `${baseUrl}${getI18nPath(routePath, locale)}`]),
-        ),
-      },
+      alternates: createAlternates(routePath),
     };
   });
 

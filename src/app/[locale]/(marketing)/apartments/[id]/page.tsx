@@ -12,6 +12,7 @@ import { TenthSection } from '@/components/landing/TenthSection';
 import { APARTMENTS_DATA } from '@/data/apartments';
 
 import { routing } from '@/libs/I18nRouting';
+import { getBaseUrl, getI18nPath } from '@/utils/Helpers';
 
 type ApartmentDetailPageProps = {
   params: Promise<{ locale: string; id: string }>;
@@ -33,10 +34,12 @@ export async function generateMetadata(props: ApartmentDetailPageProps) {
 
   const title = `Căn Hộ No. ${apartment.number} (${apartment.area}m²) | Alizé Residence Đà Nẵng`;
   const description = apartment.description ?? `Căn hộ cao cấp No. ${apartment.number} gồm ${apartment.bedrooms} phòng ngủ, diện tích ${apartment.area}m² tại dự án Alizé Residence, bờ biển Mỹ Khê Đà Nẵng.`;
-  const canonicalUrl = `https://alize-residence.com/${locale}/apartments/${id}`;
+  const baseUrl = getBaseUrl();
+  const routePath = `/apartments/${id}`;
+  const canonicalUrl = `${baseUrl}${getI18nPath(routePath, locale)}`;
 
   const languages = Object.fromEntries(
-    routing.locales.map((loc) => [loc, `https://alize-residence.com/${loc}/apartments/${id}`]),
+    routing.locales.map((loc) => [loc, `${baseUrl}${getI18nPath(routePath, loc)}`]),
   );
 
   return {
@@ -54,7 +57,7 @@ export async function generateMetadata(props: ApartmentDetailPageProps) {
       canonical: canonicalUrl,
       languages: {
         ...languages,
-        'x-default': `https://alize-residence.com/en/apartments/${id}`,
+        'x-default': `${baseUrl}${getI18nPath(routePath, routing.defaultLocale)}`,
       },
     },
     openGraph: {
@@ -93,14 +96,15 @@ export default async function ApartmentDetailPage(props: ApartmentDetailPageProp
     notFound();
   }
 
-  const baseUrl = 'https://alize-residence.com';
+  const baseUrl = getBaseUrl();
+  const routePath = `/apartments/${id}`;
 
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Apartment',
     name: `Căn hộ No. ${apartment.number} - Alizé Residence Đà Nẵng`,
     description: apartment.description,
-    url: `${baseUrl}/${locale}/apartments/${id}`,
+    url: `${baseUrl}${getI18nPath(routePath, locale)}`,
     numberOfRooms: apartment.bedrooms,
     floorSize: {
       '@type': 'QuantitativeValue',
@@ -123,7 +127,7 @@ export default async function ApartmentDetailPage(props: ApartmentDetailPageProp
     containedInPlace: {
       '@type': 'ApartmentComplex',
       name: 'Alizé Residence Đà Nẵng',
-      url: baseUrl,
+      url: `${baseUrl}${getI18nPath('', locale)}`,
     },
     breadcrumb: {
       '@type': 'BreadcrumbList',
@@ -132,19 +136,19 @@ export default async function ApartmentDetailPage(props: ApartmentDetailPageProp
           '@type': 'ListItem',
           position: 1,
           name: 'Trang chủ',
-          item: `${baseUrl}/${locale}`,
+          item: `${baseUrl}${getI18nPath('', locale)}`,
         },
         {
           '@type': 'ListItem',
           position: 2,
           name: 'Căn hộ',
-          item: `${baseUrl}/${locale}/apartments`,
+          item: `${baseUrl}${getI18nPath('/apartments', locale)}`,
         },
         {
           '@type': 'ListItem',
           position: 3,
           name: `No. ${apartment.number}`,
-          item: `${baseUrl}/${locale}/apartments/${id}`,
+          item: `${baseUrl}${getI18nPath(routePath, locale)}`,
         },
       ],
     },

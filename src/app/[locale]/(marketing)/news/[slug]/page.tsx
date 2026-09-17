@@ -11,6 +11,7 @@ import { NewsSidebar } from '@/components/news/NewsSidebar';
 import { RelatedNews } from '@/components/news/RelatedNews';
 import { getLocalizedArticle, getLocalizedArticles, NEWS_ARTICLES } from '@/data/news';
 import { routing } from '@/libs/I18nRouting';
+import { getBaseUrl, getI18nPath } from '@/utils/Helpers';
 
 type NewsDetailPageProps = {
   params: Promise<{ locale: string; slug: string }>;
@@ -36,10 +37,12 @@ export async function generateMetadata(props: NewsDetailPageProps): Promise<Meta
   const article = getLocalizedArticle(baseArticle, locale);
   const title = `${article.title} | Alizé Residence Đà Nẵng`;
   const description = article.excerpt;
-  const canonicalUrl = `https://alize-residence.com/${locale}/news/${article.slug}`;
+  const baseUrl = getBaseUrl();
+  const routePath = `/news/${article.slug}`;
+  const canonicalUrl = `${baseUrl}${getI18nPath(routePath, locale)}`;
 
   const languages = Object.fromEntries(
-    routing.locales.map((loc) => [loc, `https://alize-residence.com/${loc}/news/${article.slug}`]),
+    routing.locales.map((loc) => [loc, `${baseUrl}${getI18nPath(routePath, loc)}`]),
   );
 
   return {
@@ -56,7 +59,10 @@ export async function generateMetadata(props: NewsDetailPageProps): Promise<Meta
     ],
     alternates: {
       canonical: canonicalUrl,
-      languages,
+      languages: {
+        ...languages,
+        'x-default': `${baseUrl}${getI18nPath(routePath, routing.defaultLocale)}`,
+      },
     },
     openGraph: {
       title,
@@ -114,18 +120,19 @@ export default async function NewsDetailPage(props: NewsDetailPageProps) {
   const article = getLocalizedArticle(baseArticle, locale);
   const allArticles = getLocalizedArticles(locale);
 
-  const baseUrl = 'https://alize-residence.com';
+  const baseUrl = getBaseUrl();
+  const routePath = `/news/${article.slug}`;
 
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
       {
         '@type': 'NewsArticle',
-        '@id': `${baseUrl}/${locale}/news/${article.slug}#article`,
+        '@id': `${baseUrl}${getI18nPath(routePath, locale)}#article`,
         'isPartOf': {
           '@type': 'WebPage',
-          '@id': `${baseUrl}/${locale}/news/${article.slug}`,
-          'url': `${baseUrl}/${locale}/news/${article.slug}`,
+          '@id': `${baseUrl}${getI18nPath(routePath, locale)}`,
+          'url': `${baseUrl}${getI18nPath(routePath, locale)}`,
           'name': article.title,
           'inLanguage': locale,
         },
@@ -137,7 +144,7 @@ export default async function NewsDetailPage(props: NewsDetailPageProps) {
         'inLanguage': locale,
         'articleSection': article.categoryLabel,
         'keywords': article.tags.join(', '),
-        'mainEntityOfPage': `${baseUrl}/${locale}/news/${article.slug}`,
+        'mainEntityOfPage': `${baseUrl}${getI18nPath(routePath, locale)}`,
         'author': {
           '@type': 'Person',
           'name': article.author.name,
@@ -161,25 +168,25 @@ export default async function NewsDetailPage(props: NewsDetailPageProps) {
       },
       {
         '@type': 'BreadcrumbList',
-        '@id': `${baseUrl}/${locale}/news/${article.slug}#breadcrumb`,
+        '@id': `${baseUrl}${getI18nPath(routePath, locale)}#breadcrumb`,
         'itemListElement': [
           {
             '@type': 'ListItem',
             'position': 1,
             'name': tNews('breadcrumb_home'),
-            'item': `${baseUrl}/${locale}`,
+            'item': `${baseUrl}${getI18nPath('', locale)}`,
           },
           {
             '@type': 'ListItem',
             'position': 2,
             'name': tNews('breadcrumb_journal'),
-            'item': `${baseUrl}/${locale}/news`,
+            'item': `${baseUrl}${getI18nPath('/news', locale)}`,
           },
           {
             '@type': 'ListItem',
             'position': 3,
             'name': article.title,
-            'item': `${baseUrl}/${locale}/news/${article.slug}`,
+            'item': `${baseUrl}${getI18nPath(routePath, locale)}`,
           },
         ],
       },

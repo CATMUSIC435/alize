@@ -10,6 +10,7 @@ import { NinthSection } from '@/components/landing/NinthSection';
 import { SmoothScroll } from '@/components/landing/SmoothScroll';
 import { TenthSection } from '@/components/landing/TenthSection';
 import { routing } from '@/libs/I18nRouting';
+import { getBaseUrl, getI18nPath } from '@/utils/Helpers';
 
 type ContactPageProps = {
   params: Promise<{ locale: string }>;
@@ -24,10 +25,12 @@ export async function generateMetadata(props: ContactPageProps): Promise<Metadat
 
   const title = t('meta_title');
   const description = t('meta_description');
-  const canonicalUrl = `https://alize-residence.com/${locale}/contact`;
+  const baseUrl = getBaseUrl();
+  const routePath = '/contact';
+  const canonicalUrl = `${baseUrl}${getI18nPath(routePath, locale)}`;
 
   const languages = Object.fromEntries(
-    routing.locales.map((loc) => [loc, `https://alize-residence.com/${loc}/contact`]),
+    routing.locales.map((loc) => [loc, `${baseUrl}${getI18nPath(routePath, loc)}`]),
   );
 
   return {
@@ -47,7 +50,7 @@ export async function generateMetadata(props: ContactPageProps): Promise<Metadat
       canonical: canonicalUrl,
       languages: {
         ...languages,
-        'x-default': 'https://alize-residence.com/en/contact',
+        'x-default': `${baseUrl}${getI18nPath(routePath, routing.defaultLocale)}`,
       },
     },
     openGraph: {
@@ -95,7 +98,8 @@ export default async function ContactPage(props: ContactPageProps) {
   setRequestLocale(locale);
 
   const t = await getTranslations({ locale, namespace: 'ContactPage' });
-  const baseUrl = 'https://alize-residence.com';
+  const baseUrl = getBaseUrl();
+  const routePath = '/contact';
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -110,8 +114,8 @@ export default async function ContactPage(props: ContactPageProps) {
       },
       {
         '@type': 'ContactPage',
-        '@id': `${baseUrl}/${locale}/contact#webpage`,
-        'url': `${baseUrl}/${locale}/contact`,
+        '@id': `${baseUrl}${getI18nPath(routePath, locale)}#webpage`,
+        'url': `${baseUrl}${getI18nPath(routePath, locale)}`,
         'name': `${t('hero_title')} - Alizé Residence`,
         'isPartOf': { '@id': `${baseUrl}/#website` },
         'description': t('meta_description'),
@@ -122,13 +126,13 @@ export default async function ContactPage(props: ContactPageProps) {
               '@type': 'ListItem',
               'position': 1,
               'name': t('breadcrumb_home'),
-              'item': `${baseUrl}/${locale}`,
+              'item': `${baseUrl}${getI18nPath('', locale)}`,
             },
             {
               '@type': 'ListItem',
               'position': 2,
               'name': t('breadcrumb_contact'),
-              'item': `${baseUrl}/${locale}/contact`,
+              'item': `${baseUrl}${getI18nPath(routePath, locale)}`,
             },
           ],
         },

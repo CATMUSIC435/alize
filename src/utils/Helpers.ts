@@ -10,6 +10,10 @@ export const getBaseUrl = () => {
     return Env.NEXT_PUBLIC_APP_URL;
   }
 
+  if (Env.NODE_ENV === 'production') {
+    return 'https://alize-residence.com';
+  }
+
   return 'http://localhost:3000';
 };
 

@@ -10,6 +10,7 @@ import { NewsList } from '@/components/news/NewsList';
 import { NewsSidebar } from '@/components/news/NewsSidebar';
 import { getLocalizedArticles } from '@/data/news';
 import { routing } from '@/libs/I18nRouting';
+import { getBaseUrl, getI18nPath } from '@/utils/Helpers';
 
 type NewsPageProps = {
   params: Promise<{ locale: string }>;
@@ -21,10 +22,12 @@ export async function generateMetadata(props: NewsPageProps): Promise<Metadata> 
 
   const title = tNews('meta_title');
   const description = tNews('meta_description');
-  const canonicalUrl = `https://alize-residence.com/${locale}/news`;
+  const baseUrl = getBaseUrl();
+  const routePath = '/news';
+  const canonicalUrl = `${baseUrl}${getI18nPath(routePath, locale)}`;
 
   const languages = Object.fromEntries(
-    routing.locales.map((loc) => [loc, `https://alize-residence.com/${loc}/news`]),
+    routing.locales.map((loc) => [loc, `${baseUrl}${getI18nPath(routePath, loc)}`]),
   );
 
   return {
@@ -42,7 +45,10 @@ export async function generateMetadata(props: NewsPageProps): Promise<Metadata> 
     ],
     alternates: {
       canonical: canonicalUrl,
-      languages,
+      languages: {
+        ...languages,
+        'x-default': `${baseUrl}${getI18nPath(routePath, routing.defaultLocale)}`,
+      },
     },
     openGraph: {
       title,
@@ -89,7 +95,8 @@ export default async function NewsPage(props: NewsPageProps) {
   const articles = getLocalizedArticles(locale);
   const featuredArticle = articles.find((a) => a.featured) ?? articles[0];
 
-  const baseUrl = 'https://alize-residence.com';
+  const baseUrl = getBaseUrl();
+  const routePath = '/news';
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -104,8 +111,8 @@ export default async function NewsPage(props: NewsPageProps) {
       },
       {
         '@type': 'CollectionPage',
-        '@id': `${baseUrl}/${locale}/news#webpage`,
-        'url': `${baseUrl}/${locale}/news`,
+        '@id': `${baseUrl}${getI18nPath(routePath, locale)}#webpage`,
+        'url': `${baseUrl}${getI18nPath(routePath, locale)}`,
         'name': `${tNews('editorial_journal')} - Alizé Residence`,
         'isPartOf': { '@id': `${baseUrl}/#website` },
         'description': tNews('journal_subtitle'),
@@ -116,13 +123,13 @@ export default async function NewsPage(props: NewsPageProps) {
               '@type': 'ListItem',
               'position': 1,
               'name': tNews('breadcrumb_home'),
-              'item': `${baseUrl}/${locale}`,
+              'item': `${baseUrl}${getI18nPath('', locale)}`,
             },
             {
               '@type': 'ListItem',
               'position': 2,
               'name': tNews('breadcrumb_journal'),
-              'item': `${baseUrl}/${locale}/news`,
+              'item': `${baseUrl}${getI18nPath(routePath, locale)}`,
             },
           ],
         },

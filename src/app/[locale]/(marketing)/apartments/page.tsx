@@ -10,6 +10,7 @@ import { SmoothScroll } from '@/components/landing/SmoothScroll';
 import { TenthSection } from '@/components/landing/TenthSection';
 
 import { routing } from '@/libs/I18nRouting';
+import { getBaseUrl, getI18nPath } from '@/utils/Helpers';
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -19,10 +20,12 @@ export async function generateMetadata(props: {
 
   const title = `${t('apartments')} | Alizé Residence Đà Nẵng`;
   const description = t('boutique_desc');
-  const canonicalUrl = `https://alize-residence.com/${locale}/apartments`;
+  const baseUrl = getBaseUrl();
+  const routePath = '/apartments';
+  const canonicalUrl = `${baseUrl}${getI18nPath(routePath, locale)}`;
 
   const languages = Object.fromEntries(
-    routing.locales.map((loc) => [loc, `https://alize-residence.com/${loc}/apartments`]),
+    routing.locales.map((loc) => [loc, `${baseUrl}${getI18nPath(routePath, loc)}`]),
   );
 
   return {
@@ -40,7 +43,7 @@ export async function generateMetadata(props: {
       canonical: canonicalUrl,
       languages: {
         ...languages,
-        'x-default': 'https://alize-residence.com/en/apartments',
+        'x-default': `${baseUrl}${getI18nPath(routePath, routing.defaultLocale)}`,
       },
     },
     openGraph: {
@@ -75,18 +78,19 @@ export default async function ApartmentsPage(props: { params: Promise<{ locale: 
   setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: 'Index' });
 
+  const baseUrl = getBaseUrl();
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: `${t('apartments')} - Alizé Residence Đà Nẵng`,
     description: t('boutique_desc'),
-    url: `https://alize-residence.com/${locale}/apartments`,
+    url: `${baseUrl}${getI18nPath('/apartments', locale)}`,
     mainEntity: {
       '@type': 'RealEstateAgent',
       name: 'Alizé Residence Đà Nẵng',
       telephone: '+84965355355',
       email: 'contact@alize-residence.com',
-      url: 'https://alize-residence.com',
+      url: baseUrl,
       image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1200',
       address: {
         '@type': 'PostalAddress',
