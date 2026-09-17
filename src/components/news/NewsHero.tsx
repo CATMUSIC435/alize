@@ -4,7 +4,6 @@ import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { Inter, Playfair_Display } from 'next/font/google';
 import Image from 'next/image';
-import { SmartVideo } from '@/components/SmartVideo';
 import type { NewsArticle } from '@/data/news';
 import { Link } from '@/libs/I18nNavigation';
 
