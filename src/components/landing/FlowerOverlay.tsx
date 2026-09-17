@@ -6,7 +6,7 @@ import { SmartVideo } from '@/components/SmartVideo';
 export function FlowerOverlay() {
   return (
     <motion.div
-      className="pointer-events-none absolute inset-0 z-0 opacity-80"
+      className="pointer-events-none absolute inset-0 z-0 hidden opacity-80 md:block"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 2, delay: 1 }}

@@ -28,22 +28,26 @@ function HotspotCardContent(props: {
 }) {
   return (
     <>
-      {/* Inner Decorative Chamfered Border */}
-      <div
-        className="pointer-events-none absolute inset-2 bg-[#C5B49C]/50 sm:inset-3"
-        style={{
-          clipPath:
-            'polygon(16px 0, calc(100% - 16px) 0, 100% 16px, 100% calc(100% - 16px), calc(100% - 16px) 100%, 16px 100%, 0 calc(100% - 16px), 0 16px)',
-        }}
-      >
+      {/* Inner Decorative Border */}
+      {props.isMobile ? (
+        <div className="pointer-events-none absolute inset-2 rounded-xl border border-[#C5B49C]/50" />
+      ) : (
         <div
-          className="absolute inset-[1px] bg-sand-card"
+          className="pointer-events-none absolute inset-2 bg-[#C5B49C]/50 sm:inset-3"
           style={{
             clipPath:
-              'polygon(15px 0, calc(100% - 15px) 0, 100% 15px, 100% calc(100% - 15px), calc(100% - 15px) 100%, 15px 100%, 0 calc(100% - 15px), 0 15px)',
+              'polygon(16px 0, calc(100% - 16px) 0, 100% 16px, 100% calc(100% - 16px), calc(100% - 16px) 100%, 16px 100%, 0 calc(100% - 16px), 0 16px)',
           }}
-        />
-      </div>
+        >
+          <div
+            className="absolute inset-[1px] bg-sand-card"
+            style={{
+              clipPath:
+                'polygon(15px 0, calc(100% - 15px) 0, 100% 15px, 100% calc(100% - 15px), calc(100% - 15px) 100%, 15px 100%, 0 calc(100% - 15px), 0 15px)',
+            }}
+          />
+        </div>
+      )}
 
       {props.overview ? (
         <div className="relative z-10 flex h-full flex-col justify-between">
@@ -170,7 +174,8 @@ export function Hotspot(props: {
   const [isHovered, setIsHovered] = useState(false);
 
   const isCardOpen = props.isOpen !== undefined ? (props.isOpen || isHovered) : isHovered;
-  const isRightSide = Number.parseFloat(props.x) > 50;
+  const xPercent = Number.parseFloat(props.x) || 0;
+  const isRightSide = xPercent > 50;
 
   const handleToggle = () => {
     if (typeof window !== 'undefined' && window.innerWidth < 768 && props.overview) {
@@ -329,13 +334,13 @@ export function Hotspot(props: {
         <div
           className="pointer-events-auto absolute top-[calc(100%+8px)] z-40 block md:hidden"
           style={{
-            left: `calc(50vw - ${props.x})`,
+            left: `calc(50vw - ${xPercent}vw + 28px)`,
             transform: 'translateX(-50%)',
             width: 'calc(100vw - 32px)',
             maxWidth: '380px',
           }}
         >
-          <div className="bg-sand-card border border-[#D9CEBD]/90 relative flex cursor-default flex-col justify-between rounded-sm p-4 shadow-[0_20px_50px_rgba(21,25,38,0.25)]">
+          <div className="bg-sand-card border border-[#D9CEBD]/90 relative flex cursor-default flex-col justify-between rounded-2xl p-4 shadow-[0_20px_50px_rgba(21,25,38,0.25)]">
             <HotspotCardContent
               title={props.title}
               description={props.description}

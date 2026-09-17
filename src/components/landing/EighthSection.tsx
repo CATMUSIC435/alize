@@ -85,7 +85,7 @@ export function EighthSection() {
               muted
               playsInline
               aria-label="Bougainvillea flowers video"
-              className="safari-video-hide pointer-events-none absolute top-0 right-0 z-30 w-[80%] max-w-[600px] rotate-90 md:w-[100%]"
+              className="safari-video-hide pointer-events-none absolute top-0 right-0 z-30 hidden w-[80%] max-w-[600px] rotate-90 md:block md:w-[100%]"
               src="/bougainvillea-flowers_04.webm"
             />
           </div>

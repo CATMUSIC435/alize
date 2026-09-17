@@ -34,7 +34,7 @@ export function ContactHero() {
   return (
     <section className="relative w-full overflow-hidden bg-transparent pt-[16vh] pb-[4vh] md:pt-[20vh] md:pb-[6vh]">
       {/* Floral Decorative Video - Top Right */}
-      <div className="pointer-events-none absolute top-0 right-0 z-0 h-[70vw] max-h-[560px] w-[70vw] max-w-[560px] translate-x-[15%] translate-y-[-10%] rotate-y-[180deg] opacity-85">
+      <div className="pointer-events-none absolute top-0 right-0 z-0 hidden h-[70vw] max-h-[560px] w-[70vw] max-w-[560px] translate-x-[15%] translate-y-[-10%] rotate-y-[180deg] opacity-85 md:block">
         <SmartVideo
           src="/bougainvillea-flowers_01.webm"
           autoPlay

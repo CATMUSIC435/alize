@@ -133,7 +133,7 @@ export function SixthSection() {
         {/* Carousel & Animated Text Wrapper */}
         <div className="mx-auto flex h-full min-h-[70vh] w-full max-w-[1400px] flex-col items-center justify-center px-8 pt-10 pr-6 md:flex-row md:justify-between md:px-[10vw] md:pl-16">
           {/* Left Column (Stats) - Fixed & Animated */}
-          <div className="relative z-30 mb-8 flex h-full w-full flex-col justify-center md:mb-0 md:w-[20%]">
+          <div className="relative z-30 mb-8 flex h-full w-full flex-col justify-center md:mb-0 md:w-[18%]">
             <div className="relative flex h-[120px] w-full flex-col justify-center md:h-[200px]">
               <AnimatePresence mode="wait">
                 <motion.div
@@ -177,7 +177,7 @@ export function SixthSection() {
           </div>
 
           {/* Center Column (Image Carousel) */}
-          <div className="relative z-10 mb-24 h-[55vh] w-full md:mb-0 md:h-[70vh] md:w-[65%]">
+          <div className="relative z-10 mb-24 h-[55vh] w-full md:mb-0 md:h-[70vh] md:w-[64%]">
             <div
               className="h-full w-full overflow-hidden rounded-lg md:rounded-none"
               ref={emblaRef}
@@ -335,7 +335,7 @@ export function SixthSection() {
           </div>
 
           {/* Right Column (Description & Button) - Fixed & Animated */}
-          <div className="relative z-30 mt-0 flex w-full flex-col justify-center md:w-[20%] md:pl-10">
+          <div className="relative z-30 mt-0 flex w-full flex-col justify-center md:w-[18%] md:pl-10">
             <div className="relative flex h-[180px] w-full flex-col justify-center md:h-[150px]">
               <AnimatePresence mode="wait">
                 <motion.div
@@ -505,7 +505,7 @@ export function SixthSection() {
       </motion.div>
 
       {/* Video Graphic Right Bottom */}
-      <div className="pointer-events-none absolute -bottom-10 left-0 z-10 h-[70vh] origin-center -rotate-90 md:-bottom-20 md:bottom-0">
+      <div className="pointer-events-none absolute -bottom-10 left-0 z-10 hidden h-[70vh] origin-center -rotate-90 md:-bottom-20 md:bottom-0 md:block">
         <SmartVideo
           aria-label="Bougainvillea video"
           autoPlay

@@ -26,7 +26,7 @@ export function ApartmentHero() {
   return (
     <section className="relative w-full overflow-hidden pt-[20vh] pb-[10vh]">
       {/* Floral Decorative Image - Top Right */}
-      <div className="pointer-events-none absolute top-0 right-0 z-0 h-[80vw] max-h-[600px] w-[80vw] max-w-[600px] translate-x-[20%] translate-y-0 rotate-y-[180deg] opacity-90">
+      <div className="pointer-events-none absolute top-0 right-0 z-0 hidden h-[80vw] max-h-[600px] w-[80vw] max-w-[600px] translate-x-[20%] translate-y-0 rotate-y-[180deg] opacity-90 md:block">
         <SmartVideo
           src="/bougainvillea-flowers_01.webm"
           autoPlay
