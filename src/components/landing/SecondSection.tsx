@@ -12,6 +12,12 @@ import { LazyWebGLSlider } from './LazyWebGLSlider';
 const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400', '500', '600', '700'] });
 const inter = Inter({ subsets: ['latin'], weight: ['400', '500', '600'] });
 
+const secondSectionImages = [
+  'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1920',
+  'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1920',
+  'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80&w=1920',
+];
+
 export function SecondSection() {
   const t = useTranslations('Index');
   const sectionRef = useRef<HTMLElement>(null);
@@ -120,9 +126,7 @@ export function SecondSection() {
 
             {/* Real Life Location */}
             <div className="flex w-full flex-col items-center">
-              <h2
-                className={`mb-14 max-w-[1150px] px-6 text-center text-2xl leading-[1.4] font-normal tracking-tight text-[#151926] sm:text-3xl sm:leading-[1.35] md:mb-24 md:text-4xl md:leading-[1.3] lg:text-[48px] lg:leading-[1.28] xl:text-[54px] xl:leading-[1.25] ${playfair.className}`}
-              >
+              <h2 className={`mb-14 max-w-[1150px] px-6 text-center text-2xl leading-[1.4] font-normal tracking-tight text-[#151926] sm:text-3xl sm:leading-[1.35] md:mb-24 md:text-4xl md:leading-[1.3] lg:text-[48px] lg:leading-[1.28] xl:text-[54px] xl:leading-[1.25] ${playfair.className}`}>
                 {t('real_life_location')}
               </h2>
 
@@ -135,31 +139,26 @@ export function SecondSection() {
                 transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
               >
                 <LazyWebGLSlider
-                  images={[
-                    'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1920',
-                    'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1920',
-                    'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80&w=1920',
-                  ]}
+                  images={secondSectionImages}
                   autoplay
                   noRounded
                   className="w-[85vw] !max-w-[1150px]"
                 />
               </motion.div>
 
-              {/* Location Heading */}
-              <h3
-                className={`mt-12 text-center text-xs font-bold tracking-[0.25em] text-[#151926] uppercase sm:text-sm md:mt-16 md:text-base ${inter.className}`}
-              >
-                {t('location_heading')}
-              </h3>
+              {/* Location Heading & Description Paragraphs */}
+                <h3
+                  className={`mt-12 text-center text-xs font-bold tracking-[0.25em] text-[#151926] uppercase sm:text-sm md:mt-16 md:text-base ${inter.className}`}
+                >
+                  {t('location_heading')}
+                </h3>
 
-              {/* Location Description Paragraphs */}
-              <div
-                className={`mt-6 max-w-[680px] space-y-4 px-4 text-center text-sm leading-[1.85] font-light text-[#2D3346] sm:text-base sm:leading-[1.9] md:text-[16px] md:leading-[1.95] ${inter.className}`}
-              >
-                <p>{t('location_desc_1')}</p>
-                <p>{t('location_desc_2')}</p>
-              </div>
+                <div
+                  className={`mt-6 max-w-[680px] space-y-4 px-4 text-center text-sm leading-[1.85] font-light text-[#2D3346] sm:text-base sm:leading-[1.9] md:text-[16px] md:leading-[1.95] ${inter.className}`}
+                >
+                  <p>{t('location_desc_1')}</p>
+                  <p>{t('location_desc_2')}</p>
+                </div>
             </div>
           </div>{' '}
           {/* End of content wrapper */}

@@ -8,13 +8,18 @@ import { useTranslations } from 'next-intl';
 import { Playfair_Display, Inter } from 'next/font/google';
 import Image from 'next/image';
 import { useCallback, useEffect, useState } from 'react';
+import { Link } from '@/libs/I18nNavigation';
 
 const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400', '500', '600', '700'] });
 const inter = Inter({ subsets: ['latin'], weight: ['300', '400', '500', '600'] });
 
 export function SixthSection() {
   const t = useTranslations('Index');
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+  const [desktopEmblaRef, desktopEmblaApi] = useEmblaCarousel({ loop: true });
+  const [mobileEmblaRef, mobileEmblaApi] = useEmblaCarousel({
+    loop: true,
+    align: 'center',
+  });
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const slides = [
@@ -48,32 +53,50 @@ export function SixthSection() {
   ];
 
   const scrollPrev = useCallback(() => {
-    if (emblaApi) {
-      emblaApi.scrollPrev();
-    }
-  }, [emblaApi]);
+    desktopEmblaApi?.scrollPrev();
+    mobileEmblaApi?.scrollPrev();
+  }, [desktopEmblaApi, mobileEmblaApi]);
 
   const scrollNext = useCallback(() => {
-    if (emblaApi) {
-      emblaApi.scrollNext();
-    }
-  }, [emblaApi]);
+    desktopEmblaApi?.scrollNext();
+    mobileEmblaApi?.scrollNext();
+  }, [desktopEmblaApi, mobileEmblaApi]);
 
-  const onSelect = useCallback(() => {
-    if (!emblaApi) {
-      return;
-    }
-    setSelectedIndex(emblaApi.selectedScrollSnap());
-  }, [emblaApi]);
+  const scrollTo = useCallback(
+    (index: number) => {
+      desktopEmblaApi?.scrollTo(index);
+      mobileEmblaApi?.scrollTo(index);
+    },
+    [desktopEmblaApi, mobileEmblaApi],
+  );
 
   useEffect(() => {
-    if (!emblaApi) {
-      return;
-    }
+    if (!desktopEmblaApi) return;
+    const onSelect = () => {
+      setSelectedIndex(desktopEmblaApi.selectedScrollSnap());
+    };
     onSelect();
-    emblaApi.on('select', onSelect);
-    emblaApi.on('reInit', onSelect);
-  }, [emblaApi, onSelect]);
+    desktopEmblaApi.on('select', onSelect);
+    desktopEmblaApi.on('reInit', onSelect);
+    return () => {
+      desktopEmblaApi.off('select', onSelect);
+      desktopEmblaApi.off('reInit', onSelect);
+    };
+  }, [desktopEmblaApi]);
+
+  useEffect(() => {
+    if (!mobileEmblaApi) return;
+    const onSelect = () => {
+      setSelectedIndex(mobileEmblaApi.selectedScrollSnap());
+    };
+    onSelect();
+    mobileEmblaApi.on('select', onSelect);
+    mobileEmblaApi.on('reInit', onSelect);
+    return () => {
+      mobileEmblaApi.off('select', onSelect);
+      mobileEmblaApi.off('reInit', onSelect);
+    };
+  }, [mobileEmblaApi]);
 
   // Animation variants for smooth text transitions
   const textVariants: Variants = {
@@ -129,9 +152,216 @@ export function SixthSection() {
         }}
       />
       {/* Slider Section */}
-      <div className="ld:pt-[160px] relative min-h-[100vh] w-full pt-20">
-        {/* Carousel & Animated Text Wrapper */}
-        <div className="mx-auto flex h-full min-h-[70vh] w-full max-w-[1400px] flex-col items-center justify-center px-8 pt-10 pr-6 md:flex-row md:justify-between md:px-[10vw] md:pl-16">
+      <div className="ld:pt-[160px] relative min-h-0 md:min-h-[100vh] w-full pt-12 md:pt-20">
+        {/* MOBILE CAROUSEL (< 768px): Tailored luxury experience with rich cards, specs & animations */}
+        <div className="flex w-full flex-col items-center px-4 pt-2 pb-6 md:hidden">
+          {/* Mobile Header: Tag & Animated Slide Title */}
+          <div className="mb-3 flex flex-col items-center text-center">
+            <span
+              className={`text-[9px] font-bold tracking-[0.25em] text-[#151926]/70 uppercase ${inter.className}`}
+            >
+              ALIZÉ RESIDENCES
+            </span>
+            <div className="relative mt-1 h-9 w-full flex items-center justify-center">
+              <AnimatePresence mode="wait">
+                <motion.h3
+                  key={selectedIndex}
+                  initial={{ opacity: 0, y: 10, filter: 'blur(4px)' }}
+                  animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                  exit={{ opacity: 0, y: -10, filter: 'blur(4px)' }}
+                  transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                  className={`text-2xl font-medium tracking-tight text-[#151926] uppercase whitespace-nowrap ${playfair.className}`}
+                  style={{ transform: 'scaleY(1.15)' }}
+                >
+                  {slides[selectedIndex]?.title}
+                </motion.h3>
+              </AnimatePresence>
+            </div>
+          </div>
+
+          {/* Mobile Embla Viewport with Peek Cards */}
+          <div className="w-full overflow-hidden" ref={mobileEmblaRef}>
+            <div className="flex touch-pan-y py-2">
+              {slides.map((slide, index) => {
+                const isActive = index === selectedIndex;
+                return (
+                  <div
+                    key={index}
+                    onClick={() => scrollTo(index)}
+                    className="relative min-w-0 flex-[0_0_86%] pr-3 first:pl-2"
+                  >
+                    <div
+                      className={`relative aspect-[4/3] w-full overflow-hidden rounded-2xl transition-all duration-500 ease-out ${
+                        isActive
+                          ? 'scale-100 opacity-100 shadow-[0_16px_36px_rgba(21,25,38,0.22)] ring-1 ring-white/50'
+                          : 'scale-[0.93] opacity-60 shadow-md'
+                      }`}
+                    >
+                      <Image
+                        src={slide.image}
+                        alt={slide.title}
+                        fill
+                        className="object-cover"
+                        sizes="88vw"
+                        unoptimized
+                        priority={index === 0}
+                      />
+                      {/* Luxury subtle dark gradient vignette */}
+                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-black/25" />
+
+                      {/* Floating Slide Index Badge */}
+                      <div className="absolute top-3 right-3 rounded-full bg-black/40 px-2.5 py-1 text-[9px] font-bold tracking-widest text-white backdrop-blur-md border border-white/20">
+                        0{index + 1} / 0{slides.length}
+                      </div>
+
+                      {/* Glassmorphic Specs Bar inside active card */}
+                      <div className="absolute inset-x-3 bottom-3 flex items-center justify-around rounded-xl border border-white/70 bg-white/85 p-2.5 text-[#151926] shadow-lg backdrop-blur-md">
+                        <div className="text-center">
+                          <p
+                            className={`text-[8px] font-bold tracking-widest text-[#151926]/70 uppercase ${inter.className}`}
+                          >
+                            {t('bedrooms_label')}
+                          </p>
+                          <p
+                            className={`text-lg font-medium leading-tight text-[#151926] ${playfair.className}`}
+                          >
+                            {slide.bedrooms}
+                          </p>
+                        </div>
+                        <div className="h-6 w-[1px] bg-[#151926]/15" />
+                        <div className="text-center">
+                          <p
+                            className={`text-[8px] font-bold tracking-widest text-[#151926]/70 uppercase ${inter.className}`}
+                          >
+                            {t('area_up_to_label')}
+                          </p>
+                          <p
+                            className={`text-sm font-medium leading-tight text-[#151926] ${playfair.className}`}
+                          >
+                            {slide.area}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Mobile Controls: Prev/Next & Pill Pagination */}
+          <div className="mt-4 flex w-full items-center justify-center gap-6">
+            <button
+              type="button"
+              onClick={scrollPrev}
+              aria-label="Previous slide"
+              className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-[#151926]/20 bg-white/40 text-[#151926] shadow-sm backdrop-blur-sm transition-all active:scale-90"
+            >
+              <svg width="18" height="10" viewBox="0 0 28 10" fill="none" className="rotate-180">
+                <path
+                  d="M23 1L27 5L23 9"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M27 5H1"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+
+            {/* Expanding Pill Indicators */}
+            <div className="flex items-center gap-2">
+              {slides.map((_, idx) => {
+                const isActive = idx === selectedIndex;
+                return (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => scrollTo(idx)}
+                    aria-label={`Go to slide ${idx + 1}`}
+                    className={`h-1.5 rounded-full transition-all duration-300 ${
+                      isActive ? 'w-7 bg-[#151926]' : 'w-2 bg-[#151926]/25 hover:bg-[#151926]/40'
+                    }`}
+                  />
+                );
+              })}
+            </div>
+
+            <button
+              type="button"
+              onClick={scrollNext}
+              aria-label="Next slide"
+              className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-[#151926]/20 bg-white/40 text-[#151926] shadow-sm backdrop-blur-sm transition-all active:scale-90"
+            >
+              <svg width="18" height="10" viewBox="0 0 28 10" fill="none">
+                <path
+                  d="M23 1L27 5L23 9"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M27 5H1"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
+
+          {/* Slide Description & Action Button */}
+          <div className="mt-3 flex w-full flex-col items-center px-4 text-center">
+            <div className="relative min-h-[48px] w-full flex items-center justify-center">
+              <AnimatePresence mode="wait">
+                <motion.p
+                  key={selectedIndex}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.3 }}
+                  className={`text-xs leading-relaxed font-light text-[#151926]/90 ${inter.className}`}
+                >
+                  {slides[selectedIndex]?.description}
+                </motion.p>
+              </AnimatePresence>
+            </div>
+
+            <Link
+              href="/apartments"
+              className={`mt-4 inline-flex items-center gap-2.5 rounded-full border border-[#151926] bg-[#151926] px-6 py-2.5 text-[10px] font-bold tracking-[0.14em] text-white uppercase shadow-md transition-all active:scale-95 ${inter.className}`}
+            >
+              <span>{slides[selectedIndex]?.buttonText}</span>
+              <svg width="14" height="8" viewBox="0 0 28 10" fill="none" className="text-white">
+                <path
+                  d="M23 1L27 5L23 9"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M27 5H1"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </Link>
+          </div>
+        </div>
+
+        {/* DESKTOP CAROUSEL (>= 768px): Preserved Original 3-Column Layout */}
+        <div className="mx-auto hidden h-full min-h-[70vh] w-full max-w-[1400px] flex-col items-center justify-center px-8 pt-10 pr-6 md:flex md:flex-row md:justify-between md:px-[10vw] md:pl-16">
           {/* Left Column (Stats) - Fixed & Animated */}
           <div className="relative z-30 mb-8 flex h-full w-full flex-col justify-center md:mb-0 md:w-[18%]">
             <div className="relative flex h-[120px] w-full flex-col justify-center md:h-[200px]">
@@ -180,7 +410,7 @@ export function SixthSection() {
           <div className="relative z-10 mb-24 h-[55vh] w-full md:mb-0 md:h-[70vh] md:w-[64%]">
             <div
               className="h-full w-full overflow-hidden rounded-lg md:rounded-none"
-              ref={emblaRef}
+              ref={desktopEmblaRef}
             >
               <div className="flex h-full touch-pan-y">
                 {slides.map((slide, index) => (

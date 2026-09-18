@@ -32,3 +32,30 @@
     display: none !important;
   }
 }
+
+/* Lining Figures Override for Playfair Display:
+   Google Fonts' Playfair Display uses oldstyle figures (numbers 3, 5, 7, 9 drop below baseline).
+   We override digits 0-9 and numerical symbols (+, -, –, —, (, ), /, ., ,, :) with high-contrast serif lining figures (Times New Roman / Times / serif)
+   so all numbers across the entire codebase align straight on the baseline. */
+@font-face {
+  font-family: 'Playfair Display';
+  src: local('Times New Roman'), local('Times'), local('serif');
+  font-style: italic;
+  font-weight: 100 900;
+  unicode-range: U+0030-0039, U+002B, U+0028, U+0029, U+002D, U+2013, U+2014, U+002F, U+002E, U+002C, U+003A;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Playfair Display';
+  src: local('Times New Roman'), local('Times'), local('serif');
+  font-style: normal;
+  font-weight: 100 900;
+  unicode-range: U+0030-0039, U+002B, U+0028, U+0029, U+002D, U+2013, U+2014, U+002F, U+002E, U+002C, U+003A;
+  font-display: swap;
+}
+
+* {
+  font-variant-numeric: lining-nums tabular-nums;
+}
+

@@ -155,7 +155,7 @@ export function BackgroundAnimation() {
                 </div>
 
                 {/* Center: Alizé Project Logo */}
-                <div className="flex w-1/3 items-center justify-center">
+                <div className="flex w-1/3 -translate-y-6 items-center justify-center sm:-translate-y-16 md:-translate-y-24 lg:-translate-y-32">
                   <Image
                     src="/logo-alize.png"
                     alt="Alizé Hotel & Residences Da Nang"

@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Inter } from 'next/font/google';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
@@ -28,6 +28,8 @@ export function SimpleSlider(props: {
   const [internalIndex, setInternalIndex] = useState(0);
   const currentIndex = isControlled ? (props.activeIndex ?? 0) : internalIndex;
 
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
+
   const handleIndexChange = (newIndex: number) => {
     if (!isControlled) {
       setInternalIndex(newIndex);
@@ -47,6 +49,22 @@ export function SimpleSlider(props: {
     if (props.images.length === 0) return;
     const prevIndex = currentIndex === 0 ? props.images.length - 1 : currentIndex - 1;
     handleIndexChange(prevIndex);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStartX(e.touches[0]?.clientX ?? null);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX === null) return;
+    const touchEndX = e.changedTouches[0]?.clientX ?? 0;
+    const diff = touchStartX - touchEndX;
+    if (diff > 45) {
+      goToNext();
+    } else if (diff < -45) {
+      goToPrev();
+    }
+    setTouchStartX(null);
   };
 
   useEffect(() => {
@@ -79,18 +97,32 @@ export function SimpleSlider(props: {
 
   return (
     <div className={containerClasses}>
-      <div className={viewportClasses}>
-        {currentImageSrc && (
-          <Image
-            key={currentImageSrc}
-            src={currentImageSrc}
-            alt="Slider View"
-            fill
-            sizes="(max-width: 1024px) 100vw, 1200px"
-            className="object-cover transition-opacity duration-500"
-            priority={false}
-          />
-        )}
+      <div
+        className={`${viewportClasses} touch-pan-y select-none`}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
+        <AnimatePresence mode="popLayout" initial={false}>
+          {currentImageSrc && (
+            <motion.div
+              key={currentImageSrc}
+              initial={{ opacity: 0, scale: 1.05 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.97 }}
+              transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute inset-0 h-full w-full"
+            >
+              <Image
+                src={currentImageSrc}
+                alt="Slider View"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className="object-cover"
+                priority={false}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {!props.hideControls && (

@@ -99,6 +99,29 @@ export function useWebGLTransition(options: WebGLTransitionOptions): WebGLTransi
   const prevIndexRef = useRef(currentIndex);
   const renderSceneRef = useRef<() => void>(() => {});
 
+  const isInViewRef = useRef(isInView);
+  const onTransitionCompleteRef = useRef(onTransitionComplete);
+
+  useEffect(() => {
+    isInViewRef.current = isInView;
+    if (!isInView && isAnimatingRef.current && animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = null;
+      isAnimatingRef.current = false;
+      progressRef.current = 1;
+      if (rendererRef.current && materialRef.current) {
+        if (materialRef.current.uniforms.uProgress) {
+          materialRef.current.uniforms.uProgress.value = 1;
+        }
+        renderSceneRef.current();
+      }
+    }
+  }, [isInView]);
+
+  useEffect(() => {
+    onTransitionCompleteRef.current = onTransitionComplete;
+  }, [onTransitionComplete]);
+
   const renderScene = useCallback(() => {
     if (!rendererRef.current || !materialRef.current) {
       return;
@@ -123,6 +146,26 @@ export function useWebGLTransition(options: WebGLTransitionOptions): WebGLTransi
       }
 
       const { uniforms } = materialRef.current;
+
+      // If offscreen, snap immediately without animating RAF to save CPU/GPU
+      if (!isInViewRef.current) {
+        prevIndexRef.current = newIndex;
+        if (uniforms.uTexture1) {
+          uniforms.uTexture1.value = texturesRef.current[newIndex];
+        }
+        if (uniforms.uTexture2) {
+          uniforms.uTexture2.value = texturesRef.current[newIndex];
+        }
+        if (uniforms.uProgress) {
+          uniforms.uProgress.value = 0;
+        }
+        renderScene();
+        if (onTransitionCompleteRef.current) {
+          onTransitionCompleteRef.current(newIndex);
+        }
+        return;
+      }
+
       if (uniforms.uTexture1) {
         uniforms.uTexture1.value = texturesRef.current[prevIndexRef.current];
       }
@@ -153,22 +196,24 @@ export function useWebGLTransition(options: WebGLTransitionOptions): WebGLTransi
           isAnimatingRef.current = false;
           prevIndexRef.current = newIndex;
           animationFrameRef.current = null;
-          if (onTransitionComplete) {
-            onTransitionComplete(newIndex);
+          if (onTransitionCompleteRef.current) {
+            onTransitionCompleteRef.current(newIndex);
           }
         }
       };
 
       animationFrameRef.current = requestAnimationFrame(animateTransition);
     },
-    [onTransitionComplete, renderScene],
+    [renderScene],
   );
+
+  const imagesKey = images.join('|');
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const container = containerRef.current;
 
-    if (!isInView || !canvas || !container) {
+    if (!canvas || !container) {
       return () => {};
     }
 
@@ -191,9 +236,9 @@ export function useWebGLTransition(options: WebGLTransitionOptions): WebGLTransi
     let gl: WebGLRenderingContext | WebGL2RenderingContext | null = null;
     try {
       gl =
-        (canvas.getContext('webgl2', { alpha: true, antialias: true }) as WebGL2RenderingContext | null) ||
-        (canvas.getContext('webgl', { alpha: true, antialias: true }) as WebGLRenderingContext | null) ||
-        (canvas.getContext('experimental-webgl', { alpha: true, antialias: true }) as WebGLRenderingContext | null);
+        (canvas.getContext('webgl2', { alpha: true, antialias: true, powerPreference: 'default' }) as WebGL2RenderingContext | null) ||
+        (canvas.getContext('webgl', { alpha: true, antialias: true, powerPreference: 'default' }) as WebGLRenderingContext | null) ||
+        (canvas.getContext('experimental-webgl', { alpha: true, antialias: true, powerPreference: 'default' }) as WebGLRenderingContext | null);
     } catch {
       gl = null;
     }
@@ -213,6 +258,7 @@ export function useWebGLTransition(options: WebGLTransitionOptions): WebGLTransi
         context: gl,
         alpha: true,
         antialias: true,
+        powerPreference: 'default',
       });
     } catch {
       setIsContextLost(true);
@@ -227,7 +273,7 @@ export function useWebGLTransition(options: WebGLTransitionOptions): WebGLTransi
     const clientWidth = container.clientWidth || 300;
     const clientHeight = container.clientHeight || 200;
     renderer.setSize(clientWidth, clientHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
 
     const scene = new THREE.Scene();
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
@@ -246,7 +292,10 @@ export function useWebGLTransition(options: WebGLTransitionOptions): WebGLTransi
     const loadedTextures = images.map((src) =>
       textureLoader.load(
         src,
-        () => {
+        (tex) => {
+          tex.generateMipmaps = false;
+          tex.minFilter = THREE.LinearFilter;
+          tex.magFilter = THREE.LinearFilter;
           loadedCount += 1;
           if (loadedCount === totalCount) {
             setIsReady(true);
@@ -284,26 +333,27 @@ export function useWebGLTransition(options: WebGLTransitionOptions): WebGLTransi
 
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
+
+    // Precompile shader to avoid stutter on first render/interaction
+    renderer.compile(scene, camera);
     renderer.render(scene, camera);
 
-    const handleResize = () => {
-      if (!containerRef.current || !rendererRef.current || !materialRef.current) {
-        return;
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const { width: w, height: h } = entry.contentRect;
+        if (w > 0 && h > 0 && rendererRef.current && materialRef.current) {
+          rendererRef.current.setSize(w, h);
+          materialRef.current.uniforms.uPlaneRes?.value.set(w, h);
+          rendererRef.current.render(scene, camera);
+        }
       }
-      const { clientWidth: w, clientHeight: h } = containerRef.current;
-      if (w > 0 && h > 0) {
-        rendererRef.current.setSize(w, h);
-        materialRef.current.uniforms.uPlaneRes?.value.set(w, h);
-        rendererRef.current.render(scene, camera);
-      }
-    };
-
-    window.addEventListener('resize', handleResize, { passive: true });
+    });
+    resizeObserver.observe(container);
 
     return () => {
       canvas.removeEventListener('webglcontextlost', handleContextLost);
       canvas.removeEventListener('webglcontextrestored', handleContextRestored);
-      window.removeEventListener('resize', handleResize);
+      resizeObserver.disconnect();
 
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
@@ -319,7 +369,7 @@ export function useWebGLTransition(options: WebGLTransitionOptions): WebGLTransi
       texturesRef.current = [];
       setIsReady(false);
     };
-  }, [isInView, canvasRef, containerRef, images]);
+  }, [canvasRef, containerRef, imagesKey]);
 
   return {
     isReady,

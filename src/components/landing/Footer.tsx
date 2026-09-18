@@ -68,7 +68,7 @@ export function Footer() {
 
           {/* Large Phone Number */}
           <h2
-            className={`text-[12vw] leading-none tracking-tighter md:text-[10vw] lg:text-[8vw] ${playfair.className} italic`}
+            className={`text-[12vw] leading-none tracking-tighter md:text-[10vw] lg:text-[8vw] ${playfair.className}`}
             style={{ transform: 'scaleY(1.3)' }}
           >
             +84 (965) 355-355 
