@@ -105,6 +105,7 @@ export function NavigationMenu({ isDark }: { isDark?: boolean }) {
                     key={l}
                     href={pathname}
                     locale={l}
+                    prefetch={false}
                     className="text-[9px] font-bold tracking-[0.2em] uppercase opacity-50 transition-opacity hover:opacity-100 md:text-[10px]"
                   >
                     {l}
@@ -118,6 +119,7 @@ export function NavigationMenu({ isDark }: { isDark?: boolean }) {
         <div className="flex flex-col items-end gap-2 text-right md:gap-3">
           <Link
             href="/apartments"
+            prefetch={false}
             aria-label="Select apartment"
             className={`text-xs leading-tight uppercase transition-opacity hover:opacity-70 sm:text-base md:text-[28px] md:leading-none ${playfair.className}`}
             dangerouslySetInnerHTML={{ __html: t('select_apartment').replace(' ', ' <br/> ') }}
@@ -125,6 +127,7 @@ export function NavigationMenu({ isDark }: { isDark?: boolean }) {
           <div className="mt-1 flex flex-col items-end gap-1">
             <Link
               href="/contact"
+              prefetch={false}
               className={`text-[8px] font-bold tracking-[0.2em] uppercase transition-opacity hover:opacity-70 md:text-[9px] ${inter.className}`}
             >
               {t('contact')}

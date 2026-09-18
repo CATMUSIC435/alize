@@ -43,6 +43,7 @@ export function Header(props: { alwaysDark?: boolean }) {
       <div className="pointer-events-auto ml-2 md:ml-4">
         <Link
           href="/"
+          prefetch={false}
           onClick={handleLogoClick}
           aria-label="Home"
           className="block transition-opacity hover:opacity-80"
@@ -52,7 +53,6 @@ export function Header(props: { alwaysDark?: boolean }) {
             alt="Alize Logo"
             width={80}
             height={160}
-            priority
             className="h-auto w-12 object-contain md:w-16 lg:w-20"
           />
         </Link>

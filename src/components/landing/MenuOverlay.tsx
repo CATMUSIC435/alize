@@ -294,6 +294,7 @@ export function MenuOverlay() {
             <div className="flex items-center gap-4">
               <Link
                 href="/"
+                prefetch={false}
                 onClick={() => {
                   handleItemClick('/');
                 }}
@@ -305,7 +306,6 @@ export function MenuOverlay() {
                     alt="Alizé Logo"
                     fill
                     className="object-contain"
-                    priority
                   />
                 </div>
                 <div className="flex flex-col">
@@ -398,6 +398,7 @@ export function MenuOverlay() {
                     >
                       <Link
                         href={item.href}
+                        prefetch={false}
                         onClick={() => {
                           handleItemClick(item.href);
                         }}
@@ -491,7 +492,6 @@ export function MenuOverlay() {
                             src={activeItem.image}
                             alt={activeItem.title}
                             fill
-                            priority
                             sizes="(max-width: 1200px) 40vw, 30vw"
                             className="object-cover"
                             unoptimized
@@ -586,6 +586,7 @@ export function MenuOverlay() {
                                 key={l}
                                 href={pathname}
                                 locale={l}
+                                prefetch={false}
                                 onClick={() => {
                                   setIsMenuOpen(false);
                                 }}
@@ -640,6 +641,7 @@ export function MenuOverlay() {
               </a>
               <Link
                 href="/apartments"
+                prefetch={false}
                 onClick={() => {
                   setIsMenuOpen(false);
                 }}

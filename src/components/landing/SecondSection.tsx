@@ -91,7 +91,6 @@ export function SecondSection() {
             src="/map.png"
             alt="Bản đồ dự án"
             fill
-            priority
             sizes="(max-width: 768px) 100vw, 1500px"
             className="object-contain object-top"
           />
