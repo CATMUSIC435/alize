@@ -7,6 +7,7 @@ import createNextIntlPlugin from 'next-intl/plugin';
 // Define the base Next.js configuration
 const baseConfig: NextConfig = {
   images: {
+    formats: ['image/avif', 'image/webp'],
     remotePatterns: [
       {
         protocol: 'https',

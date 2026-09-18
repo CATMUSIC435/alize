@@ -57,7 +57,7 @@ const AnimatedWords = (props: {
                 },
               },
             }}
-            className="inline-block"
+            className="inline-block max-md:!opacity-100 max-md:!transform-none"
           >
             {word}
             {wordIndex < words.length - 1 && '\u00A0'}
@@ -117,7 +117,7 @@ export function TypographyOverlay() {
 
       {/* Horizontal Text Row (Bottom Center) */}
       <motion.div
-        className="pointer-events-none absolute bottom-8 mx-auto flex w-full max-w-[1400px] items-center justify-between px-4 md:bottom-16 md:px-16"
+        className="pointer-events-none absolute bottom-8 mx-auto flex w-full max-w-[1400px] items-center justify-between px-4 max-md:!opacity-100 max-md:!transform-none md:bottom-16 md:px-16"
         initial={{ opacity: 0, y: 18 }}
         animate={{ opacity: isIntroComplete ? 1 : 0, y: isIntroComplete ? 0 : 18 }}
         transition={{ duration: 0.8, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}

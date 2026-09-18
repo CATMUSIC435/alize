@@ -1,8 +1,23 @@
 'use client';
 
+import { useInView } from 'framer-motion';
 import dynamic from 'next/dynamic';
+import { useEffect, useRef, useState } from 'react';
+import { SimpleSlider } from './SimpleSlider';
 
-type LazyWebGLSliderProps = {
+const DynamicWebGLSlider = dynamic(
+  () => import('./WebGLSlider').then((mod) => mod.WebGLSlider),
+  {
+    ssr: false,
+  },
+);
+
+/**
+ * Responsive Slider wrapper:
+ * - On mobile (< 768px): Uses pure CSS/Image SimpleSlider to avoid Three.js bundle and WebGL context overhead.
+ * - On desktop (>= 768px): Lazily mounts DynamicWebGLSlider once near the viewport (250px margin).
+ */
+export function LazyWebGLSlider(props: {
   images: string[];
   activeIndex?: number;
   onIndexChange?: (index: number) => void;
@@ -14,19 +29,33 @@ type LazyWebGLSliderProps = {
   noRounded?: boolean;
   autoplay?: boolean;
   className?: string;
-};
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { margin: '250px', once: true });
+  const [isDesktop, setIsDesktop] = useState(false);
 
-const DynamicWebGLSlider = dynamic(
-  () => import('./WebGLSlider').then((mod) => mod.WebGLSlider),
-  {
-    ssr: false,
-  },
-);
+  useEffect(() => {
+    const checkIsDesktop = () => {
+      setIsDesktop(typeof window !== 'undefined' && window.innerWidth >= 768);
+    };
+    checkIsDesktop();
+    window.addEventListener('resize', checkIsDesktop);
+    return () => window.removeEventListener('resize', checkIsDesktop);
+  }, []);
 
-/**
- * Code-split Lazy WebGL Slider wrapper that delays Three.js bundle parsing until near-viewport.
- * Renders WebGLSlider dynamically on client only to isolate GPU and Three.js memory footprints.
- */
-export function LazyWebGLSlider(props: LazyWebGLSliderProps) {
-  return <DynamicWebGLSlider {...props} />;
+  const wrapperClass = props.absoluteFill ? 'absolute inset-0 h-full w-full' : 'w-full';
+
+  if (!isDesktop || !isInView) {
+    return (
+      <div ref={containerRef} className={wrapperClass}>
+        <SimpleSlider {...props} />
+      </div>
+    );
+  }
+
+  return (
+    <div ref={containerRef} className={wrapperClass}>
+      <DynamicWebGLSlider {...props} />
+    </div>
+  );
 }

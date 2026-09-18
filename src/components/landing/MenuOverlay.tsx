@@ -39,6 +39,11 @@ export function MenuOverlay() {
 
   useEffect(() => {
     setMounted(true);
+    return () => {
+      document.body.style.overflow = '';
+      const lenis = (window as unknown as { __lenis?: { start: () => void } }).__lenis;
+      lenis?.start();
+    };
   }, []);
 
   // Auto close menu on route change
@@ -52,10 +57,9 @@ export function MenuOverlay() {
       return () => {};
     }
 
-    const lenis = (window as unknown as { __lenis?: { stop: () => void; start: () => void } }).__lenis;
+    const lenis = (window as unknown as { __lenis?: { stop: () => void } }).__lenis;
     lenis?.stop();
 
-    const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
 
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -66,8 +70,6 @@ export function MenuOverlay() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => {
-      document.body.style.overflow = originalOverflow;
-      lenis?.start();
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [isMenuOpen, setIsMenuOpen]);
@@ -174,19 +176,25 @@ export function MenuOverlay() {
   }
 
   return createPortal(
-    <AnimatePresence>
+    <AnimatePresence
+      onExitComplete={() => {
+        document.body.style.overflow = '';
+        const lenis = (window as unknown as { __lenis?: { start: () => void } }).__lenis;
+        lenis?.start();
+      }}
+    >
       {isMenuOpen && (
         <motion.div
           key="menu-overlay"
           data-lenis-prevent="true"
-          initial={{ y: '-100%' }}
+          initial={{ y: '-140%' }}
           animate={{
-            y: 0,
-            transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
+            y: '0%',
+            transition: { duration: 0.65, ease: [0.16, 1, 0.3, 1] },
           }}
           exit={{
-            y: '-100%',
-            transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+            y: '-140%',
+            transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
           }}
           style={{ willChange: 'transform' }}
           className="bg-textured-sand pointer-events-auto fixed inset-0 z-[9999] text-[#151926] select-none"

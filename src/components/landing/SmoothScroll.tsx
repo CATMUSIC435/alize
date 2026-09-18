@@ -20,11 +20,12 @@ export function SmoothScroll(props: { children: React.ReactNode }) {
 
   const isHome = isHomePage(pathname);
 
-  // Skip intro if already seen in this session or on non-home pages
+  // Skip intro if already seen in this session, on non-home pages, or on mobile
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const seen = sessionStorage.getItem('alize_intro_seen');
-      if (seen === 'true' || !isHome) {
+      const isMobile = window.innerWidth < 768;
+      if (seen === 'true' || !isHome || isMobile) {
         setIsIntroComplete(true);
       }
     }
@@ -52,9 +53,10 @@ export function SmoothScroll(props: { children: React.ReactNode }) {
       (window as unknown as { __lenis?: Lenis }).__lenis = lenis;
     }
 
-    // Only lock scroll initially if on the home page AND intro is not yet completed
+    // Only lock scroll initially if on desktop home page AND intro is not yet completed
     const currentIsHome = isHomePage(typeof window !== 'undefined' ? window.location.pathname : pathname);
-    if (currentIsHome && !useUIStore.getState().isIntroComplete) {
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+    if (currentIsHome && !useUIStore.getState().isIntroComplete && !isMobile) {
       lenis.stop();
       document.documentElement.style.overflow = 'hidden';
       document.body.style.overflow = 'hidden';

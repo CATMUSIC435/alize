@@ -2,12 +2,19 @@
 
 import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
+import { useEffect } from 'react';
 import { useUIStore } from '@/store/useUIStore';
 
 export function BackgroundAnimation() {
   const isIntroComplete = useUIStore((state) => state.isIntroComplete);
   const setIsIntroComplete = useUIStore((state) => state.setIsIntroComplete);
   const heroMode = useUIStore((state) => state.heroMode);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      setIsIntroComplete(true);
+    }
+  }, [setIsIntroComplete]);
 
   const { scrollY } = useScroll();
   // As the user scrolls down, move the background up slightly for parallax
@@ -76,7 +83,7 @@ export function BackgroundAnimation() {
             key="intro-overlay"
             exit={{ opacity: 0 }}
             transition={{ duration: 0.45, ease: 'easeOut' }}
-            className="pointer-events-none fixed inset-0 z-[70] overflow-hidden"
+            className="pointer-events-none fixed inset-0 z-[70] hidden overflow-hidden md:block"
           >
             {/* Static Decorative Outer Frame (Chamfered Corners) - Only during load */}
             <motion.div
@@ -142,7 +149,6 @@ export function BackgroundAnimation() {
                     alt="ATG Group"
                     width={260}
                     height={170}
-                    priority
                     unoptimized
                     className="h-11 w-auto object-contain drop-shadow-md sm:h-14 md:h-18 lg:h-22 xl:h-26"
                   />
@@ -155,7 +161,6 @@ export function BackgroundAnimation() {
                     alt="Alizé Hotel & Residences Da Nang"
                     width={280}
                     height={345}
-                    priority
                     className="h-20 w-auto object-contain brightness-0 invert drop-shadow-[0_6px_20px_rgba(255,255,255,0.3)] sm:h-28 md:h-36 lg:h-44 xl:h-48"
                   />
                 </div>
@@ -167,7 +172,6 @@ export function BackgroundAnimation() {
                     alt="DXMD Vietnam"
                     width={260}
                     height={115}
-                    priority
                     unoptimized
                     className="h-9 w-auto object-contain drop-shadow-md sm:h-12 md:h-15 lg:h-18 xl:h-22"
                   />
