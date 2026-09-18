@@ -34,6 +34,9 @@ export function SecondSection() {
   // Push the content up slightly for a parallax feel
   const contentY = useTransform(scrollYProgress, [0, 1], [100, 0]);
 
+  // Dynamically expand text letter-spacing along the arc as user scrolls up into section
+  const letterSpacing = useTransform(scrollYProgress, [0, 0.9], ['0.01em', '0.14em']);
+
   return (
     <section
       ref={sectionRef}
@@ -67,14 +70,14 @@ export function SecondSection() {
           <path d="M 0,960 A 960,960 0 0,1 1920,960 Z" fill="url(#sandGrad)" />
 
           {/* Text following the curve, pushed down (dy) to sit inside the blue area */}
-          <text
-            letterSpacing="0.08em"
+          <motion.text
+            style={{ letterSpacing, willChange: 'letter-spacing' }}
             className={`fill-[#151926] uppercase ${playfair.className} text-[56px] sm:text-[62px] md:text-[68px]`}
           >
             <textPath href="#curve-text-path" startOffset="50%" textAnchor="middle">
               <tspan dy="120">{t('three_reasons')}</tspan>
             </textPath>
-          </text>
+          </motion.text>
         </svg>
         {/* Project Map Background */}
         
