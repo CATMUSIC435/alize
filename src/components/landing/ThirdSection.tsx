@@ -57,11 +57,14 @@ export function ThirdSection() {
         </p>
         <div className="mt-5 flex items-center gap-3.5 md:mt-7">
           <span className="h-[1px] w-8 bg-white/50 md:w-12" />
-          <span
-            className={`text-xs font-normal tracking-[0.2em] text-white/80 uppercase sm:text-sm ${inter.className}`}
+          <a
+            href="https://www.aedas.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`text-xs font-normal tracking-[0.2em] text-white/80 uppercase transition-opacity hover:opacity-100 hover:underline sm:text-sm ${inter.className}`}
           >
             {t('pool_quote_author')}
-          </span>
+          </a>
         </div>
       </motion.div>
     </section>

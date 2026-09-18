@@ -4,7 +4,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/libs/I18nRouting';
 import { getBaseUrl } from '@/utils/Helpers';
-import { getI18nAlternates, getLocalizedKeywords, getOpenGraphLocales } from '@/utils/Seo';
+import { getLocalizedKeywords, getOpenGraphLocales } from '@/utils/Seo';
 import '@/styles/global.css';
 
 export async function generateMetadata(props: {
@@ -17,7 +17,6 @@ export async function generateMetadata(props: {
 
   return {
     metadataBase: new URL(baseUrl),
-    alternates: getI18nAlternates('', locale),
     title: {
       template: t('title_template'),
       default: t('default_title'),

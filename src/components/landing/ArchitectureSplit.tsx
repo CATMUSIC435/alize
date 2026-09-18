@@ -195,6 +195,7 @@ export function ArchitectureSplit() {
           <div className="pointer-events-auto mt-12 flex w-full justify-start md:mt-0 md:w-auto md:justify-end">
             <CircleButton
               text={t('book_a_call_now')}
+              href="/contact"
               variant="light"
               className="h-28 w-28 border-white/50 bg-black/10 hover:border-white hover:bg-black/20 sm:h-36 sm:w-36 md:h-48 md:w-48 lg:h-56 lg:w-56"
             />

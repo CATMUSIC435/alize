@@ -316,6 +316,7 @@ export function FourthSection() {
             <div className="mt-10 md:mt-16">
               <CircleButton
                 text={t('view_available')}
+                href="/apartments"
                 variant="dark"
                 className="pointer-events-auto"
               />

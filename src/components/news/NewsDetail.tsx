@@ -21,6 +21,19 @@ export function NewsDetail(props: { article: NewsArticle }) {
 
   const handleShare = () => {
     if (typeof window !== 'undefined') {
+      if (navigator.share) {
+        navigator
+          .share({
+            title: props.article.title,
+            text: props.article.excerpt,
+            url: window.location.href,
+          })
+          .catch(() => {
+            // Dismissed or unsupported share action, keep silent
+          });
+        return;
+      }
+
       void navigator.clipboard.writeText(window.location.href);
       setCopied(true);
       setTimeout(() => {

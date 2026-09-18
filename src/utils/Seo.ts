@@ -19,19 +19,24 @@ export type I18nAlternates = {
  * @returns Metadata alternates object with canonical and multilingual hreflang targets.
  */
 export const getI18nAlternates = (path: string, currentLocale: string): I18nAlternates => {
-  const baseUrl = getBaseUrl();
+  const baseUrl = getBaseUrl().replace(/\/+$/, '');
   const cleanPath = path === '/' ? '' : path;
   const normalizedPath = cleanPath.startsWith('/') || cleanPath === '' ? cleanPath : `/${cleanPath}`;
 
+  const formatUrl = (loc: string) => {
+    const locPath = getI18nPath(normalizedPath, loc);
+    return locPath === '' ? `${baseUrl}/` : `${baseUrl}${locPath}`;
+  };
+
   const languages: Record<string, string> = Object.fromEntries(
-    routing.locales.map((loc) => [loc, `${baseUrl}${getI18nPath(normalizedPath, loc)}`]),
+    routing.locales.map((loc) => [loc, formatUrl(loc)]),
   );
 
   return {
-    canonical: `${baseUrl}${getI18nPath(normalizedPath, currentLocale)}`,
+    canonical: formatUrl(currentLocale),
     languages: {
       ...languages,
-      'x-default': `${baseUrl}${getI18nPath(normalizedPath, routing.defaultLocale)}`,
+      'x-default': formatUrl(routing.defaultLocale),
     },
   };
 };

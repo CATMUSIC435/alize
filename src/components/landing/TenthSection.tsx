@@ -91,7 +91,7 @@ export function TenthSection() {
           className="pointer-events-none absolute inset-0 flex items-center justify-center will-change-transform"
         >
           <div className="pointer-events-auto mt-32 md:mt-80">
-            <CircleButton text={t('view_available')} variant="light" />
+            <CircleButton text={t('view_available')} href="/apartments" variant="light" />
           </div>
         </motion.div>
       </motion.div>

@@ -4,6 +4,9 @@ import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { Inter, Playfair_Display } from 'next/font/google';
 
+import { Link } from '@/libs/I18nNavigation';
+import { LOCAL_BUSINESS_CONFIG } from '@/utils/Seo';
+
 const inter = Inter({ subsets: ['latin'], weight: ['300', '400', '600', '700'] });
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -13,6 +16,7 @@ const playfair = Playfair_Display({
 
 export function Footer() {
   const t = useTranslations('Index');
+  const tMenu = useTranslations('Menu');
 
   return (
     <footer id="contact" className="bg-textured-sand relative z-10 flex min-h-[80vh] w-full flex-col items-center justify-between overflow-hidden  px-6 py-12 text-[#F4F3ED] md:px-12 md:py-20">
@@ -70,14 +74,47 @@ export function Footer() {
             +84 (965) 355-355 
           </h2>
 
-          {/* Sales Office Info */}
+          {/* Sales Office Info with External Google Maps Citation */}
           <div
             className={`mt-16 flex flex-col items-center text-center text-[9px] font-bold tracking-[0.15em] uppercase md:mt-24 md:text-[11px] ${inter.className}`}
           >
             <p className="mb-3 tracking-[0.2em]">{t('sales_office')}</p>
-            <p>{t('address_line_1')}</p>
-            <p>{t('address_line_2')}</p>
+            <a
+              href={LOCAL_BUSINESS_CONFIG.hasMap}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex flex-col items-center transition-opacity hover:opacity-75"
+              aria-label="View sales office location on Google Maps"
+            >
+              <p>{t('address_line_1')}</p>
+              <p className="inline-flex items-center gap-1">
+                <span>{t('address_line_2')}</span>
+                <span className="opacity-60 text-[8px] md:text-[9px]">↗</span>
+              </p>
+            </a>
           </div>
+
+          {/* Footer Navigation Links for Internal Crawlability and SEO */}
+          <nav
+            aria-label="Footer navigation"
+            className={`mt-12 flex flex-wrap items-center justify-center gap-5 text-[9px] font-bold tracking-[0.2em] uppercase md:mt-16 md:gap-8 md:text-[10px] ${inter.className}`}
+          >
+            <Link href="/apartments" prefetch={false} className="transition-opacity hover:opacity-70">
+              {tMenu('apartments')}
+            </Link>
+            <Link href="/floorplans" prefetch={false} className="transition-opacity hover:opacity-70">
+              {tMenu('floorplans')}
+            </Link>
+            <Link href="/gallery" prefetch={false} className="transition-opacity hover:opacity-70">
+              {tMenu('gallery')}
+            </Link>
+            <Link href="/news" prefetch={false} className="transition-opacity hover:opacity-70">
+              {tMenu('news')}
+            </Link>
+            <Link href="/contact" prefetch={false} className="transition-opacity hover:opacity-70">
+              {tMenu('contact')}
+            </Link>
+          </nav>
         </div>
 
         {/* Bottom Info Row */}

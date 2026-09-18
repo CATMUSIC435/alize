@@ -191,7 +191,7 @@ export function SeventhSection() {
 
             {/* Right Column: Circle Button */}
             <div className="pointer-events-auto absolute right-6 bottom-6 md:relative md:right-auto md:bottom-auto md:self-auto">
-              <CircleButton text={t('book_a_call_now')} variant="light" />
+              <CircleButton text={t('book_a_call_now')} href="/contact" variant="light" />
             </div>
           </div>
         </div>

@@ -150,7 +150,7 @@ export function EighthSection() {
 
             {/* Massive Circle Button */}
             <div className="mt-16 flex justify-start md:mt-24 md:ml-[10%]">
-              <CircleButton text={t('view_available')} variant="dark" />
+              <CircleButton text={t('view_available')} href="/apartments" variant="dark" />
             </div>
           </div>
         </motion.div>

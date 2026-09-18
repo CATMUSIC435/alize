@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { Inter } from 'next/font/google';
 import { useState } from 'react';
+import { Link } from '@/libs/I18nNavigation';
 
 const inter = Inter({ subsets: ['latin'], weight: ['500', '700'] });
 
@@ -110,11 +111,22 @@ export function CircleButton({
   );
 
   if (href) {
+    if (href.startsWith('http') || href.startsWith('//')) {
+      return (
+        <motion.a href={href} target="_blank" rel="noopener noreferrer" {...motionProps}>
+          {backgroundFill}
+          {content}
+        </motion.a>
+      );
+    }
+
     return (
-      <motion.a href={href} {...motionProps}>
-        {backgroundFill}
-        {content}
-      </motion.a>
+      <Link href={href} prefetch={false} className="contents">
+        <motion.div {...motionProps}>
+          {backgroundFill}
+          {content}
+        </motion.div>
+      </Link>
     );
   }
 

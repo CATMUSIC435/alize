@@ -16,22 +16,27 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/contact', priority: 0.85, changeFrequency: 'weekly' },
   ];
 
+  const formatUrl = (path: string, locale: string) => {
+    const locPath = getI18nPath(path, locale);
+    return locPath === '' ? `${baseUrl}/` : `${baseUrl}${locPath}`;
+  };
+
   const createAlternates = (path: string) => {
     const languages = Object.fromEntries(
-      routing.locales.map((locale) => [locale, `${baseUrl}${getI18nPath(path, locale)}`]),
+      routing.locales.map((locale) => [locale, formatUrl(path, locale)]),
     );
 
     return {
       languages: {
         ...languages,
-        'x-default': `${baseUrl}${getI18nPath(path, routing.defaultLocale)}`,
+        'x-default': formatUrl(path, routing.defaultLocale),
       },
     };
   };
 
   const staticEntries: MetadataRoute.Sitemap = staticRoutes.flatMap((route) =>
     routing.locales.map((locale) => ({
-      url: `${baseUrl}${getI18nPath(route.path, locale)}`,
+      url: formatUrl(route.path, locale),
       lastModified: new Date(),
       changeFrequency: route.changeFrequency,
       priority: locale === routing.defaultLocale ? route.priority : Number((route.priority * 0.95).toFixed(2)),
