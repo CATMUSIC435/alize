@@ -126,7 +126,7 @@ export function SeventhSection() {
             <div className="pointer-events-auto flex w-full flex-col items-start text-left md:max-w-[50%] lg:max-w-[42%]">
               <div className="mb-6 min-h-[24px] md:mb-8 md:min-h-[32px]">
                 <AnimatePresence mode="wait">
-                  <motion.h4
+                  <motion.h2
                     key={activeIdx}
                     initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -135,7 +135,7 @@ export function SeventhSection() {
                     className={`text-[13px] font-bold tracking-[0.2em] text-white uppercase md:text-[18px] ${inter.className}`}
                   >
                     {amenities[activeIdx]}
-                  </motion.h4>
+                  </motion.h2>
                 </AnimatePresence>
               </div>
               <div className="relative min-h-[160px] w-full md:min-h-[220px]">

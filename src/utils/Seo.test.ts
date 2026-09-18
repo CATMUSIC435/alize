@@ -19,6 +19,14 @@ describe('Seo utility', () => {
       expect(alternates.languages['x-default']).toBeDefined();
     });
 
+    it('normalizes slash path identically to empty root path', () => {
+      const fromEmpty = getI18nAlternates('', 'vi');
+      const fromSlash = getI18nAlternates('/', 'vi');
+
+      expect(fromSlash.canonical).toBe(fromEmpty.canonical);
+      expect(fromSlash.languages.zh).toBe(fromEmpty.languages.zh);
+    });
+
     it('returns canonical and multilingual alternates for subpage', () => {
       const alternates = getI18nAlternates('/apartments', 'en');
 

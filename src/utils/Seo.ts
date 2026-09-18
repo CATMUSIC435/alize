@@ -20,7 +20,8 @@ export type I18nAlternates = {
  */
 export const getI18nAlternates = (path: string, currentLocale: string): I18nAlternates => {
   const baseUrl = getBaseUrl();
-  const normalizedPath = path.startsWith('/') || path === '' ? path : `/${path}`;
+  const cleanPath = path === '/' ? '' : path;
+  const normalizedPath = cleanPath.startsWith('/') || cleanPath === '' ? cleanPath : `/${cleanPath}`;
 
   const languages: Record<string, string> = Object.fromEntries(
     routing.locales.map((loc) => [loc, `${baseUrl}${getI18nPath(normalizedPath, loc)}`]),

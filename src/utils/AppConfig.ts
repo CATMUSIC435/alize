@@ -13,6 +13,7 @@ export const AppConfig = {
     locales: ['vi', 'en', 'zh'],
     defaultLocale: 'vi',
     localePrefix,
+    localeDetection: false,
   },
 };
 
