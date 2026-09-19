@@ -16,9 +16,16 @@ export function Header(props: { alwaysDark?: boolean }) {
   const handleLogoClick = (e: React.MouseEvent) => {
     if (isHome) {
       e.preventDefault();
+      const heroVideo = typeof document !== 'undefined'
+        ? (document.querySelector('video[src*="Continuum"]') as HTMLVideoElement | null)
+        : null;
+      if (heroVideo) {
+        heroVideo.muted = true;
+        heroVideo.play().catch(() => {});
+      }
       const lenis = (window as unknown as { __lenis?: { scrollTo: (target: number, opts?: { duration?: number }) => void } }).__lenis;
       if (lenis) {
-        lenis.scrollTo(0, { duration: 1.2 });
+        lenis.scrollTo(0, { duration: 1.0 });
       } else {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }

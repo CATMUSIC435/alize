@@ -143,7 +143,20 @@ export function BackgroundAnimation() {
           video.pause();
         }
       } else if (video.paused && isDay) {
-        video.play().catch(() => {});
+        video.muted = true;
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {
+            const handleResume = () => {
+              if (videoRef.current && useUIStore.getState().heroMode === 'day') {
+                videoRef.current.muted = true;
+                videoRef.current.play().catch(() => {});
+              }
+            };
+            window.addEventListener('touchstart', handleResume, { once: true, passive: true });
+            window.addEventListener('scroll', handleResume, { once: true, passive: true });
+          });
+        }
       }
     };
 
@@ -174,14 +187,13 @@ export function BackgroundAnimation() {
         style={{
           y,
           visibility: backgroundVisibility,
-          willChange: 'transform',
         }}
       >
         <div className="relative h-full w-full max-w-full overflow-hidden">
           {/* Zoom in on scroll */}
           <motion.div
             className="absolute inset-0 h-full w-full max-w-full overflow-hidden"
-            style={{ scale: scaleOnScroll, willChange: 'transform' }}
+            style={{ scale: scaleOnScroll }}
           >
             {/* Day Video Mode (Continuum South Tower) */}
             <motion.div
@@ -190,7 +202,16 @@ export function BackgroundAnimation() {
               animate={{ opacity: heroMode === 'day' ? 1 : 0 }}
               transition={{ duration: 1.5, ease: 'easeInOut' }}
             >
-              {canPlayVideo ? (
+              {/* Image fallback is ALWAYS rendered behind video so hero is never blank/black */}
+              <Image
+                src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=70&w=1920"
+                alt="Mediterranean Villa - Day"
+                fill
+                priority
+                sizes="100vw"
+                className="pointer-events-none block h-full w-full select-none object-cover object-center brightness-[1.05] contrast-[1.02]"
+              />
+              {canPlayVideo && (
                 <video
                   ref={videoRef}
                   src="/Continuum-South-Tower.mp4"
@@ -221,15 +242,6 @@ export function BackgroundAnimation() {
                     pointerEvents: 'none',
                   }}
                   className="pointer-events-none absolute inset-0 block h-full w-full max-h-full max-w-full select-none object-cover object-center brightness-[1.05] contrast-[1.02]"
-                />
-              ) : (
-                <Image
-                  src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=70&w=1920"
-                  alt="Mediterranean Villa - Day"
-                  fill
-                  priority
-                  sizes="100vw"
-                  className="pointer-events-none block h-full w-full select-none object-cover object-center brightness-[1.05] contrast-[1.02]"
                 />
               )}
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/30 md:from-black/40 md:to-black/20" />
