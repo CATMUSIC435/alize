@@ -65,7 +65,7 @@ export function TenthSection() {
           {/* Text Content (Moves up and fades out cleanly before button arrives) */}
           <motion.div
             style={{ y: textY, opacity: textOpacity }}
-            className="absolute inset-0 flex flex-col items-center justify-center will-change-transform"
+            className="absolute inset-0 flex flex-col items-center justify-center"
           >
             <h2
               className={`text-center text-[12vw] leading-[0.95] font-medium tracking-tight text-white uppercase md:text-[9vw] lg:text-[7vw] ${playfair.className}`}
@@ -90,7 +90,7 @@ export function TenthSection() {
           {/* Button Content (Second half of scroll) */}
           <motion.div
             style={{ opacity: buttonOpacity, scale: buttonScale }}
-            className="pointer-events-none absolute inset-0 flex items-center justify-center will-change-transform"
+            className="pointer-events-none absolute inset-0 flex items-center justify-center"
           >
             <div className="pointer-events-auto mt-32 md:mt-80">
               <CircleButton text={t('view_available')} href="/apartments" variant="light" />

@@ -62,7 +62,7 @@ export function ArchitectureSplit() {
             {/* Inner Image (full width of the whole container) */}
             <motion.div
               style={{ width: containerWidth }}
-              className="absolute top-0 left-0 h-full will-change-transform"
+              className="absolute top-0 left-0 h-full"
             >
               <Image
                 src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80&w=1920"
@@ -82,7 +82,7 @@ export function ArchitectureSplit() {
             {/* Inner Image (full width of the whole container, anchored right) */}
             <motion.div
               style={{ width: containerWidth }}
-              className="absolute top-0 right-0 h-full will-change-transform"
+              className="absolute top-0 right-0 h-full"
             >
               <Image
                 src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80&w=1920"
@@ -158,7 +158,7 @@ export function ArchitectureSplit() {
         {/* Description and Button - Directly embedded inside the sticky viewport */}
         <motion.div
           style={{ opacity: descOpacity, y: descY }}
-          className="pointer-events-none absolute bottom-8 left-0 right-0 z-40 flex w-full flex-col px-6 sm:bottom-12 md:bottom-16 md:px-[8vw] lg:bottom-20 will-change-transform"
+          className="pointer-events-none absolute bottom-8 left-0 right-0 z-40 flex w-full flex-col px-6 sm:bottom-12 md:bottom-16 md:px-[8vw] lg:bottom-20"
         >
           <div className="flex w-full flex-col items-start justify-between gap-6 md:flex-row md:items-end md:gap-0">
             {/* Left Text */}

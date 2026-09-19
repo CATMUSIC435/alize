@@ -1,6 +1,9 @@
-import { motion } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
+import { useRef } from 'react';
 
 export function SandRipples(props: { position?: 'left' | 'right' }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { margin: '200px' });
   const isLeft = (props.position ?? 'left') === 'left';
 
   // Generate overlapping, flowing ribbon waves
@@ -41,6 +44,7 @@ export function SandRipples(props: { position?: 'left' | 'right' }) {
 
   return (
     <div
+      ref={containerRef}
       className={`pointer-events-none absolute top-[-1400px] bottom-[-800px] z-0 w-[45vw] max-w-[800px] overflow-hidden ${
         isLeft ? 'left-0' : 'right-0'
       }`}
@@ -53,10 +57,13 @@ export function SandRipples(props: { position?: 'left' | 'right' }) {
         viewBox="0 -1600 500 5600"
         preserveAspectRatio="none"
         className="h-full w-full"
-        style={{ willChange: 'transform' }}
-        animate={{
-          x: isLeft ? [0, 15, 0] : [0, -15, 0],
-        }}
+        animate={
+          isInView
+            ? {
+                x: isLeft ? [0, 15, 0] : [0, -15, 0],
+              }
+            : undefined
+        }
         transition={{
           duration: 8,
           ease: 'easeInOut',

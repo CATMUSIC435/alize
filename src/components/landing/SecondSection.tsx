@@ -77,7 +77,7 @@ export function SecondSection() {
 
           {/* Text following the curve, pushed down (dy) to sit inside the blue area */}
           <motion.text
-            style={{ letterSpacing, willChange: 'letter-spacing' }}
+            style={{ letterSpacing }}
             className={`fill-[#151926] uppercase ${playfair.className} text-[56px] sm:text-[62px] md:text-[68px]`}
           >
             <textPath href="#curve-text-path" startOffset="50%" textAnchor="middle">

@@ -1,16 +1,23 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { Inter } from 'next/font/google';
 import Image from 'next/image';
+import { useRef } from 'react';
 
 const inter = Inter({ subsets: ['latin'], weight: ['300', '400', '600', '700'] });
 
 export function FifthSection() {
   const t = useTranslations('Index');
+  const sectionRef = useRef<HTMLElement>(null);
+  const isInView = useInView(sectionRef, { margin: '300px' });
+
   return (
-    <section className="relative h-[100vh] w-full overflow-hidden bg-gradient-to-b from-[#F4F3EC] via-[#78A8D8] to-[#78A8D8]">
+    <section
+      ref={sectionRef}
+      className="relative h-[100vh] w-full overflow-hidden bg-gradient-to-b from-[#F4F3EC] via-[#78A8D8] to-[#78A8D8]"
+    >
       {/* Background Landscape */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 z-0 [mask-image:linear-gradient(to_bottom,transparent,black_15%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent,black_15%)]">
@@ -29,8 +36,8 @@ export function FifthSection() {
 
       {/* Marquee 1 - Fast Clouds (Foreground) */}
       <motion.div
-        className="pointer-events-none absolute top-[-15vh] left-0 z-10 flex w-[200vw] opacity-90 will-change-transform"
-        animate={{ x: [0, '-50%'] }}
+        className="pointer-events-none absolute top-[-15vh] left-0 z-10 flex w-[200vw] opacity-90"
+        animate={isInView ? { x: [0, '-50%'] } : undefined}
         transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
       >
         {/* Set 1 */}
@@ -71,8 +78,8 @@ export function FifthSection() {
 
       {/* Marquee 2 - Slow Clouds (Background) */}
       <motion.div
-        className="pointer-events-none absolute top-[-5vh] left-0 z-10 flex w-[200vw] opacity-80 will-change-transform"
-        animate={{ x: [0, '-50%'] }}
+        className="pointer-events-none absolute top-[-5vh] left-0 z-10 flex w-[200vw] opacity-80"
+        animate={isInView ? { x: [0, '-50%'] } : undefined}
         transition={{ duration: 120, repeat: Infinity, ease: 'linear' }}
       >
         {/* Set 1 */}
