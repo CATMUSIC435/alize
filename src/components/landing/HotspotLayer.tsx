@@ -57,8 +57,13 @@ export function HotspotLayer() {
   // Prevent clicks when invisible
   const pointerEvents = useTransform(opacity, (v) => (v > 0.2 ? 'auto' : 'none'));
 
-  // MATCH THE PARALLAX OF THE BACKGROUND EXACTLY
-  const y = useTransform(scrollY, [0, 1000], ['0%', '-15%']);
+  // MATCH THE PARALLAX OF THE BACKGROUND EXACTLY ON DESKTOP, KEEP FIXED ON MOBILE
+  const y = useTransform(scrollY, (latest) => {
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+    if (isMobile) return '0%';
+    const progress = Math.min(latest / 1000, 1);
+    return `${-15 * progress}%`;
+  });
 
   const projectOverview = {
     name: t('project_name'),

@@ -181,14 +181,21 @@ export function BackgroundAnimation() {
     const progress = Math.min(latest / 1000, 1);
     return 1 + 0.4 * progress;
   });
-  // De-composite fixed background layer once scrolled completely past hero and arch curve
-  const backgroundVisibility = useTransform(scrollY, (latest) => {
+  // Smoothly fade out the fixed hero background as the user scrolls past Section 2
+  const backgroundOpacity = useTransform(scrollY, (latest) => {
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-    const threshold = typeof window !== 'undefined'
+    const startFade = typeof window !== 'undefined'
+      ? (isMobile ? window.innerHeight * 1.4 : window.innerHeight * 1.8)
+      : 1400;
+    const endFade = typeof window !== 'undefined'
       ? (isMobile ? window.innerHeight * 1.9 : window.innerHeight * 2.4)
       : 2300;
-    return latest > threshold ? 'hidden' : 'visible';
+    if (latest <= startFade) return 1;
+    if (latest >= endFade) return 0;
+    return 1 - (latest - startFade) / (endFade - startFade);
   });
+
+  const backgroundVisibility = useTransform(backgroundOpacity, (op) => (op <= 0 ? 'hidden' : 'visible'));
 
   return (
     <>
@@ -197,6 +204,7 @@ export function BackgroundAnimation() {
         className="pointer-events-none fixed inset-0 z-0 h-[100dvh] w-full max-w-full overflow-hidden bg-[#0D2D40] md:h-[120vh]"
         style={{
           y,
+          opacity: backgroundOpacity,
           visibility: backgroundVisibility,
         }}
       >

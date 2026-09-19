@@ -117,7 +117,6 @@ export function SmartVideo(
       tabIndex={-1}
       style={{
         ...props.style,
-        visibility: isInView ? (props.style?.visibility ?? 'visible') : 'hidden',
       }}
       {...({
         'webkit-playsinline': 'true',
