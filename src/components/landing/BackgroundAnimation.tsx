@@ -19,7 +19,7 @@ export function BackgroundAnimation() {
     }
   }, [setIsIntroComplete]);
 
-  // Ensure video plays silently on initial appearance and resumes when switching back to day mode
+  // Initialize video silently on mount; strictly enforce inline playback and forbid fullscreen
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -31,53 +31,57 @@ export function BackgroundAnimation() {
     video.setAttribute('webkit-playsinline', '');
 
     // WebKit iOS presentation mode enforcement (strictly prevent native fullscreen takeover)
-    const videoWithWebkit = video as unknown as {
+    const v = video as unknown as {
       webkitSetPresentationMode?: (mode: string) => void;
       webkitPresentationMode?: string;
+      webkitExitFullscreen?: () => void;
     };
 
-    if (typeof videoWithWebkit.webkitSetPresentationMode === 'function') {
-      videoWithWebkit.webkitSetPresentationMode('inline');
+    if (typeof v.webkitSetPresentationMode === 'function') {
+      v.webkitSetPresentationMode('inline');
     }
 
-    const enforceInline = () => {
-      if (
-        videoWithWebkit.webkitPresentationMode &&
-        videoWithWebkit.webkitPresentationMode !== 'inline' &&
-        typeof videoWithWebkit.webkitSetPresentationMode === 'function'
-      ) {
-        videoWithWebkit.webkitSetPresentationMode('inline');
+    const enforceInline = (e?: Event) => {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      if (typeof v.webkitExitFullscreen === 'function') {
+        v.webkitExitFullscreen();
+      }
+      if (typeof v.webkitSetPresentationMode === 'function') {
+        v.webkitSetPresentationMode('inline');
       }
     };
 
+    video.addEventListener('webkitbeginfullscreen', enforceInline);
     video.addEventListener('webkitpresentationmodechanged', enforceInline);
 
-    if (heroMode === 'day') {
-      video.play().catch(() => {
-        // Silently catch autoplay restrictions; never hijack touchstart/click
-      });
-    } else {
-      video.pause();
-    }
+    // Initial silent autoplay on mount once; never re-trigger on user clicks or toggles
+    video.play().catch(() => {
+      // Silently catch autoplay policy restrictions
+    });
 
     return () => {
+      video.removeEventListener('webkitbeginfullscreen', enforceInline);
       video.removeEventListener('webkitpresentationmodechanged', enforceInline);
     };
-  }, [heroMode]);
+  }, []);
 
   const { scrollY } = useScroll();
 
-  // Pause video when scrolled far past hero section to save battery/performance
+  // Desktop only: Pause video when scrolled far past hero section to save performance
+  // On mobile, never pause/resume during scroll to prevent iOS gesture interception
   useEffect(() => {
     return scrollY.on('change', (latest) => {
       const video = videoRef.current;
       if (!video) return;
       const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-      const heroThreshold = isMobile ? 900 : 1600;
+      if (isMobile) return;
 
-      if (latest > heroThreshold) {
+      if (latest > 1600) {
         if (!video.paused) video.pause();
-      } else if (useUIStore.getState().heroMode === 'day' && video.paused) {
+      } else if (video.paused) {
         video.play().catch(() => {});
       }
     });
