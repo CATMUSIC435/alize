@@ -62,7 +62,15 @@ export function SmartVideo(
       autoPlay={props.autoPlay}
       loop={props.loop}
       muted={props.muted}
-      playsInline={props.playsInline}
+      playsInline={props.playsInline ?? true}
+      {...({
+        'webkit-playsinline': 'true',
+        'x5-playsinline': 'true',
+        'x5-video-player-type': 'h5-page',
+        'x5-video-player-fullscreen': 'false',
+      } as Record<string, string>)}
+      disablePictureInPicture
+      disableRemotePlayback
       aria-label={props['aria-label']}
       aria-hidden={props['aria-hidden']}
     />

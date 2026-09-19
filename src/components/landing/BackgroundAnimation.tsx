@@ -73,21 +73,21 @@ export function BackgroundAnimation() {
     <>
       {/* 1. Persistent Background Image/Video (Stays behind all sections at z-0) */}
       <motion.div
-        className="fixed inset-0 z-0 h-[120vh] w-full bg-[#0D2D40]"
+        className="pointer-events-none fixed inset-0 z-0 h-[100dvh] w-full max-w-full overflow-hidden bg-[#0D2D40] md:h-[120vh]"
         style={{
           y,
           willChange: 'transform',
         }}
       >
-        <div className="relative h-full w-full overflow-hidden">
+        <div className="relative h-full w-full max-w-full overflow-hidden">
           {/* Zoom in on scroll */}
           <motion.div
-            className="absolute inset-0 h-full w-full"
+            className="absolute inset-0 h-full w-full max-w-full overflow-hidden"
             style={{ scale: scaleOnScroll, willChange: 'transform' }}
           >
             {/* Day Video Mode (Continuum South Tower) */}
             <motion.div
-              className="absolute inset-0 h-full w-full"
+              className="absolute inset-0 h-full w-full max-w-full overflow-hidden"
               initial={false}
               animate={{ opacity: heroMode === 'day' ? 1 : 0 }}
               transition={{ duration: 1.5, ease: 'easeInOut' }}
@@ -100,8 +100,23 @@ export function BackgroundAnimation() {
                 loop
                 muted
                 playsInline
+                {...({
+                  'webkit-playsinline': 'true',
+                  'x5-playsinline': 'true',
+                  'x5-video-player-type': 'h5-page',
+                  'x5-video-player-fullscreen': 'false',
+                } as Record<string, string>)}
+                disablePictureInPicture
+                disableRemotePlayback
                 preload="auto"
-                className="h-full w-full object-cover object-center brightness-[1.05] contrast-[1.02]"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  maxWidth: '100%',
+                  maxHeight: '100%',
+                  objectFit: 'cover',
+                }}
+                className="absolute inset-0 block h-full w-full max-h-full max-w-full object-cover object-center brightness-[1.05] contrast-[1.02]"
               />
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/30 md:from-black/40 md:to-black/20" />
             </motion.div>

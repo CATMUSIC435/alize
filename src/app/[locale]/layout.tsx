@@ -113,8 +113,8 @@ export default async function RootLayout(props: {
   setRequestLocale(locale);
 
   return (
-    <html lang={locale}>
-      <body>
+    <html lang={locale} className="overflow-x-hidden">
+      <body className="relative w-full max-w-[100vw] overflow-x-hidden bg-[#0D2D40] antialiased">
         <NextIntlClientProvider>{props.children}</NextIntlClientProvider>
       </body>
     </html>
