@@ -166,10 +166,21 @@ export function BackgroundAnimation() {
     return scrollY.on('change', checkAndToggle);
   }, [scrollY, canPlayVideo, heroMode]);
 
-  // As the user scrolls down, move the background up slightly for parallax
-  const y = useTransform(scrollY, [0, 1000], ['0%', '-15%']);
-  // Zoom in the background image as the user scrolls down
-  const scaleOnScroll = useTransform(scrollY, [0, 1000], [1, 1.4]);
+  // As the user scrolls down, move the background up slightly for parallax on desktop
+  const y = useTransform(scrollY, (latest) => {
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+    if (isMobile) return '0%';
+    const progress = Math.min(latest / 1000, 1);
+    return `${-15 * progress}%`;
+  });
+
+  // Zoom in the background image as the user scrolls down on desktop
+  const scaleOnScroll = useTransform(scrollY, (latest) => {
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+    if (isMobile) return 1;
+    const progress = Math.min(latest / 1000, 1);
+    return 1 + 0.4 * progress;
+  });
   // De-composite fixed background layer once scrolled completely past hero and arch curve
   const backgroundVisibility = useTransform(scrollY, (latest) => {
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;

@@ -37,8 +37,11 @@ export function SecondSection() {
     offset: ['start end', 'start start'],
   });
 
-  // Push the content up slightly for a parallax feel
-  const contentY = useTransform(scrollYProgress, [0, 1], [100, 0]);
+  // Push the content up slightly for a parallax feel on desktop
+  const contentY = useTransform(scrollYProgress, (v) => {
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+    return isMobile ? 0 : (1 - v) * 100;
+  });
 
   // Dynamically expand text letter-spacing strongly along the arc as user scrolls into section
   const letterSpacing = useTransform(scrollYProgress, [0, 0.85], ['0.02em', '0.38em']);
