@@ -622,5 +622,15 @@
     "section_4_content": "Nghiêm cấm tuyệt đối hành vi tàng trữ chất dễ cháy nổ, cản trở lối thoát hiểm hoặc tự ý can thiệp vào đầu phun sprinkler, cảm biến khói trong căn hộ. Định kỳ tòa nhà tổ chức diễn tập PCCC và thoát hiểm cùng lực lượng Cảnh sát PCCC TP. Đà Nẵng.",
     "contact_box_title": "BAN QUẢN LÝ VẬN HÀNH ALIZÉ RESIDENCE",
     "contact_box_desc": "Bộ phận Quản lý Vận hành: operations@alize-residence.com — Hotline hỗ trợ cư dân 24/7: +84 (965) 355-355."
+  },
+  "NotFoundPage": {
+    "meta_title": "404 - Không tìm thấy trang | Alizé Residence Đà Nẵng",
+    "meta_description": "Không gian bạn đang tìm kiếm không tồn tại hoặc đã được tái định hình. Tự động chuyển hướng về trang chủ trong giây lát.",
+    "code": "404",
+    "subtitle": "KHÔNG GIAN NGHỆ THUẬT CHƯA ĐƯỢC ĐỊNH VỊ",
+    "title": "TRANG KHÔNG TỒN TẠI",
+    "description": "Địa chỉ bạn vừa truy cập không tồn tại hoặc đã được quy hoạch lại trong hành trình Alizé Residence.",
+    "redirecting_in": "Tự động quay về trang chủ sau {seconds} giây",
+    "redirect_now": "VỀ TRANG CHỦ NGAY"
   }
 }

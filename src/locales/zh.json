@@ -622,5 +622,15 @@
     "section_4_content": "严禁在户内或公共部位存放易燃易爆危险品，严禁阻塞消防逃生通道或私自改动户内自动喷淋头与感烟探测器。物业定期联合岘港市消防救援警察大队开展实战消防疏散演练。",
     "contact_box_title": "ALIZÉ 物业运营管理服务中心",
     "contact_box_desc": "物业运营中心：operations@alize-residence.com — 24 小时业主礼宾服务热线：+84 (965) 355-355。"
+  },
+  "NotFoundPage": {
+    "meta_title": "404 - 页面未找到 | Alizé Residence 岘港",
+    "meta_description": "您所访问的页面不存在或已被重新规划。系统即将自动为您返回首页。",
+    "code": "404",
+    "subtitle": "空间未定位",
+    "title": "页面未找到",
+    "description": "您所寻觅的页面地址暂不存在或已在 Alizé Residence 规划中重组。",
+    "redirecting_in": "将在 {seconds} 秒后自动返回首页",
+    "redirect_now": "立即返回首页"
   }
 }

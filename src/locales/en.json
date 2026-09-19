@@ -620,7 +620,17 @@
     "section_3_content": "The 39th-floor celestial infinity pool, Sky Lounge, Spa, and fitness facilities operate under designated hours. Residents and guests must adhere to proper attire, aquatic safety guidelines, and quiet tranquility. Smoking and disruptive activities are strictly prohibited within wellness zones.",
     "section_4_title": "4. Fire Safety & Emergency Preparedness",
     "section_4_content": "Storage of hazardous combustibles, obstructing fire escape corridors, or tampering with in-unit sprinkler heads and smoke detectors is strictly prohibited under statutory penalties. Scheduled drills are conducted jointly with the Da Nang Fire & Rescue Police.",
-    "contact_box_title": "PROPERTY MANAGEMENT BOARD",
-    "contact_box_desc": "Operations Division: operations@alize-residence.com — 24/7 Resident Concierge Hotline: +84 (965) 355-355."
+    "contact_box_title": "ALIZÉ RESIDENCE BUILDING MANAGEMENT",
+    "contact_box_desc": "Operations Department: operations@alize-residence.com — 24/7 Resident Concierge: +84 (965) 355-355."
+  },
+  "NotFoundPage": {
+    "meta_title": "404 - Page Not Found | Alizé Residence Da Nang",
+    "meta_description": "The page you are looking for does not exist or has been relocated. Automatically returning to home page shortly.",
+    "code": "404",
+    "subtitle": "SPACE NOT LOCATED",
+    "title": "PAGE NOT FOUND",
+    "description": "The destination you requested does not exist or has been redesigned within the Alizé Residence archive.",
+    "redirecting_in": "Automatically returning to home in {seconds}s",
+    "redirect_now": "RETURN HOME NOW"
   }
 }
