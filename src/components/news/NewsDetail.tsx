@@ -148,7 +148,7 @@ export function NewsDetail(props: { article: NewsArticle }) {
                   <span
                     className={`text-[10px] font-bold tracking-[0.25em] text-[#8B7043] uppercase md:text-xs ${inter.className}`}
                   >
-                    ĐIỂM NHẤN CỐT LÕI
+                    {tNews('core_highlights')}
                   </span>
                   <span className="h-[1px] w-12 bg-[#8B7043]/40" />
                 </div>

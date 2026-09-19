@@ -17,6 +17,7 @@ const clipPathPolygon =
 export function ApartmentDetail(props: { data: ApartmentData }) {
   const t = useTranslations('Index');
   const tMenu = useTranslations('Menu');
+  const tApt = useTranslations('ApartmentDetailPage');
   const [activeTab, setActiveTab] = useState<'info' | 'benefits'>('info');
 
   const getTypologyLabel = (typ: string) => {
@@ -59,7 +60,7 @@ export function ApartmentDetail(props: { data: ApartmentData }) {
           <span
             className={`text-[9px] font-bold tracking-[0.25em] text-[#8B7043] uppercase md:text-[10px] ${inter.className}`}
           >
-            ALIZÉ RESIDENCE • BỜ BIỂN MỸ KHÊ
+            {tApt('project_tagline')}
           </span>
         </div>
 
@@ -73,12 +74,12 @@ export function ApartmentDetail(props: { data: ApartmentData }) {
                 <span
                   className={`text-[9px] font-bold tracking-[0.25em] text-[#151926]/60 uppercase md:text-[10px] ${inter.className}`}
                 >
-                  SƠ ĐỒ MẶT BẰNG CHI TIẾT
+                  {tApt('floorplan_title')}
                 </span>
                 <span
                   className={`text-[9px] tracking-[0.2em] text-[#8B7043] uppercase ${inter.className}`}
                 >
-                  TỶ LỆ CHUẨN 1:100
+                  {tApt('floorplan_scale')}
                 </span>
               </div>
 
@@ -114,7 +115,7 @@ export function ApartmentDetail(props: { data: ApartmentData }) {
                   <span
                     className={`text-[9px] font-bold tracking-[0.25em] text-[#151926]/60 uppercase md:text-[10px] ${inter.className}`}
                   >
-                    KHÔNG GIAN NỘI THẤT & PHỐI CẢNH BIỂN
+                    {tApt('gallery_title')}
                   </span>
                   <div className="h-[1px] flex-1 bg-[#151926]/10" />
                 </div>
@@ -135,7 +136,7 @@ export function ApartmentDetail(props: { data: ApartmentData }) {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#151926]/40 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                     <div className="absolute bottom-4 left-6 text-[9px] font-bold tracking-[0.2em] text-white uppercase opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                      ALIZÉ RESIDENCE • PERSPECTIVE 0{idx + 1}
+                      {tApt('perspective_prefix')} 0{idx + 1}
                     </div>
                   </div>
                 ))}
@@ -164,7 +165,7 @@ export function ApartmentDetail(props: { data: ApartmentData }) {
                       <span
                         className={`text-[9px] font-bold tracking-[0.25em] text-[#8B7043] uppercase md:text-[10px] ${inter.className}`}
                       >
-                        BỘ SƯU TẬP GIỚI HẠN
+                        {tApt('limited_collection')}
                       </span>
                       <span
                         className={`text-[9px] tracking-[0.2em] text-[#151926]/40 uppercase ${inter.className}`}
@@ -382,7 +383,7 @@ export function ApartmentDetail(props: { data: ApartmentData }) {
                       <span
                         className={`tracking-[0.15em] text-[#151926]/50 uppercase ${inter.className}`}
                       >
-                        HOTLINE TƯ VẤN
+                        {tApt('hotline_label')}
                       </span>
                       <a
                         href="tel:+84965355355"

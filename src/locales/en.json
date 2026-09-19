@@ -289,6 +289,7 @@
     "related_subtitle": "Stay informed with recent updates from Alizé Residence",
     "breadcrumb_home": "HOME",
     "breadcrumb_journal": "JOURNAL",
+    "core_highlights": "KEY HIGHLIGHTS",
     "not_found_title": "Article Not Found | Alizé Residence",
     "not_found_desc": "The article you are looking for does not exist or has been moved."
   },
@@ -371,12 +372,20 @@
     "meta_description": "Exclusive luxury residence No. {number} featuring {bedrooms} bedrooms, {area}sqm of prime living space at Alizé Residence, My Khe Beach, Da Nang.",
     "breadcrumb_home": "HOME",
     "breadcrumb_apartments": "APARTMENTS",
+    "project_tagline": "ALIZÉ RESIDENCE • MY KHE BEACHFRONT",
+    "floorplan_title": "DETAILED ARCHITECTURAL FLOOR PLAN",
+    "floorplan_scale": "STANDARD SCALE 1:100",
+    "gallery_title": "INTERIOR LIVING SPACES & OCEAN RENDERS",
+    "perspective_prefix": "ALIZÉ RESIDENCE • PERSPECTIVE",
+    "limited_collection": "LIMITED BESPOKE COLLECTION",
+    "hotline_label": "CONCIERGE HOTLINE",
     "not_found_title": "Apartment Not Found | Alizé Residence"
   },
   "GalleryPage": {
     "meta_title": "Visual Gallery & 4K Cinema | Alizé Residence Da Nang",
     "meta_description": "Explore the architectural visual archive, 5-star ocean-view interiors, and bespoke lifestyle amenities of Alizé Residence My Khe Da Nang.",
     "hero_badge": "ARCHITECTURAL VISUAL ARCHIVE",
+    "book_loading": "LOADING 3D ARCHITECTURAL MONOGRAPH...",
     "hero_heading": "Visual archive",
     "hero_curated_sub": "Curated collection of 24 bespoke spaces",
     "hero_description": "A visual sensory odyssey through the oceanfront condotel masterpiece at My Khe Beach, where the dance of coastal breeze and light comes alive in 4K.",

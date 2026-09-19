@@ -288,8 +288,9 @@
     "continue_reading": "继续探索",
     "related_subtitle": "关注 Alizé Residence 最新空间与生活动态",
     "breadcrumb_home": "首页",
-    "breadcrumb_journal": "专栏",
-    "not_found_title": "未找到文章 | Alizé Residence",
+    "breadcrumb_journal": "项目快讯",
+    "core_highlights": "核心亮点",
+    "not_found_title": "未找到相关资讯 | Alizé Residence",
     "not_found_desc": "您要查看的文章不存在或已被移动。"
   },
   "Menu": {
@@ -371,12 +372,20 @@
     "meta_description": "Alizé Residence 奢华海景公寓 No. {number}，拥有 {bedrooms} 间卧室，面积 {area} 平方米，伫立于岘港美溪海滩一线黄金地段。",
     "breadcrumb_home": "首页",
     "breadcrumb_apartments": "公寓系列",
+    "project_tagline": "ALIZÉ RESIDENCE • 美溪海滩一线",
+    "floorplan_title": "精细建筑平面图",
+    "floorplan_scale": "标准比例 1:100",
+    "gallery_title": "室内空间与海景效果图",
+    "perspective_prefix": "ALIZÉ RESIDENCE • 效果图",
+    "limited_collection": "限量私藏系列",
+    "hotline_label": "贵宾咨询热线",
     "not_found_title": "未找到公寓 | Alizé Residence"
   },
   "GalleryPage": {
     "meta_title": "视觉画廊与 4K 漫游 | Alizé Residence 岘港",
     "meta_description": "品鉴 Alizé Residence 岘港美溪海滩流线型建筑美学、五星级海景奢装大宅与天际尊享配套视觉画廊。",
     "hero_badge": "建筑艺术典藏画廊",
+    "book_loading": "正在加载 3D 建筑画册...",
     "hero_heading": "视觉影像馆",
     "hero_curated_sub": "24 席海景艺术空间典藏",
     "hero_description": "通过 4K 电影级高影视角，沉浸式品鉴岘港美溪海滩一线奢华海景度假公寓的非凡魅力与光影曼舞。",

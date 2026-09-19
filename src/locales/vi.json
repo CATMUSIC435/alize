@@ -289,6 +289,7 @@
     "related_subtitle": "Cập nhật những chuyển động mới nhất từ không gian sống Alizé Residence",
     "breadcrumb_home": "TRANG CHỦ",
     "breadcrumb_journal": "BẢN TIN",
+    "core_highlights": "ĐIỂM NHẤN CỐT LÕI",
     "not_found_title": "Không tìm thấy bài viết | Alizé Residence",
     "not_found_desc": "Bài viết bạn đang tìm kiếm không tồn tại hoặc đã được di chuyển."
   },
@@ -371,12 +372,20 @@
     "meta_description": "Căn hộ cao cấp No. {number} gồm {bedrooms} phòng ngủ, diện tích {area}m² tại dự án Alizé Residence, bờ biển Mỹ Khê Đà Nẵng.",
     "breadcrumb_home": "TRANG CHỦ",
     "breadcrumb_apartments": "CĂN HỘ",
+    "project_tagline": "ALIZÉ RESIDENCE • BỜ BIỂN MỸ KHÊ",
+    "floorplan_title": "SƠ ĐỒ MẶT BẰNG CHI TIẾT",
+    "floorplan_scale": "TỶ LỆ CHUẨN 1:100",
+    "gallery_title": "KHÔNG GIAN NỘI THẤT & PHỐI CẢNH BIỂN",
+    "perspective_prefix": "ALIZÉ RESIDENCE • PHỐI CẢNH",
+    "limited_collection": "BỘ SƯU TẬP GIỚI HẠN",
+    "hotline_label": "HOTLINE TƯ VẤN",
     "not_found_title": "Không tìm thấy căn hộ | Alizé Residence"
   },
   "GalleryPage": {
     "meta_title": "Thư Viện Ảnh & Thước Phim 4K | Alizé Residence Đà Nẵng",
     "meta_description": "Chiêm ngưỡng bộ sưu tập hình ảnh kiến trúc lượn sóng, không gian nội thất 5 sao và hệ tiện ích đặc quyền tại Alizé Residence Mỹ Khê Đà Nẵng.",
     "hero_badge": "KHO LƯU TRỮ NGHỆ THUẬT KIẾN TRÚC",
+    "book_loading": "ĐANG TẢI SÁCH LẬT 3D ALIZÉ...",
     "hero_heading": "Thư viện",
     "hero_curated_sub": "Bộ sưu tập 24 không gian 4K tuyệt mỹ",
     "hero_description": "Hành trình khám phá kiệt tác căn hộ khách sạn condotel mặt biển Mỹ Khê qua lăng kính điện ảnh 4K, nơi từng vũ điệu của gió và ánh sáng được khắc họa sống động.",

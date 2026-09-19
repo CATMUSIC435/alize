@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { Inter } from 'next/font/google';
 
 const inter = Inter({
@@ -9,6 +10,8 @@ const inter = Inter({
 });
 
 export function BookSliderSkeleton() {
+  const tGallery = useTranslations('GalleryPage');
+
   return (
     <div className="relative flex h-[580px] w-full items-center justify-center overflow-hidden bg-transparent sm:h-[680px] md:h-[740px] lg:h-[800px]">
       {/* Soft Ambient Radial Halo */}
@@ -43,7 +46,7 @@ export function BookSliderSkeleton() {
         <div className="flex items-center gap-2.5 rounded-full border border-[#8B7043]/30 bg-white/70 px-4 py-2 shadow-sm backdrop-blur-md">
           <span className="h-2 w-2 animate-ping rounded-full bg-[#8B7043]" />
           <span className={`text-[9px] font-bold tracking-[0.25em] text-[#8B7043] uppercase md:text-[10px] ${inter.className}`}>
-            ĐANG TẢI SÁCH LẬT 3D ALIZÉ...
+            {tGallery('book_loading')}
           </span>
         </div>
       </div>
