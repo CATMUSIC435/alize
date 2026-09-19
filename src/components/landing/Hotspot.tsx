@@ -334,13 +334,13 @@ export function Hotspot(props: {
         <div
           className="pointer-events-auto absolute top-[calc(100%+38px)] z-40 block md:hidden"
           style={{
-            left: `calc(50vw - ${xPercent}vw)`,
+            left: `calc(50vw - ${xPercent}vw + 28px)`,
             transform: 'translateX(-50%)',
             width: 'calc(100vw - 32px)',
             maxWidth: '380px',
           }}
         >
-          <div className="bg-sand-card border border-[#D9CEBD]/90 relative flex cursor-default flex-col justify-between rounded-2xl p-4 shadow-[0_20px_50px_rgba(21,25,38,0.25)]">
+          <div className="bg-sand-card border border-[#D9CEBD]/90 relative flex w-full cursor-default flex-col justify-between rounded-2xl p-4 shadow-[0_20px_50px_rgba(21,25,38,0.25)]">
             <HotspotCardContent
               title={props.title}
               description={props.description}
