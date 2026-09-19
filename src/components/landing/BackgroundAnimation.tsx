@@ -101,9 +101,9 @@ export function BackgroundAnimation() {
                 muted
                 playsInline
                 preload="auto"
-                className="h-full w-full object-cover object-center"
+                className="h-full w-full object-cover object-center brightness-[1.05] contrast-[1.02]"
               />
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-black/45 md:from-black/60 md:via-black/10 md:to-black/35" />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/30 md:from-black/40 md:to-black/20" />
             </motion.div>
 
             {/* Night Villa Image */}
