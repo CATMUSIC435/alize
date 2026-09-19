@@ -219,16 +219,151 @@ const KEYWORDS_BY_PAGE: Record<
       '天际顶层大平层剖面图',
     ],
   },
+  legal: {
+    vi: [
+      'Pháp lý Alizé Residence',
+      'Hồ sơ pháp lý Alizé Đà Nẵng',
+      'Giấy phép xây dựng Alizé',
+      'Quy hoạch 1/500 Alizé Residence',
+      'Sổ hồng căn hộ Alizé Mỹ Khê',
+      'Pháp lý dự án A&T Group',
+    ],
+    en: [
+      'Alizé Residence legal documents',
+      'Alizé construction permit',
+      'Alizé zoning approval',
+      'Condotel legal status Da Nang',
+      'Alizé ownership certificate',
+    ],
+    zh: [
+      'Alizé Residence 法律文件',
+      '岘港 Alizé 施工许可证',
+      'Alizé 1/500 规划批文',
+      '越南酒店式公寓产权红本',
+      'A&T Group 资质证书',
+    ],
+  },
+  sales: {
+    vi: [
+      'Tài liệu bán hàng Alizé Residence',
+      'Sales Kit Alizé Đà Nẵng',
+      'Bảng giá căn hộ Alizé',
+      'Chính sách bán hàng Alizé Residence',
+      'Brochure Alizé Mỹ Khê 4K',
+      'Bảng tính dòng tiền cho thuê condotel',
+    ],
+    en: [
+      'Alizé Residence sales kit',
+      'Alizé price list and policies',
+      'Alizé project brochure 4K',
+      'Condotel cash flow model',
+      'Luxury apartment sales materials Da Nang',
+    ],
+    zh: [
+      'Alizé Residence 销售资料包',
+      '岘港 Alizé 最新价格表与认购政策',
+      'Alizé 4K 官方楼书画册',
+      '酒店式公寓租金回报率测算',
+    ],
+  },
+  faq: {
+    vi: [
+      'Câu hỏi thường gặp Alizé Residence',
+      'Hỏi đáp pháp lý condotel Alizé',
+      'Chính sách chia sẻ doanh thu 85/15',
+      'Tiến độ bàn giao Alizé Đà Nẵng',
+      'Người nước ngoài mua căn hộ Alizé',
+    ],
+    en: [
+      'Alizé Residence FAQ',
+      'Frequently asked questions Alizé',
+      '85/15 rental revenue sharing condotel',
+      'Alizé handover date Da Nang',
+      'Foreign ownership Alizé Residence',
+    ],
+    zh: [
+      'Alizé Residence 常见问题解答',
+      '岘港 Alizé 购房 FAQ',
+      '85/15 酒店托管收益政策',
+      '外籍人士在越购房流程',
+      'Alizé 项目交房时间',
+    ],
+  },
+  privacy: {
+    vi: [
+      'Chính sách bảo mật Alizé Residence',
+      'Bảo vệ dữ liệu cá nhân Alizé',
+      'Bảo mật thông tin khách hàng Đà Nẵng',
+      'Nghị định 13/2023 bảo vệ dữ liệu',
+    ],
+    en: [
+      'Alizé Residence privacy policy',
+      'Personal data protection Vietnam',
+      'Customer privacy Alizé Da Nang',
+    ],
+    zh: [
+      'Alizé Residence 隐私政策',
+      '岘港 Alizé 个人信息安全保护声明',
+      '越南数据安全合规',
+    ],
+  },
+  terms: {
+    vi: [
+      'Điều khoản sử dụng Alizé Residence',
+      'Quy định sử dụng website Alizé',
+      'Bản quyền kiến trúc AEDAS Alizé',
+    ],
+    en: [
+      'Alizé Residence terms of use',
+      'Terms and conditions Alizé',
+      'AEDAS architecture copyright',
+    ],
+    zh: [
+      'Alizé Residence 网站使用条款',
+      'AEDAS 建筑知识产权声明',
+      '岘港 Alizé 免责声明',
+    ],
+  },
+  regulations: {
+    vi: [
+      'Quy chế hoạt động Alizé Residence',
+      'Quy chế quản lý vận hành tòa nhà',
+      'Tiêu chuẩn an ninh condotel Alizé',
+      'Quy định tiện ích hồ bơi Alizé',
+    ],
+    en: [
+      'Alizé Residence operating regulations',
+      'Building management rules Da Nang',
+      'Condotel amenities charter Alizé',
+    ],
+    zh: [
+      'Alizé Residence 大厦管理规约',
+      '岘港高端公寓运营规范',
+      '天际无边泳池使用公约',
+    ],
+  },
 };
 
 /**
  * Retrieves localized keywords for SEO metadata by page key.
- * @param pageKey The page identifier ('home' | 'apartments' | 'news' | 'contact' | 'gallery' | 'floorplans').
+ * @param pageKey The page identifier ('home' | 'apartments' | 'news' | 'contact' | 'gallery' | 'floorplans' | 'legal' | 'sales' | 'faq' | 'privacy' | 'terms' | 'regulations').
  * @param locale The active locale.
  * @returns Array of localized keywords.
  */
 export const getLocalizedKeywords = (
-  pageKey: 'home' | 'apartments' | 'news' | 'contact' | 'gallery' | 'floorplans',
+  pageKey:
+    | 'home'
+    | 'apartments'
+    | 'news'
+    | 'contact'
+    | 'gallery'
+    | 'floorplans'
+    | 'legal'
+    | 'sales'
+    | 'faq'
+    | 'privacy'
+    | 'terms'
+    | 'regulations',
   locale: string,
 ): string[] => {
   return KEYWORDS_BY_PAGE[pageKey]?.[locale] ?? KEYWORDS_BY_PAGE[pageKey]?.vi ?? [];

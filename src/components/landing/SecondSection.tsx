@@ -107,6 +107,16 @@ export function SecondSection() {
           <div className="relative z-20 flex w-full flex-col items-center">
             {/* Center Logo & Vertical Line */}
             <div className="mb-24 flex flex-col items-center md:mb-48">
+              <div className="mb-6 flex justify-center md:mb-8">
+                <Image
+                  src="/logo-alize.png"
+                  alt="Alizé Logo"
+                  width={140}
+                  height={168}
+                  className="h-20 w-auto object-contain md:h-28"
+                />
+              </div>
+
               <div
                 className={`flex items-center gap-4 text-xs font-bold tracking-[0.2em] text-[#151926] uppercase md:gap-6 md:text-xs ${inter.className}`}
               >

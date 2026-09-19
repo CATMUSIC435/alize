@@ -191,7 +191,7 @@ export function SixthSection() {
                     className="relative min-w-0 flex-[0_0_86%] pr-3 first:pl-2"
                   >
                     <div
-                      className={`relative aspect-[4/3] w-full overflow-hidden rounded-2xl transition-all duration-500 ease-out ${
+                      className={`relative aspect-[4/3] w-full overflow-hidden transition-all duration-500 ease-out ${
                         isActive
                           ? 'scale-100 opacity-100 shadow-[0_16px_36px_rgba(21,25,38,0.22)] ring-1 ring-white/50'
                           : 'scale-[0.93] opacity-60 shadow-md'
@@ -209,34 +209,36 @@ export function SixthSection() {
                       {/* Luxury subtle dark gradient vignette */}
                       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-black/25" />
 
-                      {/* Floating Slide Index Badge */}
-                      <div className="absolute top-3 right-3 rounded-full bg-black/40 px-2.5 py-1 text-[9px] font-bold tracking-widest text-white backdrop-blur-md border border-white/20">
+                      {/* Floating Slide Index Counter */}
+                      <div
+                        className={`absolute top-3.5 right-3.5 text-xs font-light tracking-[0.2em] text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.85)] ${inter.className}`}
+                      >
                         0{index + 1} / 0{slides.length}
                       </div>
 
-                      {/* Glassmorphic Specs Bar inside active card */}
-                      <div className="absolute inset-x-3 bottom-3 flex items-center justify-around rounded-xl border border-white/70 bg-white/85 p-2.5 text-[#151926] shadow-lg backdrop-blur-md">
+                      {/* Specs Overlay: Clean text with bright line underneath, no background, no rounded */}
+                      <div className="absolute inset-x-5 bottom-3.5 flex items-center justify-around border-b border-white/70 pb-2.5 text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.85)]">
                         <div className="text-center">
                           <p
-                            className={`text-[8px] font-bold tracking-widest text-[#151926]/70 uppercase ${inter.className}`}
+                            className={`text-[8px] font-bold tracking-widest text-white/80 uppercase ${inter.className}`}
                           >
                             {t('bedrooms_label')}
                           </p>
                           <p
-                            className={`text-lg font-medium leading-tight text-[#151926] ${playfair.className}`}
+                            className={`text-lg font-medium leading-tight text-white ${playfair.className}`}
                           >
                             {slide.bedrooms}
                           </p>
                         </div>
-                        <div className="h-6 w-[1px] bg-[#151926]/15" />
+                        <div className="h-6 w-[1px] bg-white/30" />
                         <div className="text-center">
                           <p
-                            className={`text-[8px] font-bold tracking-widest text-[#151926]/70 uppercase ${inter.className}`}
+                            className={`text-[8px] font-bold tracking-widest text-white/80 uppercase ${inter.className}`}
                           >
                             {t('area_up_to_label')}
                           </p>
                           <p
-                            className={`text-sm font-medium leading-tight text-[#151926] ${playfair.className}`}
+                            className={`text-sm font-medium leading-tight text-white ${playfair.className}`}
                           >
                             {slide.area}
                           </p>
@@ -249,15 +251,15 @@ export function SixthSection() {
             </div>
           </div>
 
-          {/* Mobile Controls: Prev/Next & Pill Pagination */}
+          {/* Mobile Controls: Prev/Next & Indicators without background or rounded */}
           <div className="mt-4 flex w-full items-center justify-center gap-6">
             <button
               type="button"
               onClick={scrollPrev}
               aria-label="Previous slide"
-              className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-[#151926]/20 bg-white/40 text-[#151926] shadow-sm backdrop-blur-sm transition-all active:scale-90"
+              className="flex h-10 w-10 cursor-pointer items-center justify-center text-[#151926]/70 transition-colors hover:text-[#151926] active:scale-90"
             >
-              <svg width="18" height="10" viewBox="0 0 28 10" fill="none" className="rotate-180">
+              <svg width="24" height="10" viewBox="0 0 28 10" fill="none" className="rotate-180">
                 <path
                   d="M23 1L27 5L23 9"
                   stroke="currentColor"
@@ -275,7 +277,7 @@ export function SixthSection() {
               </svg>
             </button>
 
-            {/* Expanding Pill Indicators */}
+            {/* Sharp Indicators */}
             <div className="flex items-center gap-2">
               {slides.map((_, idx) => {
                 const isActive = idx === selectedIndex;
@@ -285,8 +287,8 @@ export function SixthSection() {
                     type="button"
                     onClick={() => scrollTo(idx)}
                     aria-label={`Go to slide ${idx + 1}`}
-                    className={`h-1.5 rounded-full transition-all duration-300 ${
-                      isActive ? 'w-7 bg-[#151926]' : 'w-2 bg-[#151926]/25 hover:bg-[#151926]/40'
+                    className={`h-[2px] transition-all duration-300 ${
+                      isActive ? 'w-7 bg-[#151926]' : 'w-2.5 bg-[#151926]/25 hover:bg-[#151926]/40'
                     }`}
                   />
                 );
@@ -297,9 +299,9 @@ export function SixthSection() {
               type="button"
               onClick={scrollNext}
               aria-label="Next slide"
-              className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-[#151926]/20 bg-white/40 text-[#151926] shadow-sm backdrop-blur-sm transition-all active:scale-90"
+              className="flex h-10 w-10 cursor-pointer items-center justify-center text-[#151926]/70 transition-colors hover:text-[#151926] active:scale-90"
             >
-              <svg width="18" height="10" viewBox="0 0 28 10" fill="none">
+              <svg width="24" height="10" viewBox="0 0 28 10" fill="none">
                 <path
                   d="M23 1L27 5L23 9"
                   stroke="currentColor"
@@ -361,7 +363,7 @@ export function SixthSection() {
         </div>
 
         {/* DESKTOP CAROUSEL (>= 768px): Preserved Original 3-Column Layout */}
-        <div className="mx-auto hidden h-full min-h-[70vh] w-full max-w-[1400px] flex-col items-center justify-center px-8 pt-10 pr-6 md:flex md:flex-row md:justify-between md:px-[10vw] md:pl-16">
+        <div className="mx-auto hidden h-full min-h-[70vh] w-full max-w-[1400px] flex-col items-center justify-center px-8 pt-10 md:flex md:flex-row md:justify-between md:px-[10vw]">
           {/* Left Column (Stats) - Fixed & Animated */}
           <div className="relative z-30 mb-8 flex h-full w-full flex-col justify-center md:mb-0 md:w-[18%]">
             <div className="relative flex h-[120px] w-full flex-col justify-center md:h-[200px]">
@@ -409,7 +411,7 @@ export function SixthSection() {
           {/* Center Column (Image Carousel) */}
           <div className="relative z-10 mb-24 h-[55vh] w-full md:mb-0 md:h-[70vh] md:w-[64%]">
             <div
-              className="h-full w-full overflow-hidden rounded-lg md:rounded-none"
+              className="h-full w-full overflow-hidden rounded-none"
               ref={desktopEmblaRef}
             >
               <div className="flex h-full touch-pan-y">

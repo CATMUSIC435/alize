@@ -39,7 +39,7 @@ export function EighthSection() {
       {/* Center Title */}
       <div className="flex w-full flex-col items-center text-center">
         <h2
-          className={`flex flex-col items-center text-[6vw] leading-[0.9] font-medium tracking-tighter text-[#151926] uppercase md:text-[8vw] md:leading-[0.92] ${playfair.className}`}
+          className={`flex flex-col items-center text-[9vw] leading-[1.08] font-medium tracking-tighter text-[#151926] uppercase md:text-[8vw] md:leading-[0.92] ${playfair.className}`}
           style={{ transform: 'scaleY(1.15)' }}
         >
           {t('the_space')
@@ -49,7 +49,7 @@ export function EighthSection() {
             ))}
         </h2>
         <span
-          className={`relative z-10 ml-[2vw] text-[20vw] leading-[0.5] text-[#151926] md:ml-[4vw] md:pt-24 md:text-[12vw] ${pinyon.className}`}
+          className={`relative z-10 ml-[2vw] pt-8 text-[16vw] leading-[0.85] text-[#151926] md:ml-[4vw] md:pt-24 md:text-[12vw] md:leading-[0.5] ${pinyon.className}`}
         >
           {t('live_in')}
         </span>

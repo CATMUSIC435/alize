@@ -111,6 +111,9 @@ export function Footer() {
             <Link href="/news" prefetch={false} className="transition-opacity hover:opacity-70">
               {tMenu('news')}
             </Link>
+            <Link href="/legal" prefetch={false} className="transition-opacity hover:opacity-70">
+              {tMenu('legal')}
+            </Link>
             <Link href="/contact" prefetch={false} className="transition-opacity hover:opacity-70">
               {tMenu('contact')}
             </Link>
@@ -127,9 +130,31 @@ export function Footer() {
               <p>{t('era_residence')}</p>
               <p>{t('all_rights_reserved')}</p>
             </div>
-            <p className="cursor-pointer opacity-80 transition-opacity hover:opacity-100">
-              {t('privacy_policy')}
-            </p>
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[8px] md:text-[9.5px]">
+              <Link
+                href="/privacy"
+                prefetch={false}
+                className="cursor-pointer opacity-80 transition-opacity hover:opacity-100 hover:text-[#E0AC87]"
+              >
+                {t('privacy_policy')}
+              </Link>
+              <span className="opacity-40">•</span>
+              <Link
+                href="/terms"
+                prefetch={false}
+                className="cursor-pointer opacity-80 transition-opacity hover:opacity-100 hover:text-[#E0AC87]"
+              >
+                {t('terms_of_use')}
+              </Link>
+              <span className="opacity-40">•</span>
+              <Link
+                href="/regulations"
+                prefetch={false}
+                className="cursor-pointer opacity-80 transition-opacity hover:opacity-100 hover:text-[#E0AC87]"
+              >
+                {t('operating_regulations')}
+              </Link>
+            </div>
           </div>
 
           {/* Right Side */}

@@ -149,9 +149,18 @@ export function MenuOverlay() {
         'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=85&w=1400',
     },
     {
+      id: 'legal',
+      href: '/legal',
+      number: '06',
+      title: tMenu('legal'),
+      sub: tMenu('legal_sub'),
+      image:
+        'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=85&w=1400',
+    },
+    {
       id: 'contact',
       href: '/contact',
-      number: '06',
+      number: '07',
       title: tMenu('contact'),
       sub: tMenu('contact_sub'),
       image:

@@ -14,6 +14,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/gallery', priority: 0.85, changeFrequency: 'daily' },
     { path: '/news', priority: 0.85, changeFrequency: 'daily' },
     { path: '/contact', priority: 0.85, changeFrequency: 'weekly' },
+    { path: '/legal', priority: 0.75, changeFrequency: 'monthly' },
+    { path: '/sales-kit', priority: 0.75, changeFrequency: 'weekly' },
+    { path: '/faq', priority: 0.75, changeFrequency: 'weekly' },
+    { path: '/privacy', priority: 0.6, changeFrequency: 'monthly' },
+    { path: '/terms', priority: 0.6, changeFrequency: 'monthly' },
+    { path: '/regulations', priority: 0.6, changeFrequency: 'monthly' },
   ];
 
   const formatUrl = (path: string, locale: string) => {

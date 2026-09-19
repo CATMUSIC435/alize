@@ -78,6 +78,48 @@ describe('Seo utility', () => {
       expect(keywords.length).toBeGreaterThan(0);
       expect(keywords.some((kw) => kw.includes('公寓'))).toBe(true);
     });
+
+    it('returns Vietnamese keywords for legal page', () => {
+      const keywords = getLocalizedKeywords('legal', 'vi');
+
+      expect(keywords.length).toBeGreaterThan(0);
+      expect(keywords.some((kw) => kw.includes('Pháp lý'))).toBe(true);
+    });
+
+    it('returns English keywords for sales page', () => {
+      const keywords = getLocalizedKeywords('sales', 'en');
+
+      expect(keywords.length).toBeGreaterThan(0);
+      expect(keywords.some((kw) => kw.includes('sales kit'))).toBe(true);
+    });
+
+    it('returns Chinese keywords for faq page', () => {
+      const keywords = getLocalizedKeywords('faq', 'zh');
+
+      expect(keywords.length).toBeGreaterThan(0);
+      expect(keywords.some((kw) => kw.includes('FAQ'))).toBe(true);
+    });
+
+    it('returns Vietnamese keywords for privacy page', () => {
+      const keywords = getLocalizedKeywords('privacy', 'vi');
+
+      expect(keywords.length).toBeGreaterThan(0);
+      expect(keywords.some((kw) => kw.includes('bảo mật'))).toBe(true);
+    });
+
+    it('returns English keywords for terms page', () => {
+      const keywords = getLocalizedKeywords('terms', 'en');
+
+      expect(keywords.length).toBeGreaterThan(0);
+      expect(keywords.some((kw) => kw.includes('terms of use'))).toBe(true);
+    });
+
+    it('returns Chinese keywords for regulations page', () => {
+      const keywords = getLocalizedKeywords('regulations', 'zh');
+
+      expect(keywords.length).toBeGreaterThan(0);
+      expect(keywords.some((kw) => kw.includes('管理规约'))).toBe(true);
+    });
   });
 
   describe('LOCAL_BUSINESS_CONFIG', () => {
