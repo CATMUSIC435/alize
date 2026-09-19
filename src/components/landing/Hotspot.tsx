@@ -329,12 +329,12 @@ export function Hotspot(props: {
         </AnimatePresence>
       </div>
 
-      {/* Mobile Card (Positioned directly under hotspot button, non-fixed, default visible, no close button) */}
+      {/* Mobile Card (Positioned lower under hotspot button, non-fixed, default visible, no close button) */}
       {(props.overview || isCardOpen) && (
         <div
-          className="pointer-events-auto absolute top-[calc(100%+8px)] z-40 block md:hidden"
+          className="pointer-events-auto absolute top-[calc(100%+38px)] z-40 block md:hidden"
           style={{
-            left: `calc(50vw - ${xPercent}vw + 28px)`,
+            left: `calc(50vw - ${xPercent}vw)`,
             transform: 'translateX(-50%)',
             width: 'calc(100vw - 32px)',
             maxWidth: '380px',
