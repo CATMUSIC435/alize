@@ -26,24 +26,43 @@ export function BackgroundAnimation() {
 
     video.muted = true;
     video.defaultMuted = true;
-    video.volume = 0;
+    video.playsInline = true;
+    video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', '');
+
+    // WebKit iOS presentation mode enforcement (strictly prevent native fullscreen takeover)
+    const videoWithWebkit = video as unknown as {
+      webkitSetPresentationMode?: (mode: string) => void;
+      webkitPresentationMode?: string;
+    };
+
+    if (typeof videoWithWebkit.webkitSetPresentationMode === 'function') {
+      videoWithWebkit.webkitSetPresentationMode('inline');
+    }
+
+    const enforceInline = () => {
+      if (
+        videoWithWebkit.webkitPresentationMode &&
+        videoWithWebkit.webkitPresentationMode !== 'inline' &&
+        typeof videoWithWebkit.webkitSetPresentationMode === 'function'
+      ) {
+        videoWithWebkit.webkitSetPresentationMode('inline');
+      }
+    };
+
+    video.addEventListener('webkitpresentationmodechanged', enforceInline);
 
     if (heroMode === 'day') {
-      const playPromise = video.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          const startPlayback = () => {
-            if (videoRef.current && useUIStore.getState().heroMode === 'day') {
-              videoRef.current.play().catch(() => {});
-            }
-          };
-          window.addEventListener('touchstart', startPlayback, { once: true, passive: true });
-          window.addEventListener('click', startPlayback, { once: true, passive: true });
-        });
-      }
+      video.play().catch(() => {
+        // Silently catch autoplay restrictions; never hijack touchstart/click
+      });
     } else {
       video.pause();
     }
+
+    return () => {
+      video.removeEventListener('webkitpresentationmodechanged', enforceInline);
+    };
   }, [heroMode]);
 
   const { scrollY } = useScroll();

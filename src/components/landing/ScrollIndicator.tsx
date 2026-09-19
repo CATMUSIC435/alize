@@ -22,6 +22,17 @@ export function ScrollIndicator() {
   const percentage = useTransform(scrollYProgress, [0, 1], [0, 100]);
   const topHeight = useMotionTemplate`calc(${percentage}% - ${percentage} * 0.48px)`;
 
+  const handleScrollDown = () => {
+    if (typeof window === 'undefined') return;
+    const target = window.innerHeight * 0.95;
+    const lenis = (window as unknown as { __lenis?: { scrollTo: (target: number, opts?: { duration?: number }) => void } }).__lenis;
+    if (lenis) {
+      lenis.scrollTo(target, { duration: 1.2 });
+    } else {
+      window.scrollTo({ top: target, behavior: 'smooth' });
+    }
+  };
+
   return (
     <motion.div
       className={`pointer-events-none fixed bottom-8 left-4 z-50 flex flex-col items-center md:bottom-12 md:left-12 ${inter.className}`}
@@ -37,31 +48,38 @@ export function ScrollIndicator() {
         <div className="w-[1px] grow bg-white/30"></div>
       </div>
 
-      {/* Wrapper to handle the rotated text space */}
-      <div className="mb-4 flex h-20 items-center justify-center">
-        <span className="rotate-90 text-[8px] font-bold tracking-[0.3em] whitespace-nowrap text-white uppercase drop-shadow-md md:text-[10px]">
-          {t('scroll')}
-        </span>
-      </div>
-
-      <motion.svg
-        width="10"
-        height="40"
-        viewBox="0 0 10 40"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className="drop-shadow-md"
-        animate={{ y: [0, 15, 0], opacity: [0.2, 1, 0.2] }}
-        transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
+      {/* Clickable Scroll Trigger */}
+      <button
+        type="button"
+        onClick={handleScrollDown}
+        aria-label={t('scroll')}
+        className="pointer-events-auto flex cursor-pointer flex-col items-center transition-opacity hover:opacity-80 active:scale-95 focus:outline-none"
       >
-        <path
-          d="M5 0L5 38M5 38L1 34M5 38L9 34"
-          stroke="white"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </motion.svg>
+        <div className="mb-4 flex h-20 items-center justify-center">
+          <span className="rotate-90 text-[8px] font-bold tracking-[0.3em] whitespace-nowrap text-white uppercase drop-shadow-md md:text-[10px]">
+            {t('scroll')}
+          </span>
+        </div>
+
+        <motion.svg
+          width="10"
+          height="40"
+          viewBox="0 0 10 40"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="drop-shadow-md"
+          animate={{ y: [0, 15, 0], opacity: [0.2, 1, 0.2] }}
+          transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
+        >
+          <path
+            d="M5 0L5 38M5 38L1 34M5 38L9 34"
+            stroke="white"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </motion.svg>
+      </button>
     </motion.div>
   );
 }
