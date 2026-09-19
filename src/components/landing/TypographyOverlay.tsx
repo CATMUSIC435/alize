@@ -82,7 +82,7 @@ export function TypographyOverlay() {
       className={`pointer-events-none relative flex min-h-[100dvh] h-[100vh] w-full flex-col items-center justify-center ${playfair.className}`}
     >
       {/* Central Layout Container */}
-      <div className="relative mx-auto flex w-full max-w-7xl flex-col items-center justify-center px-4">
+      <div className="relative mx-auto flex w-full max-w-7xl flex-col items-center justify-center px-4 translate-y-14 min-[400px]:translate-y-18 sm:translate-y-24 md:translate-y-32 lg:translate-y-40">
         {/* Main Title */}
         <h1 className="flex flex-col items-center text-center text-white">
           <span className="text-3xl leading-none font-normal tracking-[0.24em] drop-shadow-[0_4px_24px_rgba(0,0,0,0.9)] min-[400px]:text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
@@ -105,7 +105,7 @@ export function TypographyOverlay() {
 
       {/* Horizontal Text Row (Bottom Center) */}
       <motion.div
-        className="pointer-events-none absolute bottom-6 sm:bottom-8 md:bottom-12 lg:bottom-14 mx-auto flex w-full max-w-[1400px] items-center justify-between px-4 sm:px-8 md:px-12 lg:px-16 max-md:!opacity-100 max-md:!transform-none"
+        className="pointer-events-none absolute bottom-4 sm:bottom-6 md:bottom-8 lg:bottom-10 mx-auto flex w-full max-w-[1400px] items-center justify-between px-4 sm:px-8 md:px-12 lg:px-16 max-md:!opacity-100 max-md:!transform-none"
         initial={{ opacity: 0, y: 18 }}
         animate={{ opacity: isIntroComplete ? 1 : 0, y: isIntroComplete ? 0 : 18 }}
         transition={{ duration: 0.8, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
