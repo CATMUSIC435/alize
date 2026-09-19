@@ -2,14 +2,49 @@
 
 import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useSyncExternalStore } from 'react';
 import { useUIStore } from '@/store/useUIStore';
+
+const MEDIA_QUERY = '(min-width: 768px)';
+
+function subscribeDesktop(callback: () => void) {
+  const mediaQuery = window.matchMedia(MEDIA_QUERY);
+  mediaQuery.addEventListener('change', callback);
+  return () => {
+    mediaQuery.removeEventListener('change', callback);
+  };
+}
+
+function checkVideoEligibility(): boolean {
+  if (typeof window === 'undefined') {
+    return false;
+  }
+  const isDesktop = window.matchMedia(MEDIA_QUERY).matches;
+  if (!isDesktop) {
+    return false;
+  }
+  const ua = navigator.userAgent || '';
+  const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const isInApp = /zalo|fban|fbav|instagram|line|micromessenger|tiktok|bytedance|wv/i.test(ua) ||
+    (isIOS && (!/safari/i.test(ua) || !/version/i.test(ua)));
+
+  return !isInApp && !/zalo/i.test(ua);
+}
+
+function getDesktopSnapshot() {
+  return checkVideoEligibility();
+}
+
+function getServerSnapshot() {
+  return false;
+}
 
 export function BackgroundAnimation() {
   const isIntroComplete = useUIStore((state) => state.isIntroComplete);
   const setIsIntroComplete = useUIStore((state) => state.setIsIntroComplete);
   const heroMode = useUIStore((state) => state.heroMode);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const canPlayVideo = useSyncExternalStore(subscribeDesktop, getDesktopSnapshot, getServerSnapshot);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -19,8 +54,10 @@ export function BackgroundAnimation() {
     }
   }, [setIsIntroComplete]);
 
-  // Initialize video silently on mount; strictly enforce inline playback and forbid fullscreen
+  // Initialize video silently on desktop when eligible; strictly enforce inline playback and forbid fullscreen
   useEffect(() => {
+    if (!canPlayVideo) return;
+
     const video = videoRef.current;
     if (!video) return;
 
@@ -66,26 +103,25 @@ export function BackgroundAnimation() {
       video.removeEventListener('webkitbeginfullscreen', enforceInline);
       video.removeEventListener('webkitpresentationmodechanged', enforceInline);
     };
-  }, []);
+  }, [canPlayVideo]);
 
   const { scrollY } = useScroll();
 
   // Desktop only: Pause video when scrolled far past hero section to save performance
-  // On mobile, never pause/resume during scroll to prevent iOS gesture interception
   useEffect(() => {
+    if (!canPlayVideo) return;
+
     return scrollY.on('change', (latest) => {
       const video = videoRef.current;
       if (!video) return;
-      const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-      if (isMobile) return;
 
       if (latest > 1600) {
         if (!video.paused) video.pause();
-      } else if (video.paused) {
+      } else if (video.paused && useUIStore.getState().heroMode === 'day') {
         video.play().catch(() => {});
       }
     });
-  }, [scrollY]);
+  }, [scrollY, canPlayVideo]);
 
   // As the user scrolls down, move the background up slightly for parallax
   const y = useTransform(scrollY, [0, 1000], ['0%', '-15%']);
@@ -115,42 +151,48 @@ export function BackgroundAnimation() {
               animate={{ opacity: heroMode === 'day' ? 1 : 0 }}
               transition={{ duration: 1.5, ease: 'easeInOut' }}
             >
-              <video
-                ref={videoRef}
-                src="/Continuum-South-Tower.mp4"
-                poster="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=70&w=1920"
-                autoPlay
-                loop
-                muted
-                playsInline
-                controls={false}
-                controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
-                tabIndex={-1}
-                aria-hidden="true"
-                {...({
-                  'webkit-playsinline': 'true',
-                  'x5-playsinline': 'true',
-                  'x5-video-player-type': 'h5-page',
-                  'x5-video-player-fullscreen': 'false',
-                } as Record<string, string>)}
-                disablePictureInPicture
-                disableRemotePlayback
-                preload="auto"
-                onPause={() => {
-                  if (useUIStore.getState().heroMode === 'day' && typeof window !== 'undefined' && window.scrollY < 900) {
-                    videoRef.current?.play().catch(() => {});
-                  }
-                }}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  maxWidth: '100%',
-                  maxHeight: '100%',
-                  objectFit: 'cover',
-                  pointerEvents: 'none',
-                }}
-                className="pointer-events-none absolute inset-0 block h-full w-full max-h-full max-w-full select-none object-cover object-center brightness-[1.05] contrast-[1.02]"
-              />
+              {canPlayVideo ? (
+                <video
+                  ref={videoRef}
+                  src="/Continuum-South-Tower.mp4"
+                  poster="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=70&w=1920"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  controls={false}
+                  controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
+                  tabIndex={-1}
+                  aria-hidden="true"
+                  {...({
+                    'webkit-playsinline': 'true',
+                    'x5-playsinline': 'true',
+                    'x5-video-player-type': 'h5-page',
+                    'x5-video-player-fullscreen': 'false',
+                  } as Record<string, string>)}
+                  disablePictureInPicture
+                  disableRemotePlayback
+                  preload="auto"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    maxWidth: '100%',
+                    maxHeight: '100%',
+                    objectFit: 'cover',
+                    pointerEvents: 'none',
+                  }}
+                  className="pointer-events-none absolute inset-0 block h-full w-full max-h-full max-w-full select-none object-cover object-center brightness-[1.05] contrast-[1.02]"
+                />
+              ) : (
+                <Image
+                  src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=70&w=1920"
+                  alt="Mediterranean Villa - Day"
+                  fill
+                  priority
+                  sizes="100vw"
+                  className="pointer-events-none block h-full w-full select-none object-cover object-center brightness-[1.05] contrast-[1.02]"
+                />
+              )}
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/30 md:from-black/40 md:to-black/20" />
             </motion.div>
 
