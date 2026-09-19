@@ -22,7 +22,7 @@ export function HotspotLayer() {
     if (!isIntroComplete) return;
     const currentScroll = window.scrollY;
     const isMobile = window.innerWidth < 768;
-    const heroEnd = isMobile ? window.innerHeight * 0.95 : window.innerHeight * 1.5;
+    const heroEnd = isMobile ? window.innerHeight * 1.25 : window.innerHeight * 1.5;
     if (currentScroll >= 300 && currentScroll < heroEnd) {
       setActiveHotspotId(1);
     }
@@ -34,7 +34,7 @@ export function HotspotLayer() {
     if (!useUIStore.getState().isIntroComplete) return;
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
     const heroEnd = isMobile
-      ? (typeof window !== 'undefined' ? window.innerHeight * 0.95 : 800)
+      ? (typeof window !== 'undefined' ? window.innerHeight * 1.25 : 1000)
       : (typeof window !== 'undefined' ? window.innerHeight * 1.5 : 1350);
 
     const isInHeroSection = latest >= 300 && latest < heroEnd;

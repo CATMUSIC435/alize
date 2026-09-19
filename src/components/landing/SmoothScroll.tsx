@@ -36,7 +36,7 @@ export function SmoothScroll(props: { children: React.ReactNode }) {
     }
 
     const lenis = new Lenis({
-      duration: 0.9,
+      duration: 1.1,
       easing: (t) => Math.min(1, 1.001 - 2 ** (-10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',

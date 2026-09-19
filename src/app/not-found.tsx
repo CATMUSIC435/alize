@@ -4,54 +4,63 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { routing } from '@/libs/I18nRouting';
 import '@/styles/global.css';
 
+const INITIAL_COUNTDOWN_SECONDS = 8;
+
 /**
- * Renders the global fallback 404 page with a 2-second countdown auto-redirect.
+ * Renders the global fallback 404 page matching Alizé Residence design language.
  * @returns Root 404 page element.
  */
 export default function GlobalNotFoundPage() {
   const router = useRouter();
-  const [countdown, setCountdown] = useState(2);
+  const [countdown, setCountdown] = useState(INITIAL_COUNTDOWN_SECONDS);
+  const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
     if (typeof document !== 'undefined') {
-      document.title = '404 - Không tìm thấy trang | Alizé Residence';
+      document.title = '404 - Không tìm thấy trang | Alizé Residence Đà Nẵng';
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isPaused) return;
+
+    if (countdown <= 0) {
+      router.replace('/');
+      return;
     }
 
-    const interval = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          clearInterval(interval);
-          router.replace('/');
-          return 0;
-        }
-        return prev - 1;
-      });
+    const timer = setTimeout(() => {
+      setCountdown((prev) => prev - 1);
     }, 1000);
 
-    return () => {
-      clearInterval(interval);
-    };
-  }, [router]);
+    return () => clearTimeout(timer);
+  }, [countdown, isPaused, router]);
 
   return (
-    <html lang={routing.defaultLocale}>
-      <body className="relative flex min-h-screen w-full flex-col items-center justify-between overflow-hidden bg-[#081520] px-6 py-8 text-white select-none sm:px-12 sm:py-12">
-        {/* Background Ambient Glows */}
+    <main className="relative flex min-h-screen w-full flex-col items-center justify-between overflow-hidden bg-[#0A1926] px-4 py-6 text-[#151926] select-none sm:px-8 sm:py-10">
+        {/* Background Decorative Ocean & Sand Atmosphere */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute -top-48 left-1/2 h-[550px] w-[550px] -translate-x-1/2 rounded-full bg-[#E0AC87]/15 blur-[120px]" />
-          <div className="absolute top-1/2 left-1/2 h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#0D2D40] blur-[100px]" />
-          <div className="absolute -bottom-32 left-1/2 h-[350px] w-[600px] -translate-x-1/2 rounded-full bg-[#E0AC87]/10 blur-[140px]" />
+          <div className="absolute -top-40 left-1/2 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-[#E0AC87]/15 blur-[130px]" />
+          <div className="absolute top-1/2 left-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#0D2D40] blur-[110px]" />
+          <div className="absolute -bottom-40 left-1/2 h-[450px] w-[700px] -translate-x-1/2 rounded-full bg-[#E0AC87]/10 blur-[150px]" />
+          <div
+            className="absolute inset-0 opacity-[0.035]"
+            style={{
+              backgroundImage:
+                'linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px)',
+              backgroundSize: '40px 40px',
+            }}
+          />
         </div>
 
-        {/* Top Brand Header */}
-        <header className="relative z-10 flex w-full max-w-6xl items-center justify-between">
+        {/* Top Header */}
+        <header className="relative z-10 flex w-full max-w-6xl items-center justify-between pt-2">
           <Link
             href="/"
             aria-label="Alizé Residence Home"
-            className="group inline-flex items-center gap-3 transition-opacity duration-300 hover:opacity-80"
+            className="group inline-flex items-center gap-3 transition-opacity duration-300 hover:opacity-85"
           >
             <Image
               src="/logo-alize.png"
@@ -59,113 +68,138 @@ export default function GlobalNotFoundPage() {
               width={72}
               height={144}
               priority
-              className="h-auto w-10 object-contain sm:w-12 md:w-14"
+              className="h-auto w-9 object-contain sm:w-11 md:w-12"
             />
             <div className="flex flex-col text-left">
-              <span className="font-serif text-base font-light tracking-[0.25em] text-[#F3E8DB] sm:text-lg">
+              <span className="font-serif text-base font-medium tracking-[0.24em] text-[#FAF8F5] sm:text-lg">
                 ALIZÉ
               </span>
-              <span className="text-[9px] tracking-[0.3em] text-[#E0AC87]/80 uppercase">
+              <span className="text-[9px] tracking-[0.3em] text-[#C5B49C] uppercase">
                 Residence Da Nang
               </span>
             </div>
           </Link>
+
+          <nav className="flex items-center gap-4 text-[11px] font-medium tracking-[0.2em] uppercase sm:gap-8 sm:text-xs">
+            <Link href="/" className="text-[#FAF8F5]/70 transition-colors hover:text-[#E0AC87]">
+              Trang chủ
+            </Link>
+            <Link href="/apartments" className="text-[#FAF8F5]/70 transition-colors hover:text-[#E0AC87]">
+              Căn hộ
+            </Link>
+          </nav>
         </header>
 
-        {/* Center Content */}
-        <div className="relative z-10 my-auto flex w-full max-w-2xl flex-col items-center text-center">
-          <div className="relative">
-            <h1 className="bg-gradient-to-b from-[#FFF5EC] via-[#E0AC87] to-[#8C5E3D] bg-clip-text font-serif text-8xl font-extralight tracking-[0.12em] text-transparent drop-shadow-[0_10px_40px_rgba(224,172,135,0.25)] sm:text-9xl md:text-[11rem]">
-              404
-            </h1>
-            <div className="pointer-events-none absolute inset-0 -z-10 bg-[#E0AC87]/15 blur-3xl" />
-          </div>
+        {/* Center Alizé Sand Card */}
+        <div className="relative z-10 my-auto flex w-full max-w-xl flex-col items-center py-6">
+          <div className="bg-sand-card border border-[#D9CEBD]/90 relative flex w-full flex-col items-center rounded-2xl p-6 shadow-[0_24px_80px_rgba(0,0,0,0.45)] sm:p-10 md:p-12 text-center">
+            {/* Inner Chamfered Border */}
+            <div
+              className="pointer-events-none absolute inset-3 bg-[#C5B49C]/40 sm:inset-4"
+              style={{
+                clipPath:
+                  'polygon(16px 0, calc(100% - 16px) 0, 100% 16px, 100% calc(100% - 16px), calc(100% - 16px) 100%, 16px 100%, 0 calc(100% - 16px), 0 16px)',
+              }}
+            >
+              <div
+                className="absolute inset-[1px] bg-sand-card"
+                style={{
+                  clipPath:
+                    'polygon(15px 0, calc(100% - 15px) 0, 100% 15px, 100% calc(100% - 15px), calc(100% - 15px) 100%, 15px 100%, 0 calc(100% - 15px), 0 15px)',
+                }}
+              />
+            </div>
 
-          <div className="mt-2 mb-6 flex items-center justify-center gap-3 sm:mb-8">
-            <div className="h-px w-12 bg-gradient-to-r from-transparent to-[#E0AC87]/60 sm:w-20" />
-            <span className="text-[9px] text-[#E0AC87]">◆</span>
-            <div className="h-px w-12 bg-gradient-to-l from-transparent to-[#E0AC87]/60 sm:w-20" />
-          </div>
+            <div className="relative z-10 flex w-full flex-col items-center">
+              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#C5B49C] bg-[#EBD0B3]/30 px-3.5 py-1 text-[10px] font-semibold tracking-[0.22em] text-[#7D5C2C] uppercase sm:text-[11px]">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#7D5C2C] animate-pulse" />
+                <span>KHÔNG GIAN NGHỆ THUẬT CHƯA ĐƯỢC ĐỊNH VỊ</span>
+              </div>
 
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#E0AC87]/30 bg-[#E0AC87]/10 px-4 py-1.5 text-[11px] font-medium tracking-[0.24em] text-[#E0AC87] uppercase backdrop-blur-md sm:text-xs">
-            KHÔNG GIAN NGHỆ THUẬT CHƯA ĐƯỢC ĐỊNH VỊ
-          </div>
+              <h1 className="font-serif text-7xl font-semibold tracking-[0.14em] text-[#151926] sm:text-8xl md:text-9xl">
+                404
+              </h1>
 
-          <h2 className="mb-4 font-serif text-2xl font-light tracking-wide text-[#FAF8F5] sm:text-3xl md:text-4xl">
-            TRANG KHÔNG TỒN TẠI
-          </h2>
+              <div className="my-3 flex items-center justify-center gap-3">
+                <div className="h-px w-12 bg-[#C8BEAE] sm:w-16" />
+                <span className="text-[10px] text-[#7D5C2C]">◆</span>
+                <div className="h-px w-12 bg-[#C8BEAE] sm:w-16" />
+              </div>
 
-          <p className="max-w-md text-sm font-light leading-relaxed text-[#C6BCB3] sm:max-w-lg sm:text-base">
-            Địa chỉ bạn vừa truy cập không tồn tại hoặc đã được quy hoạch lại trong hành trình Alizé Residence.
-          </p>
+              <h2 className="mb-3 font-serif text-2xl font-semibold tracking-wide text-[#151926] uppercase sm:text-3xl">
+                TRANG KHÔNG TỒN TẠI
+              </h2>
 
-          <div className="mt-8 flex w-full max-w-sm flex-col items-center gap-5 rounded-2xl border border-white/10 bg-white/[0.03] p-5 shadow-2xl backdrop-blur-xl sm:p-6">
-            <div className="flex items-center gap-3">
-              <div className="relative flex h-10 w-10 items-center justify-center">
-                <svg className="h-full w-full -rotate-90 transform" viewBox="0 0 36 36">
-                  <path
-                    className="text-white/10"
-                    strokeWidth="3"
-                    stroke="currentColor"
-                    fill="none"
-                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                  />
-                  <path
-                    className="text-[#E0AC87] transition-all duration-1000 ease-linear"
-                    strokeDasharray={`${(countdown / 2) * 100}, 100`}
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                    stroke="currentColor"
-                    fill="none"
-                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                  />
-                </svg>
-                <span className="absolute font-serif text-sm font-medium text-[#E0AC87]">
-                  {countdown}
+              <p className="max-w-md text-xs font-normal leading-relaxed text-[#52483B] sm:text-sm">
+                Địa chỉ bạn vừa truy cập không tồn tại hoặc đã được quy hoạch lại trong hành trình Alizé Residence.
+              </p>
+
+              <div
+                onClick={() => setIsPaused((prev) => !prev)}
+                className="mt-6 flex cursor-pointer items-center gap-3 rounded-full border border-[#D9CEBD] bg-[#EBE4D8]/60 px-4 py-2 transition-colors hover:bg-[#EBE4D8]"
+                title={isPaused ? 'Nhấn để tiếp tục đếm ngược' : 'Nhấn để tạm dừng đếm ngược'}
+              >
+                <div className="relative flex h-6 w-6 items-center justify-center">
+                  <svg className="h-full w-full -rotate-90 transform" viewBox="0 0 36 36">
+                    <path
+                      className="text-[#C5B49C]/40"
+                      strokeWidth="3.5"
+                      stroke="currentColor"
+                      fill="none"
+                      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                    />
+                    <path
+                      className="text-[#7D5C2C] transition-all duration-1000 ease-linear"
+                      strokeDasharray={`${(countdown / INITIAL_COUNTDOWN_SECONDS) * 100}, 100`}
+                      strokeWidth="3.5"
+                      strokeLinecap="round"
+                      stroke="currentColor"
+                      fill="none"
+                      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                    />
+                  </svg>
+                  <span className="absolute font-serif text-[10px] font-bold text-[#7D5C2C]">
+                    {countdown}
+                  </span>
+                </div>
+                <span className="text-[11px] font-medium tracking-wider text-[#665B4C] uppercase">
+                  Tự động quay về trang chủ sau {countdown} giây
                 </span>
               </div>
 
-              <div className="text-left">
-                <p className="text-xs font-light tracking-wider text-[#E8DDD4]">
-                  Tự động quay về trang chủ sau {countdown} giây
-                </p>
-                <div className="mt-1 h-1 w-32 overflow-hidden rounded-full bg-white/10">
-                  <div
-                    className="h-full bg-gradient-to-r from-[#E0AC87] to-[#F3E8DB] transition-all duration-1000 ease-linear"
-                    style={{ width: `${(countdown / 2) * 100}%` }}
-                  />
-                </div>
+              <div className="mt-7 flex w-full flex-col gap-3 sm:flex-row sm:justify-center">
+                <Link
+                  href="/"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-[#151926] bg-[#151926] px-7 py-3 text-xs font-semibold tracking-[0.2em] text-[#FAF8F5] uppercase transition-all duration-300 hover:bg-[#2D3346] hover:shadow-lg active:scale-[0.98]"
+                >
+                  <span>VỀ TRANG CHỦ NGAY</span>
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path
+                      d="M2.91663 7H11.0833M11.0833 7L7.00002 2.91666M11.0833 7L7.00002 11.0833"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </Link>
+
+                <Link
+                  href="/apartments"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-[#C5B49C] bg-transparent px-6 py-3 text-xs font-semibold tracking-[0.2em] text-[#151926] uppercase transition-all duration-300 hover:border-[#151926] hover:bg-[#151926]/5 active:scale-[0.98]"
+                >
+                  <span>CĂN HỘ MỞ BÁN</span>
+                </Link>
               </div>
             </div>
-
-            <Link
-              href="/"
-              className="group relative inline-flex w-full items-center justify-center gap-3 overflow-hidden rounded-full border border-[#E0AC87]/50 bg-gradient-to-r from-[#E0AC87]/25 via-[#E0AC87]/15 to-[#E0AC87]/25 px-6 py-3 text-xs font-medium tracking-[0.22em] text-[#FAF6F0] shadow-[0_0_25px_rgba(224,172,135,0.15)] transition-all duration-300 hover:border-[#E0AC87] hover:bg-[#E0AC87]/35 hover:shadow-[0_0_35px_rgba(224,172,135,0.35)] active:scale-[0.98]"
-            >
-              <span>VỀ TRANG CHỦ NGAY</span>
-              <svg
-                className="h-3.5 w-3.5 transform transition-transform duration-300 group-hover:translate-x-1"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <line x1="5" y1="12" x2="19" y2="12" />
-                <polyline points="12 5 19 12 12 19" />
-              </svg>
-            </Link>
           </div>
         </div>
 
-        {/* Footer */}
-        <footer className="relative z-10 flex flex-col items-center gap-1 text-center">
-          <p className="text-[10px] tracking-[0.3em] text-white/35 uppercase sm:text-[11px]">
+        <footer className="relative z-10 flex flex-col items-center gap-1 text-center pb-2">
+          <p className="text-[10px] tracking-[0.28em] text-[#C5B49C] uppercase sm:text-[11px]">
             Alizé Residence • Mỹ Khê Beach, Da Nang
           </p>
         </footer>
-      </body>
-    </html>
-  );
-}
+      </main>
+    );
+  }

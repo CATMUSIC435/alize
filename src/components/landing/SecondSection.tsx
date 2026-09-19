@@ -43,13 +43,10 @@ export function SecondSection() {
     return isMobile ? 0 : (1 - v) * 100;
   });
 
-  // Dynamically expand text letter-spacing strongly along the arc as user scrolls into section
-  const letterSpacing = useTransform(scrollYProgress, [0, 0.85], ['0.02em', '0.38em']);
-
   return (
     <section
       ref={sectionRef}
-      className="relative z-40 mt-0 flex min-h-screen w-full flex-col bg-transparent md:mt-[20vh] lg:min-h-[150vh]"
+      className="relative z-40 mt-[10vh] flex min-h-screen w-full flex-col bg-transparent md:mt-[20vh] lg:min-h-[150vh]"
     >
       <motion.div
         className="relative z-10 mx-auto flex w-full flex-col items-center"
@@ -79,14 +76,14 @@ export function SecondSection() {
           <path d="M 0,960 A 960,960 0 0,1 1920,960 Z" fill="url(#sandGrad)" />
 
           {/* Text following the curve, pushed down (dy) to sit inside the blue area */}
-          <motion.text
-            style={{ letterSpacing }}
+          <text
             className={`fill-[#151926] uppercase ${playfair.className} text-[56px] sm:text-[62px] md:text-[68px]`}
+            style={{ letterSpacing: '0.18em' }}
           >
             <textPath href="#curve-text-path" startOffset="50%" textAnchor="middle">
               <tspan dy="120">{t('three_reasons')}</tspan>
             </textPath>
-          </motion.text>
+          </text>
         </svg>
         {/* Project Map Background */}
         

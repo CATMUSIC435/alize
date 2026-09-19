@@ -51,33 +51,35 @@ function HotspotCardContent(props: {
 
       {props.overview ? (
         <div className="relative z-10 flex h-full flex-col justify-between">
-          {/* Close button - hidden on mobile */}
-          {!props.isMobile && (
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                props.onClose();
-              }}
-              aria-label="Close"
-              className="absolute -top-1 -right-1 z-20 flex h-7 w-7 items-center justify-center rounded-full text-[#151926]/70 transition-colors hover:bg-black/5 hover:text-[#151926]"
-            >
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <path
-                  d="M1 1L13 13M1 13L13 1"
-                  stroke="currentColor"
-                  strokeWidth="1.75"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </button>
-          )}
+          {/* Close button */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              props.onClose();
+            }}
+            aria-label="Close"
+            className={`absolute z-20 flex items-center justify-center rounded-full text-[#151926]/70 transition-colors hover:bg-black/5 hover:text-[#151926] ${
+              props.isMobile
+                ? '-top-0.5 -right-0.5 h-6.5 w-6.5'
+                : '-top-1 -right-1 h-7 w-7'
+            }`}
+          >
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path
+                d="M1 1L13 13M1 13L13 1"
+                stroke="currentColor"
+                strokeWidth="1.75"
+                strokeLinecap="round"
+              />
+            </svg>
+          </button>
 
           {/* Header */}
-          <div className={props.isMobile ? 'border-b border-[#C8BEAE]/70 pb-2.5' : 'border-b border-[#C8BEAE]/70 pb-5 pr-8'}>
+          <div className={props.isMobile ? 'border-b border-[#C8BEAE]/70 pb-2 pr-6' : 'border-b border-[#C8BEAE]/70 pb-5 pr-8'}>
             <h2
               className={`font-semibold tracking-wider text-[#151926] uppercase ${
-                props.isMobile ? 'text-xl' : 'text-3xl md:text-[38px]'
+                props.isMobile ? 'text-lg' : 'text-3xl md:text-[38px]'
               } ${playfair.className}`}
             >
               {props.overview.name}
@@ -85,7 +87,7 @@ function HotspotCardContent(props: {
             <p
               className={`font-semibold text-[#7D5C2C] uppercase ${inter.className} ${
                 props.isMobile
-                  ? 'mt-1 text-[9px] leading-snug tracking-[0.14em]'
+                  ? 'mt-0.5 text-[8.5px] leading-snug tracking-[0.12em]'
                   : 'mt-2 text-[11px] md:text-[12px] tracking-[0.18em] leading-relaxed'
               }`}
             >
@@ -97,7 +99,7 @@ function HotspotCardContent(props: {
           <div
             className={`grid grid-cols-2 ${
               props.isMobile
-                ? 'gap-x-3 gap-y-2.5 pt-3 pb-1'
+                ? 'gap-x-3 gap-y-2 pt-2.5 pb-2'
                 : 'gap-x-8 gap-y-4 pt-5 pb-1'
             }`}
           >
@@ -108,14 +110,14 @@ function HotspotCardContent(props: {
               >
                 <div
                   className={`font-semibold text-[#665B4C] uppercase leading-tight ${
-                    props.isMobile ? 'text-[9px] tracking-[0.1em]' : 'text-[10px] md:text-[11px] tracking-[0.13em]'
+                    props.isMobile ? 'text-[8.5px] tracking-[0.08em]' : 'text-[10px] md:text-[11px] tracking-[0.13em]'
                   }`}
                 >
                   {item.label}
                 </div>
                 <div
                   className={`font-medium text-[#151926] ${inter.className} ${
-                    props.isMobile ? 'mt-0.5 text-[11px] leading-snug' : 'mt-1 text-[13px] md:text-[13.5px] leading-relaxed'
+                    props.isMobile ? 'mt-0.5 text-[10.5px] leading-snug' : 'mt-1 text-[13px] md:text-[13.5px] leading-relaxed'
                   }`}
                 >
                   {item.value}
@@ -178,9 +180,6 @@ export function Hotspot(props: {
   const isRightSide = xPercent > 50;
 
   const handleToggle = () => {
-    if (typeof window !== 'undefined' && window.innerWidth < 768 && props.overview) {
-      return; // On mobile, overview card is default visible and not dismissible
-    }
     if (props.onToggle) {
       props.onToggle();
     } else {
@@ -329,8 +328,8 @@ export function Hotspot(props: {
         </AnimatePresence>
       </div>
 
-      {/* Mobile Card (Positioned lower under hotspot button, non-fixed, default visible, no close button) */}
-      {(props.overview || isCardOpen) && (
+      {/* Mobile Card (Positioned lower under hotspot button, non-fixed) */}
+      {isCardOpen && (
         <div
           className="pointer-events-auto absolute top-[calc(100%+38px)] z-40 block md:hidden"
           style={{
@@ -340,7 +339,7 @@ export function Hotspot(props: {
             maxWidth: '380px',
           }}
         >
-          <div className="bg-sand-card border border-[#D9CEBD]/90 relative flex w-full cursor-default flex-col justify-between rounded-2xl p-4 shadow-[0_20px_50px_rgba(21,25,38,0.25)]">
+          <div className="bg-sand-card border border-[#D9CEBD]/90 relative flex w-full cursor-default flex-col justify-between rounded-2xl p-4.5 pb-5 shadow-[0_20px_50px_rgba(21,25,38,0.25)]">
             <HotspotCardContent
               title={props.title}
               description={props.description}

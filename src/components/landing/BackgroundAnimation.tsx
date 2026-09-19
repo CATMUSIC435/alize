@@ -206,13 +206,14 @@ export function BackgroundAnimation() {
           y,
           opacity: backgroundOpacity,
           visibility: backgroundVisibility,
+          willChange: 'transform, opacity',
         }}
       >
         <div className="relative h-full w-full max-w-full overflow-hidden">
           {/* Zoom in on scroll */}
           <motion.div
             className="absolute inset-0 h-full w-full max-w-full overflow-hidden"
-            style={{ scale: scaleOnScroll }}
+            style={{ scale: scaleOnScroll, willChange: 'transform' }}
           >
             {/* Day Video Mode (Continuum South Tower) */}
             <motion.div
