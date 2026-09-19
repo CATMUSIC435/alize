@@ -34,8 +34,8 @@ export function SmartVideo(
 ) {
   const isDesktop = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const videoRef = useRef<HTMLVideoElement>(null);
-  // 80px buffer: smooth margin before pausing to avoid jarring cutoffs
-  const isInView = useInView(videoRef, { margin: '80px' });
+  // 150px buffer: smooth margin before pausing to avoid jarring cutoffs
+  const isInView = useInView(videoRef, { margin: '150px' });
 
   useEffect(() => {
     const video = videoRef.current;
@@ -43,14 +43,37 @@ export function SmartVideo(
       return;
     }
 
-    if (isInView && !document.hidden) {
+    // Force DOM muted property to ensure browser autoplay policy compliance
+    if (props.muted !== false) {
+      video.muted = true;
+      video.defaultMuted = true;
+    }
+
+    const tryPlay = () => {
       if (props.autoPlay !== false) {
-        video.play().catch(() => {});
+        const promise = video.play();
+        if (promise !== undefined) {
+          promise.catch(() => {
+            const handleInteraction = () => {
+              if (videoRef.current) {
+                videoRef.current.muted = true;
+                videoRef.current.play().catch(() => {});
+              }
+            };
+            window.addEventListener('touchstart', handleInteraction, { once: true, passive: true });
+            window.addEventListener('click', handleInteraction, { once: true, passive: true });
+            window.addEventListener('scroll', handleInteraction, { once: true, passive: true });
+          });
+        }
       }
+    };
+
+    if (isInView && !document.hidden) {
+      tryPlay();
     } else {
       video.pause();
     }
-  }, [isInView, props.autoPlay]);
+  }, [isInView, props.autoPlay, props.muted]);
 
   // Pause when browser tab is inactive to preserve CPU/GPU
   useEffect(() => {
@@ -61,6 +84,9 @@ export function SmartVideo(
       if (document.hidden) {
         video.pause();
       } else if (isInView && props.autoPlay !== false) {
+        if (props.muted !== false) {
+          video.muted = true;
+        }
         video.play().catch(() => {});
       }
     };
@@ -69,9 +95,10 @@ export function SmartVideo(
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, [isInView, props.autoPlay]);
+  }, [isInView, props.autoPlay, props.muted]);
 
-  if (props.desktopOnly !== false && !isDesktop) {
+  // Only hide/unmount if desktopOnly is explicitly set to true AND viewport is mobile
+  if (props.desktopOnly === true && !isDesktop) {
     return null;
   }
 
@@ -80,17 +107,17 @@ export function SmartVideo(
       ref={videoRef}
       src={props.src}
       className={`pointer-events-none ${props.className ?? ''}`}
-      autoPlay={false}
-      loop={props.loop}
-      muted={props.muted}
+      autoPlay={props.autoPlay ?? true}
+      loop={props.loop ?? true}
+      muted={props.muted ?? true}
       playsInline={props.playsInline ?? true}
-      preload="metadata"
+      preload="auto"
       controls={false}
       controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
       tabIndex={-1}
       style={{
         ...props.style,
-        visibility: isInView ? 'visible' : 'hidden',
+        visibility: isInView ? (props.style?.visibility ?? 'visible') : 'hidden',
       }}
       {...({
         'webkit-playsinline': 'true',
