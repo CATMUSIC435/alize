@@ -40,8 +40,8 @@ export function SecondSection() {
   // Push the content up slightly for a parallax feel
   const contentY = useTransform(scrollYProgress, [0, 1], [100, 0]);
 
-  // Dynamically expand text letter-spacing along the arc as user scrolls up into section
-  const letterSpacing = useTransform(scrollYProgress, [0, 0.9], ['0.01em', '0.14em']);
+  // Dynamically expand text letter-spacing strongly along the arc as user scrolls into section
+  const letterSpacing = useTransform(scrollYProgress, [0, 0.85], ['0.02em', '0.38em']);
 
   return (
     <section
