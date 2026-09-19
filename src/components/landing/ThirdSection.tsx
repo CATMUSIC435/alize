@@ -32,7 +32,7 @@ export function ThirdSection() {
           sizes="100vw"
         />
         {/* Top Fade matching the sand gradient to blend sections seamlessly */}
-        <div className="pointer-events-none absolute top-0 left-0 z-10 h-24 w-full bg-gradient-to-r from-[#F0EBE1] via-[#EBD0B3] to-[#E1AC88] [mask-image:linear-gradient(to_bottom,black_10%,transparent)] [-webkit-mask-image:linear-gradient(to_bottom,black_10%,transparent)] md:h-64"></div>
+        <div className="pointer-events-none absolute top-0 left-0 z-10 h-24 w-full bg-gradient-to-b from-[#EBD0B3] via-[#EBD0B3]/40 to-transparent md:h-64"></div>
         {/* Soft Gradient Overlay for better text readability */}
         <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-black/85 via-black/30 to-transparent"></div>
       </div>

@@ -45,13 +45,9 @@ export function SandRipples(props: { position?: 'left' | 'right' }) {
   return (
     <div
       ref={containerRef}
-      className={`pointer-events-none absolute top-[-1400px] bottom-[-800px] z-0 w-[45vw] max-w-[800px] overflow-hidden ${
+      className={`pointer-events-none absolute top-[-1400px] bottom-[-800px] z-0 w-[45vw] max-w-[800px] overflow-hidden opacity-60 ${
         isLeft ? 'left-0' : 'right-0'
       }`}
-      style={{
-        maskImage: `radial-gradient(ellipse at ${isLeft ? '0%' : '100%'} 50%, black 10%, transparent 70%)`,
-        WebkitMaskImage: `radial-gradient(ellipse at ${isLeft ? '0%' : '100%'} 50%, black 10%, transparent 70%)`,
-      }}
     >
       <motion.svg
         viewBox="0 -1600 500 5600"

@@ -37,16 +37,13 @@ export function SecondSection() {
     offset: ['start end', 'start start'],
   });
 
-  // Push the content up slightly for a parallax feel on desktop
-  const contentY = useTransform(scrollYProgress, (v) => {
-    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-    return isMobile ? 0 : (1 - v) * 100;
-  });
+  // Push the content up slightly for a parallax feel on desktop using direct array transform
+  const contentY = useTransform(scrollYProgress, [0, 1], [40, 0]);
 
   return (
     <section
       ref={sectionRef}
-      className="relative z-40 mt-[10vh] flex min-h-screen w-full flex-col bg-transparent md:mt-[20vh] lg:min-h-[150vh]"
+      className="relative z-40 mt-[10vh] flex min-h-screen w-full flex-col bg-transparent md:mt-[15vh] lg:min-h-[140vh]"
     >
       <motion.div
         className="relative z-10 mx-auto flex w-full flex-col items-center"
@@ -140,13 +137,13 @@ export function SecondSection() {
                 {t('real_life_location')}
               </h2>
 
-              {/* Image Slider Component wrapped with scale animation */}
+              {/* Image Slider Component wrapped with fade/y animation */}
               <motion.div
                 className="flex w-full justify-center"
-                initial={{ scale: 0.9, opacity: 0 }}
-                whileInView={{ scale: 1, opacity: 1 }}
-                viewport={{ once: true, margin: '-100px' }}
-                transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.8, ease: 'easeOut' }}
               >
                 <LazyWebGLSlider
                   images={secondSectionImages}

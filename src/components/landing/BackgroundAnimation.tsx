@@ -195,8 +195,6 @@ export function BackgroundAnimation() {
     return 1 - (latest - startFade) / (endFade - startFade);
   });
 
-  const backgroundVisibility = useTransform(backgroundOpacity, (op) => (op <= 0 ? 'hidden' : 'visible'));
-
   return (
     <>
       {/* 1. Persistent Background Image/Video (Stays behind all sections at z-0) */}
@@ -205,7 +203,6 @@ export function BackgroundAnimation() {
         style={{
           y,
           opacity: backgroundOpacity,
-          visibility: backgroundVisibility,
           willChange: 'transform, opacity',
         }}
       >

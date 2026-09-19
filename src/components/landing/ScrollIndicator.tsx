@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useMotionTemplate } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { Inter } from 'next/font/google';
 import { useUIStore } from '@/store/useUIStore';
@@ -19,7 +19,8 @@ export function ScrollIndicator() {
     return percentage.toString().padStart(2, '0');
   });
 
-  const indicatorTop = useTransform(scrollYProgress, [0, 1], ['10px', 'calc(100% - 10px)']);
+  const percentage = useTransform(scrollYProgress, [0, 1], [0, 100]);
+  const topHeight = useMotionTemplate`calc(${percentage}% - ${percentage} * 0.48px)`;
 
   const handleScrollDown = () => {
     if (typeof window === 'undefined') return;
@@ -39,21 +40,12 @@ export function ScrollIndicator() {
       animate={{ opacity: isIntroComplete ? 1 : 0 }}
       transition={{ duration: 0.8, delay: isIntroComplete ? 0.35 : 0, ease: 'easeOut' }}
     >
-      <div className="relative mb-4 h-[200px] w-8 md:h-[300px]">
-        {/* Inactive line track */}
-        <div className="absolute top-0 bottom-0 left-1/2 w-[1px] -translate-x-1/2 bg-white/30" />
-        {/* Active solid white line (GPU scaleY) */}
-        <motion.div
-          className="absolute top-0 left-1/2 w-[1px] -translate-x-1/2 origin-top bg-white"
-          style={{ height: '100%', scaleY: scrollYProgress }}
-        />
-        {/* Numerical badge moving smoothly along the track */}
-        <motion.span
-          className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 flex h-5 min-w-[20px] items-center justify-center rounded bg-[#0D2D40]/90 px-1 text-[10px] leading-none font-bold text-white drop-shadow-md md:text-xs"
-          style={{ top: indicatorTop }}
-        >
+      <div className="mb-4 flex h-[200px] w-8 flex-col items-center md:h-[300px]">
+        <motion.div className="w-[1px] shrink-0 bg-white" style={{ height: topHeight }} />
+        <motion.span className="my-4 flex h-[16px] shrink-0 items-center justify-center text-[10px] leading-none font-bold text-white drop-shadow-md md:text-xs">
           {scrollNumber}
         </motion.span>
+        <div className="w-[1px] grow bg-white/30" />
       </div>
 
       {/* Clickable Scroll Trigger */}
