@@ -37,7 +37,13 @@ export function EighthSection() {
         className="bg-textured-sand relative z-20 w-full [border-top-left-radius:50vw] [border-top-right-radius:50vw] pt-[10vh] pb-6 text-[#151926] md:pt-[20vw] lg:pb-44"
       >
       {/* Center Title */}
-      <div className="flex w-full flex-col items-center text-center">
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-80px' }}
+        transition={{ duration: 0.9, ease: 'easeOut' }}
+        className="flex w-full flex-col items-center text-center"
+      >
         <h2
           className={`flex flex-col items-center text-[9vw] leading-[1.08] font-medium tracking-tighter text-[#151926] uppercase md:text-[8vw] md:leading-[0.92] ${playfair.className}`}
           style={{ transform: 'scaleY(1.15)' }}
@@ -53,7 +59,7 @@ export function EighthSection() {
         >
           {t('live_in')}
         </span>
-      </div>
+      </motion.div>
 
       {/* Content Layout */}
       <div className="relative mt-24 flex w-full flex-col md:mt-48 md:flex-row">

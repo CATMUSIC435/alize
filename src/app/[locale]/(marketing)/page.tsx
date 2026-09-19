@@ -148,7 +148,7 @@ export default async function EraResidencePage(props: { params: Promise<{ locale
         Semantic HTML Fix: Wrap all primary page content in <main> 
         The hero section is now <header> within the page 
       */}
-      <main className="relative w-full max-w-full overflow-x-clip">
+      <main className="relative w-full max-w-full">
         <header className="relative h-[135vh] w-full max-w-full overflow-x-clip md:h-[200vh]">
           {/* Background is globally fixed to stay behind all sections */}
           <BackgroundAnimation />

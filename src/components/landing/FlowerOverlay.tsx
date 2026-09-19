@@ -31,7 +31,7 @@ export function FlowerOverlay() {
         muted
         playsInline
         aria-hidden="true"
-        className="safari-video-hide absolute top-[16%] right-0 w-[50vw] max-w-[750px] translate-x-[20%] rotate-90 object-contain md:w-[60vw] lg:top-[8%]"
+        className="safari-video-hide absolute top-[14%] right-[-4%] w-[50vw] max-w-[750px] translate-x-[20%] rotate-90 object-contain md:w-[60vw] lg:top-0"
         src="/bougainvillea-flowers_02.webm"
       />
 

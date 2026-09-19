@@ -63,9 +63,15 @@ export function SmoothScroll(props: { children: React.ReactNode }) {
       lenis.start();
     }
 
+    let resizeDebounceTimer: ReturnType<typeof setTimeout> | null = null;
     const resizeObserver = typeof ResizeObserver !== 'undefined'
       ? new ResizeObserver(() => {
-          lenisRef.current?.resize();
+          if (resizeDebounceTimer) {
+            clearTimeout(resizeDebounceTimer);
+          }
+          resizeDebounceTimer = setTimeout(() => {
+            lenisRef.current?.resize();
+          }, 150);
         })
       : null;
 
@@ -78,6 +84,9 @@ export function SmoothScroll(props: { children: React.ReactNode }) {
     }, 400);
 
     return () => {
+      if (resizeDebounceTimer) {
+        clearTimeout(resizeDebounceTimer);
+      }
       clearTimeout(resizeTimer);
       resizeObserver?.disconnect();
       if (typeof window !== 'undefined') {

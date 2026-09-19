@@ -122,26 +122,49 @@ export function BackgroundAnimation() {
 
   const { scrollY } = useScroll();
 
-  // Desktop only: Pause video when scrolled far past hero section to save performance
+  // Pause video and hide background when scrolled past hero section to eliminate scroll lag
   useEffect(() => {
     if (!canPlayVideo) return;
 
-    return scrollY.on('change', (latest) => {
+    const checkAndToggle = (latest: number) => {
       const video = videoRef.current;
       if (!video) return;
 
-      if (latest > 1600) {
-        if (!video.paused) video.pause();
-      } else if (video.paused && useUIStore.getState().heroMode === 'day') {
+      const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+      // Header is 135vh on mobile, 200vh on desktop; let video play smoothly through the arch curve
+      const threshold = typeof window !== 'undefined'
+        ? (isMobile ? window.innerHeight * 1.8 : window.innerHeight * 2.3)
+        : 2200;
+      const isPastHero = latest > threshold;
+      const isDay = useUIStore.getState().heroMode === 'day';
+
+      if (isPastHero || !isDay) {
+        if (!video.paused) {
+          video.pause();
+        }
+      } else if (video.paused && isDay) {
         video.play().catch(() => {});
       }
-    });
-  }, [scrollY, canPlayVideo]);
+    };
+
+    // Check immediately on mount or when heroMode changes
+    checkAndToggle(scrollY.get());
+
+    return scrollY.on('change', checkAndToggle);
+  }, [scrollY, canPlayVideo, heroMode]);
 
   // As the user scrolls down, move the background up slightly for parallax
   const y = useTransform(scrollY, [0, 1000], ['0%', '-15%']);
   // Zoom in the background image as the user scrolls down
   const scaleOnScroll = useTransform(scrollY, [0, 1000], [1, 1.4]);
+  // De-composite fixed background layer once scrolled completely past hero and arch curve
+  const backgroundVisibility = useTransform(scrollY, (latest) => {
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+    const threshold = typeof window !== 'undefined'
+      ? (isMobile ? window.innerHeight * 1.9 : window.innerHeight * 2.4)
+      : 2300;
+    return latest > threshold ? 'hidden' : 'visible';
+  });
 
   return (
     <>
@@ -150,6 +173,7 @@ export function BackgroundAnimation() {
         className="pointer-events-none fixed inset-0 z-0 h-[100dvh] w-full max-w-full overflow-hidden bg-[#0D2D40] md:h-[120vh]"
         style={{
           y,
+          visibility: backgroundVisibility,
           willChange: 'transform',
         }}
       >

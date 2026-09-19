@@ -34,20 +34,41 @@ export function SmartVideo(
 ) {
   const isDesktop = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const isInView = useInView(videoRef, { margin: '200px' });
+  // 80px buffer: smooth margin before pausing to avoid jarring cutoffs
+  const isInView = useInView(videoRef, { margin: '80px' });
 
   useEffect(() => {
-    if (!videoRef.current) {
+    const video = videoRef.current;
+    if (!video) {
       return;
     }
 
-    if (isInView) {
-      if (props.autoPlay) {
-        videoRef.current.play().catch(() => {});
+    if (isInView && !document.hidden) {
+      if (props.autoPlay !== false) {
+        video.play().catch(() => {});
       }
     } else {
-      videoRef.current.pause();
+      video.pause();
     }
+  }, [isInView, props.autoPlay]);
+
+  // Pause when browser tab is inactive to preserve CPU/GPU
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        video.pause();
+      } else if (isInView && props.autoPlay !== false) {
+        video.play().catch(() => {});
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, [isInView, props.autoPlay]);
 
   if (props.desktopOnly !== false && !isDesktop) {
@@ -59,13 +80,18 @@ export function SmartVideo(
       ref={videoRef}
       src={props.src}
       className={`pointer-events-none ${props.className ?? ''}`}
-      autoPlay={props.autoPlay}
+      autoPlay={false}
       loop={props.loop}
       muted={props.muted}
       playsInline={props.playsInline ?? true}
+      preload="metadata"
       controls={false}
       controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
       tabIndex={-1}
+      style={{
+        ...props.style,
+        visibility: isInView ? 'visible' : 'hidden',
+      }}
       {...({
         'webkit-playsinline': 'true',
         'x5-playsinline': 'true',
