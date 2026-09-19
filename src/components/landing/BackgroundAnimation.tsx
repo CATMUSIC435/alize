@@ -5,33 +5,38 @@ import Image from 'next/image';
 import { useEffect, useRef, useSyncExternalStore } from 'react';
 import { useUIStore } from '@/store/useUIStore';
 
-const MEDIA_QUERY = '(min-width: 768px)';
-
-function subscribeDesktop(callback: () => void) {
-  const mediaQuery = window.matchMedia(MEDIA_QUERY);
-  mediaQuery.addEventListener('change', callback);
-  return () => {
-    mediaQuery.removeEventListener('change', callback);
-  };
+function subscribeVideoEligibility(_callback: () => void) {
+  return () => {};
 }
 
 function checkVideoEligibility(): boolean {
   if (typeof window === 'undefined') {
     return false;
   }
-  const isDesktop = window.matchMedia(MEDIA_QUERY).matches;
-  if (!isDesktop) {
+  const ua = navigator.userAgent || '';
+
+  // In-app browsers (specifically Zalo, Facebook, Instagram, Line, etc.) where inline video is hijacked to native fullscreen
+  const isRestrictedInApp = /zalo|fban|fbav|instagram|line|micromessenger|tiktok|bytedance/i.test(ua);
+  if (isRestrictedInApp) {
     return false;
   }
-  const ua = navigator.userAgent || '';
-  const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  const isInApp = /zalo|fban|fbav|instagram|line|micromessenger|tiktok|bytedance|wv/i.test(ua) ||
-    (isIOS && (!/safari/i.test(ua) || !/version/i.test(ua)));
 
-  return !isInApp && !/zalo/i.test(ua);
+  // On iOS, check for in-app webview wrappers that lack standard browser tokens
+  const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  if (isIOS) {
+    const isIOSChrome = /crios/i.test(ua);
+    const isIOSFirefox = /fxios/i.test(ua);
+    const isIOSSafari = /safari/i.test(ua) && /version/i.test(ua);
+
+    if (!isIOSChrome && !isIOSFirefox && !isIOSSafari) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
-function getDesktopSnapshot() {
+function getVideoSnapshot() {
   return checkVideoEligibility();
 }
 
@@ -44,7 +49,7 @@ export function BackgroundAnimation() {
   const setIsIntroComplete = useUIStore((state) => state.setIsIntroComplete);
   const heroMode = useUIStore((state) => state.heroMode);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const canPlayVideo = useSyncExternalStore(subscribeDesktop, getDesktopSnapshot, getServerSnapshot);
+  const canPlayVideo = useSyncExternalStore(subscribeVideoEligibility, getVideoSnapshot, getServerSnapshot);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -54,7 +59,7 @@ export function BackgroundAnimation() {
     }
   }, [setIsIntroComplete]);
 
-  // Initialize video silently on desktop when eligible; strictly enforce inline playback and forbid fullscreen
+  // Initialize video silently when eligible (Desktop, Chrome mobile, Safari mobile); strictly enforce inline playback
   useEffect(() => {
     if (!canPlayVideo) return;
 
@@ -66,6 +71,7 @@ export function BackgroundAnimation() {
     video.playsInline = true;
     video.setAttribute('playsinline', '');
     video.setAttribute('webkit-playsinline', '');
+    video.setAttribute('muted', '');
 
     // WebKit iOS presentation mode enforcement (strictly prevent native fullscreen takeover)
     const v = video as unknown as {
@@ -94,14 +100,23 @@ export function BackgroundAnimation() {
     video.addEventListener('webkitbeginfullscreen', enforceInline);
     video.addEventListener('webkitpresentationmodechanged', enforceInline);
 
-    // Initial silent autoplay on mount once; never re-trigger on user clicks or toggles
+    const tryPlay = () => {
+      if (video.paused && useUIStore.getState().heroMode === 'day') {
+        video.play().catch(() => {});
+      }
+    };
+
+    // Initial silent autoplay on mount; if mobile policy defers it, play on first gentle interaction
     video.play().catch(() => {
-      // Silently catch autoplay policy restrictions
+      window.addEventListener('touchstart', tryPlay, { once: true, passive: true });
+      window.addEventListener('scroll', tryPlay, { once: true, passive: true });
     });
 
     return () => {
       video.removeEventListener('webkitbeginfullscreen', enforceInline);
       video.removeEventListener('webkitpresentationmodechanged', enforceInline);
+      window.removeEventListener('touchstart', tryPlay);
+      window.removeEventListener('scroll', tryPlay);
     };
   }, [canPlayVideo]);
 
