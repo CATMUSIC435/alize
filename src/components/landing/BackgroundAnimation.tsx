@@ -100,6 +100,10 @@ export function BackgroundAnimation() {
                 loop
                 muted
                 playsInline
+                controls={false}
+                controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
+                tabIndex={-1}
+                aria-hidden="true"
                 {...({
                   'webkit-playsinline': 'true',
                   'x5-playsinline': 'true',
@@ -109,14 +113,20 @@ export function BackgroundAnimation() {
                 disablePictureInPicture
                 disableRemotePlayback
                 preload="auto"
+                onPause={() => {
+                  if (useUIStore.getState().heroMode === 'day' && typeof window !== 'undefined' && window.scrollY < 900) {
+                    videoRef.current?.play().catch(() => {});
+                  }
+                }}
                 style={{
                   width: '100%',
                   height: '100%',
                   maxWidth: '100%',
                   maxHeight: '100%',
                   objectFit: 'cover',
+                  pointerEvents: 'none',
                 }}
-                className="absolute inset-0 block h-full w-full max-h-full max-w-full object-cover object-center brightness-[1.05] contrast-[1.02]"
+                className="pointer-events-none absolute inset-0 block h-full w-full max-h-full max-w-full select-none object-cover object-center brightness-[1.05] contrast-[1.02]"
               />
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/30 md:from-black/40 md:to-black/20" />
             </motion.div>

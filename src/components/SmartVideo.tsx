@@ -58,11 +58,14 @@ export function SmartVideo(
     <video
       ref={videoRef}
       src={props.src}
-      className={props.className}
+      className={`pointer-events-none ${props.className ?? ''}`}
       autoPlay={props.autoPlay}
       loop={props.loop}
       muted={props.muted}
       playsInline={props.playsInline ?? true}
+      controls={false}
+      controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
+      tabIndex={-1}
       {...({
         'webkit-playsinline': 'true',
         'x5-playsinline': 'true',
