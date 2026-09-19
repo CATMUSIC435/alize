@@ -2,21 +2,68 @@
 
 import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useUIStore } from '@/store/useUIStore';
 
 export function BackgroundAnimation() {
   const isIntroComplete = useUIStore((state) => state.isIntroComplete);
   const setIsIntroComplete = useUIStore((state) => state.setIsIntroComplete);
   const heroMode = useUIStore((state) => state.heroMode);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.innerWidth < 768) {
-      setIsIntroComplete(true);
+    if (typeof window !== 'undefined') {
+      if (window.innerWidth < 768 || sessionStorage.getItem('alize_intro_seen') === 'true') {
+        setIsIntroComplete(true);
+      }
     }
   }, [setIsIntroComplete]);
 
+  // Ensure video plays silently on initial appearance and resumes when switching back to day mode
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    video.muted = true;
+    video.defaultMuted = true;
+    video.volume = 0;
+
+    if (heroMode === 'day') {
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          const startPlayback = () => {
+            if (videoRef.current && useUIStore.getState().heroMode === 'day') {
+              videoRef.current.play().catch(() => {});
+            }
+          };
+          window.addEventListener('touchstart', startPlayback, { once: true, passive: true });
+          window.addEventListener('click', startPlayback, { once: true, passive: true });
+        });
+      }
+    } else {
+      video.pause();
+    }
+  }, [heroMode]);
+
   const { scrollY } = useScroll();
+
+  // Pause video when scrolled far past hero section to save battery/performance
+  useEffect(() => {
+    return scrollY.on('change', (latest) => {
+      const video = videoRef.current;
+      if (!video) return;
+      const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+      const heroThreshold = isMobile ? 900 : 1600;
+
+      if (latest > heroThreshold) {
+        if (!video.paused) video.pause();
+      } else if (useUIStore.getState().heroMode === 'day' && video.paused) {
+        video.play().catch(() => {});
+      }
+    });
+  }, [scrollY]);
+
   // As the user scrolls down, move the background up slightly for parallax
   const y = useTransform(scrollY, [0, 1000], ['0%', '-15%']);
   // Zoom in the background image as the user scrolls down
@@ -24,7 +71,7 @@ export function BackgroundAnimation() {
 
   return (
     <>
-      {/* 1. Persistent Background Image (Stays behind all sections at z-0) */}
+      {/* 1. Persistent Background Image/Video (Stays behind all sections at z-0) */}
       <motion.div
         className="fixed inset-0 z-0 h-[120vh] w-full bg-[#0D2D40]"
         style={{
@@ -38,22 +85,25 @@ export function BackgroundAnimation() {
             className="absolute inset-0 h-full w-full"
             style={{ scale: scaleOnScroll, willChange: 'transform' }}
           >
-            {/* Day Villa Image */}
+            {/* Day Video Mode (Continuum South Tower) */}
             <motion.div
               className="absolute inset-0 h-full w-full"
               initial={false}
               animate={{ opacity: heroMode === 'day' ? 1 : 0 }}
-              transition={{ duration: 2.2, ease: 'easeInOut' }}
+              transition={{ duration: 1.5, ease: 'easeInOut' }}
             >
-              <Image
-                src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=70&w=1920"
-                alt="Mediterranean Villa - Day"
-                fill
-                priority
-                sizes="100vw"
-                className="object-cover object-center"
+              <video
+                ref={videoRef}
+                src="/Continuum-South-Tower.mp4"
+                poster="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=70&w=1920"
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="auto"
+                className="h-full w-full object-cover object-center"
               />
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 md:from-black/40 md:to-black/20" />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-black/45 md:from-black/60 md:via-black/10 md:to-black/35" />
             </motion.div>
 
             {/* Night Villa Image */}
