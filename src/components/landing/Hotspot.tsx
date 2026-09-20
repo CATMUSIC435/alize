@@ -51,32 +51,30 @@ function HotspotCardContent(props: {
 
       {props.overview ? (
         <div className="relative z-10 flex h-full flex-col justify-between">
-          {/* Close button */}
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              props.onClose();
-            }}
-            aria-label="Close"
-            className={`absolute z-20 flex items-center justify-center rounded-full text-[#151926]/70 transition-colors hover:bg-black/5 hover:text-[#151926] ${
-              props.isMobile
-                ? '-top-0.5 -right-0.5 h-6.5 w-6.5'
-                : '-top-1 -right-1 h-7 w-7'
-            }`}
-          >
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path
-                d="M1 1L13 13M1 13L13 1"
-                stroke="currentColor"
-                strokeWidth="1.75"
-                strokeLinecap="round"
-              />
-            </svg>
-          </button>
+          {/* Close button - hidden on mobile */}
+          {!props.isMobile && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                props.onClose();
+              }}
+              aria-label="Close"
+              className="absolute -top-1 -right-1 z-20 flex h-7 w-7 items-center justify-center rounded-full text-[#151926]/70 transition-colors hover:bg-black/5 hover:text-[#151926]"
+            >
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path
+                  d="M1 1L13 13M1 13L13 1"
+                  stroke="currentColor"
+                  strokeWidth="1.75"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </button>
+          )}
 
           {/* Header */}
-          <div className={props.isMobile ? 'border-b border-[#C8BEAE]/70 pb-2 pr-6' : 'border-b border-[#C8BEAE]/70 pb-5 pr-8'}>
+          <div className={props.isMobile ? 'border-b border-[#C8BEAE]/70 pb-2' : 'border-b border-[#C8BEAE]/70 pb-5 pr-8'}>
             <h2
               className={`font-semibold tracking-wider text-[#151926] uppercase ${
                 props.isMobile ? 'text-lg' : 'text-3xl md:text-[38px]'
@@ -180,6 +178,9 @@ export function Hotspot(props: {
   const isRightSide = xPercent > 50;
 
   const handleToggle = () => {
+    if (typeof window !== 'undefined' && window.innerWidth < 768 && props.overview) {
+      return; // On mobile, overview card is default visible and not dismissible
+    }
     if (props.onToggle) {
       props.onToggle();
     } else {
@@ -328,8 +329,8 @@ export function Hotspot(props: {
         </AnimatePresence>
       </div>
 
-      {/* Mobile Card (Positioned lower under hotspot button, non-fixed) */}
-      {isCardOpen && (
+      {/* Mobile Card (Positioned lower under hotspot button, non-fixed, default visible for overview) */}
+      {(props.overview || isCardOpen) && (
         <div
           className="pointer-events-auto absolute top-[calc(100%+38px)] z-40 block md:hidden"
           style={{
