@@ -154,7 +154,7 @@ export default async function EraResidencePage(props: { params: Promise<{ locale
           <BackgroundAnimation />
 
           {/* Sticky UI Container - Acts like viewport for parallax elements */}
-          <div className="sticky top-0 h-[100vh] w-full overflow-hidden">
+          <div className="sticky top-0 h-[100vh] h-[100dvh] w-full overflow-hidden">
             <HotspotLayer />
           </div>
 

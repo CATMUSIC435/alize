@@ -97,7 +97,7 @@ function HotspotCardContent(props: {
           <div
             className={`grid grid-cols-2 ${
               props.isMobile
-                ? 'gap-x-3 gap-y-2 pt-2.5 pb-2'
+                ? 'gap-x-3 gap-y-1.5 pt-2 pb-1'
                 : 'gap-x-8 gap-y-4 pt-5 pb-1'
             }`}
           >
@@ -332,7 +332,7 @@ export function Hotspot(props: {
       {/* Mobile Card (Positioned lower under hotspot button, non-fixed, default visible for overview) */}
       {(props.overview || isCardOpen) && (
         <div
-          className="pointer-events-auto absolute top-[calc(100%+38px)] z-40 block md:hidden"
+          className="pointer-events-auto absolute top-[calc(100%+14px)] z-40 block md:hidden"
           style={{
             left: `calc(50vw - ${xPercent}vw + 28px)`,
             transform: 'translateX(-50%)',
@@ -340,7 +340,7 @@ export function Hotspot(props: {
             maxWidth: '380px',
           }}
         >
-          <div className="bg-sand-card border border-[#D9CEBD]/90 relative flex w-full cursor-default flex-col justify-between rounded-2xl p-4.5 pb-5 shadow-[0_20px_50px_rgba(21,25,38,0.25)]">
+          <div className="bg-sand-card border border-[#D9CEBD]/90 relative flex w-full cursor-default flex-col justify-between rounded-2xl p-3.5 pb-3.5 shadow-[0_20px_50px_rgba(21,25,38,0.25)]">
             <HotspotCardContent
               title={props.title}
               description={props.description}
