@@ -1,37 +1,110 @@
 'use client';
 
-import { motion, useInView } from 'framer-motion';
+import { AnimatePresence, motion, useInView } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { Inter } from 'next/font/google';
 import Image from 'next/image';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-const inter = Inter({ subsets: ['latin'], weight: ['300', '400', '600', '700'] });
+const inter = Inter({ subsets: ['latin'], weight: ['300', '400', '500', '600', '700'] });
 
 export function FifthSection() {
   const t = useTranslations('Index');
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { margin: '300px' });
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
+
+  const landmarks = [
+    {
+      id: 'my-khe',
+      image: '/landmarks/my-khe-beach.jpg',
+      title: `${t('new_golden_mile')}, ${t('timeline_estepona')}`,
+      subtitle: t('landmark_1_sub'),
+      tag: t('landmark_1_tag'),
+    },
+    {
+      id: 'cau-vang',
+      image: '/landmarks/cau-vang-bana.jpg',
+      title: t('landmark_2_title'),
+      subtitle: t('landmark_2_sub'),
+      tag: t('landmark_2_tag'),
+    },
+    {
+      id: 'ngu-hanh-son',
+      image: '/landmarks/ngu-hanh-son.jpg',
+      title: t('landmark_3_title'),
+      subtitle: t('landmark_3_sub'),
+      tag: t('landmark_3_tag'),
+    },
+  ];
+
+  // Gentle auto-fade carousel cycle every 3 seconds when visible
+  useEffect(() => {
+    if (!isInView || isPaused) return;
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % landmarks.length);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, [isInView, isPaused, landmarks.length]);
+
+  const goToNext = () => {
+    setCurrentIndex((prev) => (prev + 1) % landmarks.length);
+  };
+
+  const goToPrev = () => {
+    setCurrentIndex((prev) => (prev === 0 ? landmarks.length - 1 : prev - 1));
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStartX(e.touches[0]?.clientX ?? null);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX === null) return;
+    const touchEndX = e.changedTouches[0]?.clientX ?? 0;
+    const diff = touchStartX - touchEndX;
+    if (diff > 50) {
+      goToNext();
+    } else if (diff < -50) {
+      goToPrev();
+    }
+    setTouchStartX(null);
+  };
+
+  const currentLandmark = landmarks[currentIndex] ?? landmarks[0]!;
 
   return (
     <section
       ref={sectionRef}
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
       className="relative h-[100vh] w-full overflow-hidden bg-gradient-to-b from-[#F4F3EC] via-[#78A8D8] to-[#78A8D8]"
     >
-      {/* Background Landscape */}
+      {/* Background Landscape Crossfade Carousel */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 z-0 [mask-image:linear-gradient(to_bottom,transparent,black_15%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent,black_15%)]">
-          <Image
-            src="https://images.unsplash.com/photo-1728898394273-dad9725cfadf?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="City Landscape"
-            fill
-            sizes="100vw"
-            className="object-cover object-bottom"
-          />
-        </div>
-
-        {/* Bottom Overlay */}
-        {/* <div className="absolute inset-0 z-[5] bg-gradient-to-b from-transparent to-[#d2a373]/30 pointer-events-none" /> */}
+        <AnimatePresence mode="popLayout" initial={false}>
+          <motion.div
+            key={currentLandmark.id}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.0, ease: 'easeInOut' }}
+            className="absolute inset-0 z-0 [mask-image:linear-gradient(to_bottom,transparent,black_15%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent,black_15%)]"
+          >
+            <Image
+              src={currentLandmark.image}
+              alt={currentLandmark.title}
+              fill
+              sizes="100vw"
+              className="object-cover object-bottom"
+              priority={currentIndex === 0}
+            />
+          </motion.div>
+        </AnimatePresence>
       </div>
 
       {/* Marquee 1 - Fast Clouds (Foreground) */}
@@ -118,31 +191,52 @@ export function FifthSection() {
         </div>
       </motion.div>
 
-      {/* Location Text Overlay */}
-      <div className="absolute right-[5vw] bottom-[10vh] z-20 flex flex-col items-start text-white md:right-[5vw] lg:right-[4vw]">
-        <h3
-          className={`text-[10px] leading-snug font-bold tracking-widest uppercase md:text-[12px] ${inter.className}`}
-        >
-          {t('new_golden_mile')},
-          <br />
-          {t('timeline_estepona')}
-        </h3>
+      {/* Location Text Overlay & Interactive Scene Switcher */}
+      <div className="absolute right-[5vw] bottom-[6vh] z-30 flex max-w-[90vw] flex-col items-start text-white md:right-[5vw] md:bottom-[8vh] lg:right-[4vw]">
+        {/* Animated Landmark Details - Clickable to switch scene */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentLandmark.id}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+            role="button"
+            tabIndex={0}
+            onClick={goToNext}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                goToNext();
+              }
+            }}
+            title="Bấm để chuyển cảnh"
+            aria-label="Chuyển sang địa điểm tiếp theo"
+            className="group flex cursor-pointer select-none flex-col items-start transition-opacity duration-300 hover:opacity-80 active:scale-[0.99] focus:outline-none"
+          >
+            <h3
+              className={`text-[10px] leading-snug font-bold tracking-widest uppercase transition-colors md:text-[12px] ${inter.className}`}
+            >
+              {currentLandmark.title}
+            </h3>
 
-        <div className="my-3 ml-1 h-[25px] w-[1px] bg-white opacity-70"></div>
+            <div className="my-2.5 ml-1 h-[22px] w-[1px] bg-white opacity-70 transition-opacity group-hover:opacity-100" />
 
-        <p
-          className={`text-[10px] font-light tracking-wider capitalize opacity-90 md:text-[11px] ${inter.className}`}
-        >
-          {t('costa').toLowerCase()} {t('del_sol').toLowerCase()}
-        </p>
+            <p
+              className={`text-[10px] font-light tracking-wider capitalize opacity-90 transition-opacity group-hover:opacity-100 md:text-[11px] ${inter.className}`}
+            >
+              {currentLandmark.subtitle} — {currentLandmark.tag}
+            </p>
 
-        <div className="my-3 ml-1 h-[25px] w-[1px] bg-white opacity-70"></div>
+            <div className="my-2.5 ml-1 h-[22px] w-[1px] bg-white opacity-70 transition-opacity group-hover:opacity-100" />
 
-        <p
-          className={`text-[10px] font-light tracking-wider capitalize opacity-90 md:text-[11px] ${inter.className}`}
-        >
-          {t('spain').toLowerCase()}
-        </p>
+            <p
+              className={`text-[10px] font-light tracking-wider uppercase opacity-90 transition-opacity group-hover:opacity-100 md:text-[11px] ${inter.className}`}
+            >
+              {t('spain')}
+            </p>
+          </motion.div>
+        </AnimatePresence>
       </div>
     </section>
   );

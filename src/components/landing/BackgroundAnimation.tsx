@@ -3,6 +3,7 @@
 import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import { useEffect, useRef, useSyncExternalStore } from 'react';
+import { Env } from '@/libs/Env';
 import { useUIStore } from '@/store/useUIStore';
 
 function subscribeVideoEligibility(_callback: () => void) {
@@ -53,7 +54,9 @@ export function BackgroundAnimation() {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      if (window.innerWidth < 768 || sessionStorage.getItem('alize_intro_seen') === 'true') {
+      const isDev = Env.NODE_ENV === 'development';
+      const seen = !isDev && sessionStorage.getItem('alize_intro_seen') === 'true';
+      if (window.innerWidth < 768 || seen) {
         setIsIntroComplete(true);
       }
     }
@@ -290,7 +293,7 @@ export function BackgroundAnimation() {
           <motion.div
             key="intro-overlay"
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.45, ease: 'easeOut' }}
+            transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
             className="pointer-events-none fixed inset-0 z-[70] hidden overflow-hidden md:block"
           >
             {/* Static Decorative Outer Frame (Chamfered Corners) - Only during load */}
@@ -301,9 +304,9 @@ export function BackgroundAnimation() {
                 opacity: [0, 1, 1, 0],
               }}
               transition={{
-                duration: 2.3,
-                times: [0, 0.22, 0.55, 0.95],
-                ease: 'easeInOut',
+                duration: 2.9,
+                times: [0, 0.22, 0.48, 0.9],
+                ease: ['easeOut', 'linear', [0.35, 0.05, 0.25, 1]],
                 delay: 0.08,
               }}
             >
@@ -340,12 +343,12 @@ export function BackgroundAnimation() {
               initial={{ opacity: 0, y: 14 }}
               animate={{
                 opacity: [0, 1, 1, 0],
-                y: [14, 0, 0, -10],
+                y: [14, 0, 0, -12],
               }}
               transition={{
-                duration: 2.3,
-                times: [0, 0.22, 0.55, 0.95],
-                ease: ['easeOut', 'linear', [0.16, 1, 0.3, 1]],
+                duration: 2.9,
+                times: [0, 0.22, 0.48, 0.9],
+                ease: ['easeOut', 'linear', [0.35, 0.05, 0.25, 1]],
                 delay: 0.08,
               }}
             >
@@ -401,16 +404,20 @@ export function BackgroundAnimation() {
                     willChange: 'transform, opacity',
                     transformOrigin: '50% 100%',
                   }}
-                  initial={{ y: 650, scale: 1, opacity: 1 }}
+                  initial={{ y: 560, scale: 1, opacity: 1 }}
                   animate={{
-                    y: [650, 0, 0, 0],
-                    scale: [1, 1, 1, 7],
+                    y: [560, 0, 0, 0],
+                    scale: [1, 1, 1, 8.5],
                     opacity: [1, 1, 1, 0],
                   }}
                   transition={{
-                    duration: 2.3,
-                    times: [0, 0.28, 0.55, 1],
-                    ease: ['easeOut', 'linear', [0.16, 1, 0.3, 1]],
+                    duration: 2.9,
+                    times: [0, 0.3, 0.48, 1],
+                    ease: [
+                      [0.22, 1, 0.36, 1],
+                      'linear',
+                      [0.35, 0.05, 0.25, 1],
+                    ],
                     delay: 0.05,
                   }}
                   onAnimationComplete={() => {
@@ -423,7 +430,12 @@ export function BackgroundAnimation() {
                   {/* 5 Concentric Architectural Stroke Rings with gentle fade-out before full expansion */}
                   <motion.div
                     animate={{ opacity: [1, 1, 0, 0] }}
-                    transition={{ duration: 2.3, times: [0, 0.52, 0.72, 1], delay: 0.05 }}
+                    transition={{
+                      duration: 2.9,
+                      times: [0, 0.46, 0.72, 1],
+                      ease: ['linear', 'easeInOut', 'linear'],
+                      delay: 0.05,
+                    }}
                     className="pointer-events-none absolute inset-0"
                   >
                     <div className="pointer-events-none absolute -inset-[12px] bottom-0 rounded-t-[187px] border border-white/45 border-b-0" />
