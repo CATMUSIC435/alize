@@ -34,17 +34,17 @@ export function ArchitectureSplit() {
   const flowersOpacity = useTransform(scrollYProgress, [0.32, 0.38], [1, 0]);
   const flowersVisibility = useTransform(scrollYProgress, (v) => (v > 0.38 ? 'hidden' : 'visible'));
 
-  // Step 2: "KIẾN TRÚC" text appears after full image is revealed (0.38 to 0.52), then lifts up (0.55 to 0.70)
-  const textOpacity = useTransform(scrollYProgress, [0.38, 0.48], [0, 1]);
-  const textScale = useTransform(scrollYProgress, [0.38, 0.48], [0.85, 1]);
-  const textY = useTransform(scrollYProgress, [0.55, 0.70], ['0vh', '-14vh']);
+  // Step 2: "KIẾN TRÚC" text appears after full image is revealed (0.36 to 0.48), lifts smoothly to safe header position (0.48 to 0.65), exits softly (0.92 to 0.98)
+  const textOpacity = useTransform(scrollYProgress, [0.36, 0.48, 0.92, 0.98], [0, 1, 1, 0]);
+  const textScale = useTransform(scrollYProgress, [0.36, 0.48], [0.9, 1]);
+  const textY = useTransform(scrollYProgress, [0.48, 0.65], ['0vh', '-9vh']);
 
-  // Step 3: Narrative Description & Redirect Button appear after "KIẾN TRÚC" lifts up (0.62 to 0.76)
-  const descOpacity = useTransform(scrollYProgress, [0.62, 0.76], [0, 1]);
-  const descY = useTransform(scrollYProgress, [0.62, 0.76], ['40px', '0px']);
+  // Step 3: Narrative Description & Redirect Button appear after "KIẾN TRÚC" lifts (0.58 to 0.74), exits softly (0.92 to 0.98)
+  const descOpacity = useTransform(scrollYProgress, [0.58, 0.74, 0.92, 0.98], [0, 1, 1, 0]);
+  const descY = useTransform(scrollYProgress, [0.58, 0.74, 0.92, 0.98], ['35px', '0px', '0px', '-25px']);
 
   return (
-    <div id="concept" ref={containerRef} className="bg-textured-sand relative h-[300vh] w-full md:h-[350vh]">
+    <div id="concept" ref={containerRef} className="bg-textured-sand relative h-[280vh] w-full md:h-[300vh]">
       <div className="sticky top-0 flex h-screen w-full items-center justify-center overflow-hidden">
         {/* Split Image Container */}
         <motion.div
@@ -95,11 +95,11 @@ export function ArchitectureSplit() {
         {/* The "ARCHITECTURE" Text */}
         <motion.div
           style={{ opacity: textOpacity, scale: textScale, x: '-50%', y: textY }}
-          className="pointer-events-none absolute top-[24vh] left-1/2 z-20 flex w-full items-center justify-center px-4 will-change-transform md:top-[22vh]"
+          className="pointer-events-none absolute top-[26vh] left-1/2 z-20 flex w-full items-center justify-center px-4 will-change-transform md:top-[24vh]"
         >
           <h2
-            className={`w-full text-center text-[13vw] leading-none font-medium tracking-tighter whitespace-nowrap text-white uppercase md:text-[11.5vw] ${playfair.className}`}
-            style={{ transform: 'scaleY(1.3)', textShadow: '0 20px 40px rgba(0,0,0,0.6)' }}
+            className={`w-full text-center text-[12vw] leading-none font-medium tracking-tighter whitespace-nowrap text-white uppercase sm:text-[12.5vw] md:text-[11vw] ${playfair.className}`}
+            style={{ transform: 'scaleY(1.12)', textShadow: '0 20px 40px rgba(0,0,0,0.6)' }}
           >
             {t('architecture')}
           </h2>

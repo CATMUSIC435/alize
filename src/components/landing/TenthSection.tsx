@@ -34,7 +34,7 @@ export function TenthSection() {
   const imageScale = useTransform(scrollYProgress, [0, 1], [1, 1.15]);
   const imageY = useTransform(scrollYProgress, [0, 1], ['0%', '5%']);
 
-  const exitScale = useTransform(exitProgress, [0, 1], [1, 0.65]);
+  const exitScale = useTransform(exitProgress, [0, 0.75, 1], [1, 0.42, 0.32]);
 
   return (
     <section ref={targetRef} className="bg-textured-sand relative h-[200vh] w-full">

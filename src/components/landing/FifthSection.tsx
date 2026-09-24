@@ -200,75 +200,47 @@ export function FifthSection() {
       </motion.div>
 
       {/* Location Text Overlay & Interactive Scene Switcher */}
-      <div className="absolute right-[7vw] bottom-[12vh] z-30 flex max-w-[90vw] flex-col items-start text-white md:right-[8vw] md:bottom-[15vh] lg:bottom-[16vh]">
-        {/* 3 Landmark clusters with vertical line dividers - click to switch */}
-        <div className="flex flex-col items-start select-none">
-          {landmarks.map((landmark, idx) => {
-            const isActive = idx === currentIndex;
-            return (
-              <div key={landmark.id} className="flex flex-col items-start">
-                {idx > 0 && (
-                  <div
-                    className={`my-2.5 ml-1 h-[22px] w-[1px] transition-opacity duration-300 ${
-                      isActive || idx - 1 === currentIndex
-                        ? 'bg-white opacity-80'
-                        : 'bg-white opacity-40'
-                    }`}
-                  />
-                )}
-
+      <div className="absolute right-[7vw] bottom-[12vh] z-30 flex w-[280px] flex-col items-start text-white select-none sm:w-[320px] md:right-[8vw] md:bottom-[15vh] md:w-[360px] lg:bottom-[16vh]">
+        {landmarks.map((landmark, idx) => {
+          const isActive = idx === currentIndex;
+          return (
+            <div key={landmark.id} className="flex flex-col items-start">
+              {idx > 0 && (
                 <div
-                  role="button"
-                  tabIndex={0}
-                  onClick={() => {
-                    if (isActive) {
-                      goToNext();
-                    } else {
-                      setCurrentIndex(idx);
-                    }
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
-                      if (isActive) {
-                        goToNext();
-                      } else {
-                        setCurrentIndex(idx);
-                      }
-                    }
-                  }}
-                  title="Bấm để chuyển cảnh"
-                  aria-label={`Chuyển sang ${landmark.title}`}
-                  className="group flex cursor-pointer flex-col items-start transition-opacity duration-300 focus:outline-none"
-                >
-                  <h3
-                    className={`text-[10px] leading-snug tracking-widest uppercase transition-all md:text-[12px] ${
-                      isActive
-                        ? 'font-bold text-white opacity-100'
-                        : 'font-normal text-white opacity-60 group-hover:opacity-90'
-                    } ${inter.className}`}
-                  >
-                    {landmark.title}
-                  </h3>
+                  className={`my-2.5 ml-1 h-[22px] w-[1px] transition-opacity duration-300 ${
+                    isActive || idx - 1 === currentIndex
+                      ? 'bg-white opacity-80'
+                      : 'bg-white opacity-35'
+                  }`}
+                />
+              )}
 
-                  <AnimatePresence>
-                    {isActive && landmark.tag && (
-                      <motion.p
-                        initial={{ opacity: 0, height: 0, marginTop: 0 }}
-                        animate={{ opacity: 0.9, height: 'auto', marginTop: 4 }}
-                        exit={{ opacity: 0, height: 0, marginTop: 0 }}
-                        transition={{ duration: 0.25, ease: 'easeOut' }}
-                        className={`text-[10px] font-light tracking-wider capitalize text-white/90 md:text-[11px] ${inter.className}`}
-                      >
-                        {landmark.subtitle ? `${landmark.subtitle} — ` : ''}{landmark.tag}
-                      </motion.p>
-                    )}
-                  </AnimatePresence>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+              <button
+                type="button"
+                onClick={() => {
+                  if (isActive) {
+                    goToNext();
+                  } else {
+                    setCurrentIndex(idx);
+                  }
+                }}
+                title="Bấm để chuyển cảnh"
+                aria-label={`Chuyển sang ${landmark.title}`}
+                className="group flex cursor-pointer items-center text-left focus:outline-none"
+              >
+                <h3
+                  className={`whitespace-nowrap text-[10px] leading-snug tracking-widest uppercase transition-all duration-300 md:text-[12px] ${
+                    isActive
+                      ? 'font-bold text-white opacity-100'
+                      : 'font-normal text-white opacity-50 hover:opacity-85'
+                  } ${inter.className}`}
+                >
+                  {landmark.title}
+                </h3>
+              </button>
+            </div>
+          );
+        })}
       </div>
     </section>
   );

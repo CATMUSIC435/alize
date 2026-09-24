@@ -6,8 +6,10 @@ import createNextIntlPlugin from 'next-intl/plugin';
 
 // Define the base Next.js configuration
 const baseConfig: NextConfig = {
+  compress: true,
   images: {
     formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 2592000,
     remotePatterns: [
       {
         protocol: 'https',
@@ -29,6 +31,27 @@ const baseConfig: NextConfig = {
   },
   // Allow accessing the dev server from local network IP
   allowedDevOrigins: ['192.168.1.211', '192.168.1.190', 'localhost:3000'],
+  experimental: {
+    optimizePackageImports: [
+      'framer-motion',
+      'embla-carousel-react',
+      'three',
+      '@sentry/nextjs',
+    ],
+  },
+  async headers() {
+    return [
+      {
+        source: '/:path*\\.(mp4|webm|png|jpg|jpeg|svg|webp|avif|ico|woff|woff2)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+    ];
+  },
 };
 
 // Initialize the Next-Intl plugin

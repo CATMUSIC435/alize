@@ -34,12 +34,17 @@ export function SmartVideo(
 ) {
   const isDesktop = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const videoRef = useRef<HTMLVideoElement>(null);
+  // 600px lookahead buffer to begin prefetching/attaching src before the user reaches the section
+  const isNearView = useInView(videoRef, { margin: '600px', once: true });
   // 150px buffer: smooth margin before pausing to avoid jarring cutoffs
   const isInView = useInView(videoRef, { margin: '150px' });
 
+  const isEligible = props.desktopOnly === false || isDesktop;
+  const shouldLoad = isEligible && isNearView;
+
   useEffect(() => {
     const video = videoRef.current;
-    if (!video) {
+    if (!video || !shouldLoad) {
       return;
     }
 
@@ -73,12 +78,12 @@ export function SmartVideo(
     } else {
       video.pause();
     }
-  }, [isInView, props.autoPlay, props.muted]);
+  }, [shouldLoad, isInView, props.autoPlay, props.muted]);
 
   // Pause when browser tab is inactive to preserve CPU/GPU
   useEffect(() => {
     const video = videoRef.current;
-    if (!video) return;
+    if (!video || !shouldLoad) return;
 
     const handleVisibilityChange = () => {
       if (document.hidden) {
@@ -95,23 +100,23 @@ export function SmartVideo(
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, [isInView, props.autoPlay, props.muted]);
+  }, [shouldLoad, isInView, props.autoPlay, props.muted]);
 
-  // Only hide/unmount if desktopOnly is explicitly set to true AND viewport is mobile
-  if (props.desktopOnly === true && !isDesktop) {
+  // Default to desktop-only to avoid downloading heavy videos on mobile viewports
+  if (props.desktopOnly !== false && !isDesktop) {
     return null;
   }
 
   return (
     <video
       ref={videoRef}
-      src={props.src}
+      src={shouldLoad ? props.src : undefined}
       className={`pointer-events-none ${props.className ?? ''}`}
       autoPlay={props.autoPlay ?? true}
       loop={props.loop ?? true}
       muted={props.muted ?? true}
       playsInline={props.playsInline ?? true}
-      preload="auto"
+      preload={shouldLoad ? (props.preload ?? 'metadata') : 'none'}
       controls={false}
       controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
       tabIndex={-1}
