@@ -18,8 +18,8 @@ export function FifthSection() {
     {
       id: 'my-khe',
       image: '/landmarks/my-khe-beach.jpg',
-      title: `${t('new_golden_mile')}, ${t('timeline_estepona')}`,
-      subtitle: t('landmark_1_sub'),
+      title: t('landmark_1_title'),
+      subtitle: t('new_golden_mile'),
       tag: t('landmark_1_tag'),
     },
     {
@@ -200,51 +200,75 @@ export function FifthSection() {
       </motion.div>
 
       {/* Location Text Overlay & Interactive Scene Switcher */}
-      <div className="absolute right-[5vw] bottom-[6vh] z-30 flex max-w-[90vw] flex-col items-start text-white md:right-[5vw] md:bottom-[8vh] lg:right-[4vw]">
-        {/* Animated Landmark Details - Clickable to switch scene */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentLandmark.id}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
-            role="button"
-            tabIndex={0}
-            onClick={goToNext}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                goToNext();
-              }
-            }}
-            title="Bấm để chuyển cảnh"
-            aria-label="Chuyển sang địa điểm tiếp theo"
-            className="group flex cursor-pointer select-none flex-col items-start transition-opacity duration-300 hover:opacity-80 active:scale-[0.99] focus:outline-none"
-          >
-            <h3
-              className={`text-[10px] leading-snug font-bold tracking-widest uppercase transition-colors md:text-[12px] ${inter.className}`}
-            >
-              {currentLandmark.title}
-            </h3>
+      <div className="absolute right-[7vw] bottom-[12vh] z-30 flex max-w-[90vw] flex-col items-start text-white md:right-[8vw] md:bottom-[15vh] lg:bottom-[16vh]">
+        {/* 3 Landmark clusters with vertical line dividers - click to switch */}
+        <div className="flex flex-col items-start select-none">
+          {landmarks.map((landmark, idx) => {
+            const isActive = idx === currentIndex;
+            return (
+              <div key={landmark.id} className="flex flex-col items-start">
+                {idx > 0 && (
+                  <div
+                    className={`my-2.5 ml-1 h-[22px] w-[1px] transition-opacity duration-300 ${
+                      isActive || idx - 1 === currentIndex
+                        ? 'bg-white opacity-80'
+                        : 'bg-white opacity-40'
+                    }`}
+                  />
+                )}
 
-            <div className="my-2.5 ml-1 h-[22px] w-[1px] bg-white opacity-70 transition-opacity group-hover:opacity-100" />
+                <div
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => {
+                    if (isActive) {
+                      goToNext();
+                    } else {
+                      setCurrentIndex(idx);
+                    }
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      if (isActive) {
+                        goToNext();
+                      } else {
+                        setCurrentIndex(idx);
+                      }
+                    }
+                  }}
+                  title="Bấm để chuyển cảnh"
+                  aria-label={`Chuyển sang ${landmark.title}`}
+                  className="group flex cursor-pointer flex-col items-start transition-opacity duration-300 focus:outline-none"
+                >
+                  <h3
+                    className={`text-[10px] leading-snug tracking-widest uppercase transition-all md:text-[12px] ${
+                      isActive
+                        ? 'font-bold text-white opacity-100'
+                        : 'font-normal text-white opacity-60 group-hover:opacity-90'
+                    } ${inter.className}`}
+                  >
+                    {landmark.title}
+                  </h3>
 
-            <p
-              className={`text-[10px] font-light tracking-wider capitalize opacity-90 transition-opacity group-hover:opacity-100 md:text-[11px] ${inter.className}`}
-            >
-              {currentLandmark.subtitle} — {currentLandmark.tag}
-            </p>
-
-            <div className="my-2.5 ml-1 h-[22px] w-[1px] bg-white opacity-70 transition-opacity group-hover:opacity-100" />
-
-            <p
-              className={`text-[10px] font-light tracking-wider uppercase opacity-90 transition-opacity group-hover:opacity-100 md:text-[11px] ${inter.className}`}
-            >
-              {t('spain')}
-            </p>
-          </motion.div>
-        </AnimatePresence>
+                  <AnimatePresence>
+                    {isActive && landmark.tag && (
+                      <motion.p
+                        initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                        animate={{ opacity: 0.9, height: 'auto', marginTop: 4 }}
+                        exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                        transition={{ duration: 0.25, ease: 'easeOut' }}
+                        className={`text-[10px] font-light tracking-wider capitalize text-white/90 md:text-[11px] ${inter.className}`}
+                      >
+                        {landmark.subtitle ? `${landmark.subtitle} — ` : ''}{landmark.tag}
+                      </motion.p>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </section>
   );
