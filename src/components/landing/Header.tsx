@@ -60,7 +60,10 @@ export function Header(props: { alwaysDark?: boolean }) {
             alt="Alize Logo"
             width={80}
             height={160}
-            className="h-auto w-12 object-contain md:w-16 lg:w-20"
+            priority
+            loading="eager"
+            style={{ height: 'auto' }}
+            className="h-auto w-12 max-w-[48px] object-contain md:w-16 md:max-w-[64px] lg:w-20 lg:max-w-[80px]"
           />
         </Link>
       </div>

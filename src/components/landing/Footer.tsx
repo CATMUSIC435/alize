@@ -2,17 +2,10 @@
 
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
-import { Inter, Playfair_Display } from 'next/font/google';
-
 import { Link } from '@/libs/I18nNavigation';
+import { inter, playfair } from '@/utils/Fonts';
 import { LOCAL_BUSINESS_CONFIG } from '@/utils/Seo';
-
-const inter = Inter({ subsets: ['latin'], weight: ['300', '400', '600', '700'] });
-const playfair = Playfair_Display({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  style: ['italic', 'normal'],
-});
+import { RevealHeading, RevealLabel } from './RevealText';
 
 export function Footer() {
   const t = useTranslations('Index');
@@ -67,18 +60,18 @@ export function Footer() {
           </div>
 
           {/* Large Phone Number */}
-          <h2
+          <RevealHeading
+            as="h2"
+            text="+84 (965) 355-355"
             className={`text-[12vw] leading-none tracking-tighter md:text-[10vw] lg:text-[8vw] ${playfair.className}`}
             style={{ transform: 'scaleY(1.3)' }}
-          >
-            +84 (965) 355-355 
-          </h2>
+          />
 
           {/* Sales Office Info with External Google Maps Citation */}
           <div
             className={`mt-16 flex flex-col items-center text-center text-[9px] font-bold tracking-[0.15em] uppercase md:mt-24 md:text-[11px] ${inter.className}`}
           >
-            <p className="mb-3 tracking-[0.2em]">{t('sales_office')}</p>
+            <RevealLabel text={t('sales_office')} className="mb-3 tracking-[0.2em]" />
             <a
               href={LOCAL_BUSINESS_CONFIG.hasMap}
               target="_blank"

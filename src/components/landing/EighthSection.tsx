@@ -3,14 +3,13 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { SmartVideo } from '@/components/SmartVideo';
 import { useTranslations } from 'next-intl';
-import { Playfair_Display, Inter, Pinyon_Script } from 'next/font/google';
+import { Pinyon_Script } from 'next/font/google';
 import Image from 'next/image';
 import { useRef } from 'react';
+import { inter, playfair } from '@/utils/Fonts';
 import { CircleButton } from './CircleButton';
 import { LazyWebGLSlider } from './LazyWebGLSlider';
-
-const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400', '500', '600', '700'] });
-const inter = Inter({ subsets: ['latin'], weight: ['300', '400', '500', '600'] });
+import { RevealHeading, RevealLabel, RevealParagraph } from './RevealText';
 
 const eighthSectionImages = [
   'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1920',
@@ -64,7 +63,7 @@ export function EighthSection() {
       {/* Content Layout */}
       <div className="relative mt-24 flex w-full flex-col md:mt-48 md:flex-row">
         {/* Left Column (Burgundy Box & Flowers) */}
-        <div className="relative w-full md:w-[45%]">
+        <div className="relative w-full md:w-[45%] mt-8 md:mt-24 lg:mt-32">
           <div className="relative flex h-[600px] w-full items-center justify-end rounded-r-xl md:h-[900px] md:w-full md:rounded-none lg:w-[90%]">
 
             {/* Flower Image */}
@@ -99,11 +98,10 @@ export function EighthSection() {
           {/* Upgrades List */}
           <div className="mt-16 flex w-full justify-start pl-8 md:mt-16 md:pl-[8vw]">
             <div className="max-w-[400px]">
-              <h3
+              <RevealLabel
+                text={t('optional_upgrades')}
                 className={`mb-4 text-[10px] font-bold tracking-widest text-[#151926] uppercase md:text-[11px] ${inter.className}`}
-              >
-                {t('optional_upgrades')}
-              </h3>
+              />
               <ul
                 className={`space-y-2 text-[10px] font-bold tracking-widest text-[#151926] uppercase md:text-[11px] ${inter.className}`}
               >
@@ -139,19 +137,19 @@ export function EighthSection() {
 
           {/* Text Content */}
           <div className="mt-16 flex w-full flex-col px-4 md:mt-32 md:px-16 xl:px-24">
-            <h3
+            <RevealHeading
+              as="h3"
+              align="left"
+              text={t('every_detail')}
               className={`indent-[15%] text-3xl leading-[1.1] font-medium tracking-tighter text-[#151926] uppercase whitespace-pre-line md:indent-[20%] md:text-[2.5vw] md:leading-[1.15] xl:text-[2.2vw] ${playfair.className}`}
               style={{ transform: 'scaleY(1.15)', transformOrigin: 'left top' }}
-            >
-              {t('every_detail')}
-            </h3>
+            />
 
             <div className="mt-16 flex w-full justify-end md:mt-24">
-              <p
+              <RevealParagraph
+                text={t('underfloor_heating')}
                 className={`w-[90%] text-xs leading-[1.8] text-[#151926] opacity-80 md:w-[60%] md:text-[14px] ${inter.className}`}
-              >
-                {t('underfloor_heating')}
-              </p>
+              />
             </div>
 
             {/* Massive Circle Button */}

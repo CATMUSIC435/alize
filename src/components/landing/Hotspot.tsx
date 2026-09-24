@@ -1,11 +1,8 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { Inter, Playfair_Display } from 'next/font/google';
 import { useState } from 'react';
-
-const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400', '500', '600', '700'] });
-const inter = Inter({ subsets: ['latin'], weight: ['300', '400', '500', '600'] });
+import { inter, playfair } from '@/utils/Fonts';
 
 type SpecItem = {
   label: string;

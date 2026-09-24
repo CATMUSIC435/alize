@@ -2,22 +2,10 @@
 
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { useTranslations } from 'next-intl';
-import { Playfair_Display, Inter } from 'next/font/google';
 import { useState, useRef } from 'react';
+import { inter, playfair } from '@/utils/Fonts';
 import { CircleButton } from './CircleButton';
 import { LazyWebGLSlider } from './LazyWebGLSlider';
-
-const playfair = Playfair_Display({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  display: 'swap',
-});
-
-const inter = Inter({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-  display: 'swap',
-});
 
 const backgroundImages = [
   'https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?auto=format&fit=crop&q=80&w=1920',

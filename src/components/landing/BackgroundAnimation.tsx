@@ -125,6 +125,18 @@ export function BackgroundAnimation() {
 
   const { scrollY } = useScroll();
 
+  const heroThresholdRef = useRef(2200);
+
+  useEffect(() => {
+    const updateThreshold = () => {
+      const isMobile = window.innerWidth < 768;
+      heroThresholdRef.current = isMobile ? window.innerHeight * 1.8 : window.innerHeight * 2.3;
+    };
+    updateThreshold();
+    window.addEventListener('resize', updateThreshold, { passive: true });
+    return () => window.removeEventListener('resize', updateThreshold);
+  }, []);
+
   // Pause video and hide background when scrolled past hero section to eliminate scroll lag
   useEffect(() => {
     if (!canPlayVideo) return;
@@ -133,12 +145,7 @@ export function BackgroundAnimation() {
       const video = videoRef.current;
       if (!video) return;
 
-      const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-      // Header is 135vh on mobile, 200vh on desktop; let video play smoothly through the arch curve
-      const threshold = typeof window !== 'undefined'
-        ? (isMobile ? window.innerHeight * 1.8 : window.innerHeight * 2.3)
-        : 2200;
-      const isPastHero = latest > threshold;
+      const isPastHero = latest > heroThresholdRef.current;
       const isDay = useUIStore.getState().heroMode === 'day';
 
       if (isPastHero || !isDay) {
@@ -169,34 +176,10 @@ export function BackgroundAnimation() {
     return scrollY.on('change', checkAndToggle);
   }, [scrollY, canPlayVideo, heroMode]);
 
-  // As the user scrolls down, move the background up slightly for parallax on desktop
-  const y = useTransform(scrollY, (latest) => {
-    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-    if (isMobile) return '0%';
-    const progress = Math.min(latest / 1000, 1);
-    return `${-15 * progress}%`;
-  });
-
-  // Zoom in the background image as the user scrolls down on desktop
-  const scaleOnScroll = useTransform(scrollY, (latest) => {
-    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-    if (isMobile) return 1;
-    const progress = Math.min(latest / 1000, 1);
-    return 1 + 0.4 * progress;
-  });
-  // Smoothly fade out the fixed hero background as the user scrolls past Section 2
-  const backgroundOpacity = useTransform(scrollY, (latest) => {
-    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-    const startFade = typeof window !== 'undefined'
-      ? (isMobile ? window.innerHeight * 1.4 : window.innerHeight * 1.8)
-      : 1400;
-    const endFade = typeof window !== 'undefined'
-      ? (isMobile ? window.innerHeight * 1.9 : window.innerHeight * 2.4)
-      : 2300;
-    if (latest <= startFade) return 1;
-    if (latest >= endFade) return 0;
-    return 1 - (latest - startFade) / (endFade - startFade);
-  });
+  // Direct numeric range transforms to avoid layout queries during scroll
+  const y = useTransform(scrollY, [0, 1000], ['0%', '-15%']);
+  const scaleOnScroll = useTransform(scrollY, [0, 1000], [1, 1.4]);
+  const backgroundOpacity = useTransform(scrollY, [1400, 2200], [1, 0]);
 
   return (
     <>
@@ -293,7 +276,7 @@ export function BackgroundAnimation() {
           <motion.div
             key="intro-overlay"
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
             className="pointer-events-none fixed inset-0 z-[70] hidden overflow-hidden md:block"
           >
             {/* Static Decorative Outer Frame (Chamfered Corners) - Only during load */}
@@ -304,9 +287,9 @@ export function BackgroundAnimation() {
                 opacity: [0, 1, 1, 0],
               }}
               transition={{
-                duration: 2.9,
-                times: [0, 0.22, 0.48, 0.9],
-                ease: ['easeOut', 'linear', [0.35, 0.05, 0.25, 1]],
+                duration: 4.0,
+                times: [0, 0.22, 0.42, 0.88],
+                ease: ['easeOut', 'linear', [0.32, 0.05, 0.15, 1]],
                 delay: 0.08,
               }}
             >
@@ -339,52 +322,57 @@ export function BackgroundAnimation() {
 
             {/* Opening Intro Logos (ATG on left, Alizé project in center, DXMD on right) */}
             <motion.div
-              className="pointer-events-none absolute inset-x-0 top-[12vh] z-30 px-6 sm:top-[15vh] sm:px-10 md:top-[18vh] md:px-16 lg:top-[20vh] lg:px-24"
+              className="pointer-events-none absolute inset-x-0 top-[10vh] z-30 px-6 sm:top-[12vh] sm:px-10 md:top-[13vh] md:px-16 lg:top-[15vh] lg:px-24"
               initial={{ opacity: 0, y: 14 }}
               animate={{
                 opacity: [0, 1, 1, 0],
-                y: [14, 0, 0, -12],
+                y: [14, 0, 0, -14],
               }}
               transition={{
-                duration: 2.9,
-                times: [0, 0.22, 0.48, 0.9],
-                ease: ['easeOut', 'linear', [0.35, 0.05, 0.25, 1]],
+                duration: 4.0,
+                times: [0, 0.22, 0.42, 0.88],
+                ease: ['easeOut', 'linear', [0.32, 0.05, 0.15, 1]],
                 delay: 0.08,
               }}
             >
-              <div className="mx-auto flex w-full max-w-7xl items-center justify-between">
+              <div className="mx-auto flex w-full max-w-7xl items-start justify-between">
                 {/* Left: ATG Group Logo */}
-                <div className="flex w-1/3 items-center justify-start">
+                <div className="flex w-1/3 translate-y-10 items-center justify-start sm:translate-y-12 md:translate-y-16 lg:translate-y-20 xl:translate-y-24">
                   <Image
                     src="/atg-logo.svg"
                     alt="ATG Group"
                     width={260}
                     height={170}
                     unoptimized
-                    className="h-11 w-auto object-contain drop-shadow-md sm:h-14 md:h-18 lg:h-22 xl:h-26"
+                    style={{ width: 'auto' }}
+                    className="h-10 max-h-10 w-auto max-w-[150px] object-contain drop-shadow-md sm:h-12 sm:max-h-12 sm:max-w-[180px] md:h-13 md:max-h-13 md:max-w-[210px] lg:h-15 lg:max-h-15 lg:max-w-[250px] xl:h-16 xl:max-h-16 xl:max-w-[280px]"
                   />
                 </div>
 
-                {/* Center: Alizé Project Logo */}
-                <div className="flex w-1/3 -translate-y-6 items-center justify-center sm:-translate-y-16 md:-translate-y-24 lg:-translate-y-32">
+                {/* Center: Alizé Project Logo (Hero LCP Element) */}
+                <div className="flex w-1/3 items-center justify-center">
                   <Image
                     src="/logo-alize.png"
                     alt="Alizé Hotel & Residences Da Nang"
                     width={280}
                     height={345}
-                    className="h-20 w-auto object-contain brightness-0 invert drop-shadow-[0_6px_20px_rgba(255,255,255,0.3)] sm:h-28 md:h-36 lg:h-44 xl:h-48"
+                    priority
+                    loading="eager"
+                    style={{ width: 'auto' }}
+                    className="h-20 max-h-20 w-auto max-w-[130px] object-contain brightness-0 invert drop-shadow-[0_6px_20px_rgba(255,255,255,0.3)] sm:h-24 sm:max-h-24 sm:max-w-[150px] md:h-28 md:max-h-28 md:max-w-[190px] lg:h-36 lg:max-h-36 lg:max-w-[230px] xl:h-40 xl:max-h-40 xl:max-w-[260px]"
                   />
                 </div>
 
                 {/* Right: DXMD Logo */}
-                <div className="flex w-1/3 items-center justify-end">
+                <div className="flex w-1/3 translate-y-10 items-center justify-end sm:translate-y-12 md:translate-y-16 lg:translate-y-20 xl:translate-y-24">
                   <Image
                     src="/dxmd-logo.svg"
                     alt="DXMD Vietnam"
                     width={260}
                     height={115}
                     unoptimized
-                    className="h-9 w-auto object-contain drop-shadow-md sm:h-12 md:h-15 lg:h-18 xl:h-22"
+                    style={{ width: 'auto' }}
+                    className="h-10 max-h-10 w-auto max-w-[170px] object-contain drop-shadow-md sm:h-12 sm:max-h-12 sm:max-w-[200px] md:h-13 md:max-h-13 md:max-w-[230px] lg:h-15 lg:max-h-15 lg:max-w-[270px] xl:h-16 xl:max-h-16 xl:max-w-[300px]"
                   />
                 </div>
               </div>
@@ -407,16 +395,16 @@ export function BackgroundAnimation() {
                   initial={{ y: 560, scale: 1, opacity: 1 }}
                   animate={{
                     y: [560, 0, 0, 0],
-                    scale: [1, 1, 1, 8.5],
+                    scale: [1, 1, 1, 9],
                     opacity: [1, 1, 1, 0],
                   }}
                   transition={{
-                    duration: 2.9,
-                    times: [0, 0.3, 0.48, 1],
+                    duration: 4.0,
+                    times: [0, 0.26, 0.40, 1],
                     ease: [
                       [0.22, 1, 0.36, 1],
                       'linear',
-                      [0.35, 0.05, 0.25, 1],
+                      [0.32, 0.05, 0.15, 1],
                     ],
                     delay: 0.05,
                   }}
@@ -431,8 +419,8 @@ export function BackgroundAnimation() {
                   <motion.div
                     animate={{ opacity: [1, 1, 0, 0] }}
                     transition={{
-                      duration: 2.9,
-                      times: [0, 0.46, 0.72, 1],
+                      duration: 4.0,
+                      times: [0, 0.40, 0.72, 1],
                       ease: ['linear', 'easeInOut', 'linear'],
                       delay: 0.05,
                     }}

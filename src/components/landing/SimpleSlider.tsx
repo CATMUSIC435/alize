@@ -1,11 +1,9 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { Inter } from 'next/font/google';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-
-const inter = Inter({ subsets: ['latin'], weight: ['300', '400', '500', '600'] });
+import { inter } from '@/utils/Fonts';
 
 /**
  * Lightweight, zero-CLS Image slider for mobile screens and progressive enhancement fallback.

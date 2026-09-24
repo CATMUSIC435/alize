@@ -5,29 +5,38 @@ import type { Variants } from 'framer-motion';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SmartVideo } from '@/components/SmartVideo';
 import { useTranslations } from 'next-intl';
-import { Playfair_Display, Inter } from 'next/font/google';
 import Image from 'next/image';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from '@/libs/I18nNavigation';
+import { inter, playfair } from '@/utils/Fonts';
+import { LazyWebGLSlider } from './LazyWebGLSlider';
 
-const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400', '500', '600', '700'] });
-const inter = Inter({ subsets: ['latin'], weight: ['300', '400', '500', '600'] });
+const SLIDE_IMAGES = [
+  'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1200&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=1200&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?q=80&w=1200&auto=format&fit=crop',
+];
+
+// Era Residence Custom Curves: Out [0.25, 1, 0.5, 1], In [0.5, 0, 0.75, 0]
+const EASE_OUT = [0.25, 1, 0.5, 1] as const;
+const EASE_IN = [0.5, 0, 0.75, 0] as const;
 
 export function SixthSection() {
   const t = useTranslations('Index');
-  const [desktopEmblaRef, desktopEmblaApi] = useEmblaCarousel({ loop: true });
   const [mobileEmblaRef, mobileEmblaApi] = useEmblaCarousel({
     loop: true,
     align: 'center',
   });
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [progressKey, setProgressKey] = useState(0);
+  const sectionRef = useRef<HTMLElement>(null);
 
   const slides = [
     {
       bedrooms: '3',
       area: '178 — 202 M²',
-      image:
-        'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop',
+      image: SLIDE_IMAGES[0]!,
       description: t('slide_1_desc'),
       buttonText: t('slide_1_btn'),
       title: t('slide_1_title'),
@@ -35,8 +44,7 @@ export function SixthSection() {
     {
       bedrooms: '2-3',
       area: '124 — 243 M²',
-      image:
-        'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2070&auto=format&fit=crop',
+      image: SLIDE_IMAGES[1]!,
       description: t('slide_2_desc'),
       buttonText: t('slide_2_btn'),
       title: t('slide_2_title'),
@@ -44,52 +52,116 @@ export function SixthSection() {
     {
       bedrooms: '4',
       area: '250 — 300 M²',
-      image:
-        'https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?q=80&w=2070&auto=format&fit=crop',
+      image: SLIDE_IMAGES[2]!,
       description: t('slide_3_desc'),
       buttonText: t('slide_3_btn'),
       title: t('slide_3_title'),
     },
   ];
 
-  const scrollPrev = useCallback(() => {
-    desktopEmblaApi?.scrollPrev();
-    mobileEmblaApi?.scrollPrev();
-  }, [desktopEmblaApi, mobileEmblaApi]);
+  const handleNext = () => {
+    setSelectedIndex((curr) => {
+      const next = curr === slides.length - 1 ? 0 : curr + 1;
+      mobileEmblaApi?.scrollTo(next);
+      return next;
+    });
+    setProgressKey((k) => k + 1);
+  };
 
-  const scrollNext = useCallback(() => {
-    desktopEmblaApi?.scrollNext();
-    mobileEmblaApi?.scrollNext();
-  }, [desktopEmblaApi, mobileEmblaApi]);
+  const handlePrev = () => {
+    setSelectedIndex((curr) => {
+      const prev = curr === 0 ? slides.length - 1 : curr - 1;
+      mobileEmblaApi?.scrollTo(prev);
+      return prev;
+    });
+    setProgressKey((k) => k + 1);
+  };
 
-  const scrollTo = useCallback(
-    (index: number) => {
-      desktopEmblaApi?.scrollTo(index);
-      mobileEmblaApi?.scrollTo(index);
-    },
-    [desktopEmblaApi, mobileEmblaApi],
-  );
+  const handleSelect = (index: number) => {
+    if (index === selectedIndex) return;
+    setSelectedIndex(index);
+    mobileEmblaApi?.scrollTo(index);
+    setProgressKey((k) => k + 1);
+  };
 
+  const scrollPrev = handlePrev;
+  const scrollNext = handleNext;
+  const scrollTo = handleSelect;
+
+  // IntersectionObserver to pause auto-play when out of view (threshold 0.15)
   useEffect(() => {
-    if (!desktopEmblaApi) return;
-    const onSelect = () => {
-      setSelectedIndex(desktopEmblaApi.selectedScrollSnap());
-    };
-    onSelect();
-    desktopEmblaApi.on('select', onSelect);
-    desktopEmblaApi.on('reInit', onSelect);
+    const el = sectionRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsPaused(!entry?.isIntersecting);
+      },
+      { threshold: 0.15 },
+    );
+    observer.observe(el);
     return () => {
-      desktopEmblaApi.off('select', onSelect);
-      desktopEmblaApi.off('reInit', onSelect);
+      observer.disconnect();
     };
-  }, [desktopEmblaApi]);
+  }, []);
 
+  // Visibility change to pause auto-play when tab is inactive
+  useEffect(() => {
+    const onVisibility = () => {
+      setIsPaused(document.hidden);
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => {
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
+  }, []);
+
+  const isScrollingRef = useRef(false);
+
+  // Mark scrolling active so auto-play transition waits until scrolling settles without causing React re-renders
+  useEffect(() => {
+    let scrollTimer: ReturnType<typeof setTimeout> | null = null;
+    const onScroll = () => {
+      isScrollingRef.current = true;
+      if (scrollTimer) clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(() => {
+        isScrollingRef.current = false;
+      }, 400);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      if (scrollTimer) clearTimeout(scrollTimer);
+    };
+  }, []);
+
+  // 6-second auto-play timer (matching Era Residence autoDuration: 6)
+  useEffect(() => {
+    if (isPaused) return;
+    const timer = setTimeout(() => {
+      if (!isScrollingRef.current) {
+        handleNext();
+      } else {
+        setProgressKey((k) => k + 1);
+      }
+    }, 6000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [selectedIndex, isPaused, progressKey]);
+
+  // Sync mobile swipe events to selectedIndex
   useEffect(() => {
     if (!mobileEmblaApi) return;
     const onSelect = () => {
-      setSelectedIndex(mobileEmblaApi.selectedScrollSnap());
+      const newIdx = mobileEmblaApi.selectedScrollSnap();
+      setSelectedIndex((curr) => {
+        if (curr !== newIdx) {
+          setProgressKey((k) => k + 1);
+          return newIdx;
+        }
+        return curr;
+      });
     };
-    onSelect();
     mobileEmblaApi.on('select', onSelect);
     mobileEmblaApi.on('reInit', onSelect);
     return () => {
@@ -98,45 +170,68 @@ export function SixthSection() {
     };
   }, [mobileEmblaApi]);
 
-  // Animation variants for smooth text transitions
-  const textVariants: Variants = {
-    initial: { opacity: 0, y: 15, filter: 'blur(4px)' },
-    animate: { opacity: 1, y: 0, filter: 'blur(0px)' },
-    exit: { opacity: 0, y: -15, filter: 'blur(4px)' },
-  };
 
-  const containerVariants: Variants = {
-    initial: {},
-    animate: {
-      transition: { staggerChildren: 0.05 },
-    },
-    exit: {
-      transition: { staggerChildren: 0.02, staggerDirection: -1 },
-    },
-  };
-
-  const charVariants: Variants = {
-    initial: { opacity: 0, y: 80, rotate: -15, scale: 0.9, filter: 'blur(8px)' },
+  // Left Column Specifications Animation (starts after image wipe is well underway)
+  const specsVariants: Variants = {
+    initial: { opacity: 0, y: 25 },
     animate: {
       opacity: 1,
       y: 0,
-      rotate: 0,
-      scale: 1,
-      filter: 'blur(0px)',
-      transition: { duration: 1.4, ease: [0.19, 1, 0.22, 1] },
+      transition: { duration: 0.6, delay: 0.45, ease: EASE_OUT },
     },
     exit: {
       opacity: 0,
-      y: -80,
-      rotate: 15,
-      scale: 1.1,
-      filter: 'blur(8px)',
-      transition: { duration: 0.8, ease: [0.19, 1, 0.22, 1] },
+      y: -15,
+      transition: { duration: 0.25, ease: EASE_IN },
     },
   };
 
+  // Right Column Description & Button Animation
+  const descVariants: Variants = {
+    initial: { opacity: 0, y: 20 },
+    animate: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, delay: 0.5, ease: EASE_OUT },
+    },
+    exit: {
+      opacity: 0,
+      y: -12,
+      transition: { duration: 0.25, ease: EASE_IN },
+    },
+  };
+
+  // Title 3D Character Flip Animation (starts at 0.45s with smooth stagger)
+  const charVariants: Variants = {
+    initial: { opacity: 0, y: 30, rotateY: 85 },
+    animate: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      rotateY: 0,
+      transition: {
+        duration: 0.7,
+        delay: 0.45 + i * 0.02,
+        ease: EASE_OUT,
+      },
+    }),
+    exit: {
+      opacity: 0,
+      y: -15,
+      rotateY: -35,
+      transition: {
+        duration: 0.25,
+        ease: EASE_IN,
+      },
+    },
+  };
+
+  const nextIndex = selectedIndex === slides.length - 1 ? 0 : selectedIndex + 1;
+
   return (
-    <section className="sixth-section-clip relative z-20 -mt-[40px] w-full overflow-hidden bg-[#B1C6D4] pb-[100px] text-[#151926] md:-mt-[80px]">
+    <section
+      ref={sectionRef}
+      className="sixth-section-clip relative z-20 -mt-[40px] w-full overflow-hidden bg-[#B1C6D4] pb-[100px] text-[#151926] md:-mt-[80px]"
+    >
       <style
         dangerouslySetInnerHTML={{
           __html: `
@@ -362,43 +457,46 @@ export function SixthSection() {
           </div>
         </div>
 
-        {/* DESKTOP CAROUSEL (>= 768px): Preserved Original 3-Column Layout */}
-        <div className="mx-auto hidden h-full min-h-[70vh] w-full max-w-[1400px] flex-col items-center justify-center px-8 pt-10 md:flex md:flex-row md:justify-between md:px-[10vw]">
-          {/* Left Column (Stats) - Fixed & Animated */}
-          <div className="relative z-30 mb-8 flex h-full w-full flex-col justify-center md:mb-0 md:w-[18%]">
-            <div className="relative flex h-[120px] w-full flex-col justify-center md:h-[200px]">
+        {/* DESKTOP CAROUSEL (>= 768px): Era Residence Signature 3-Column Architecture */}
+        <div
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          className="mx-auto hidden h-full min-h-[72vh] w-full max-w-[1400px] flex-col items-center justify-center px-8 pt-10 md:flex md:flex-row md:justify-between md:px-[6vw] lg:px-[8vw]"
+        >
+          {/* Left Column (Stats / Specifications) */}
+          <div className="relative z-30 mb-8 flex h-full w-full flex-col justify-center md:mb-0 md:w-[20%]">
+            <div className="relative flex h-[160px] w-full flex-col justify-center md:h-[220px]">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={selectedIndex}
-                  variants={textVariants}
+                  variants={specsVariants}
                   initial="initial"
                   animate="animate"
                   exit="exit"
-                  transition={{ duration: 0.4, ease: 'easeOut' }}
-                  className="absolute left-0 w-full space-y-12"
+                  className="absolute left-0 w-full space-y-10"
                 >
                   <div>
                     <p
-                      className={`text-[9px] font-bold tracking-[0.2em] text-[#151926]/90 uppercase ${inter.className}`}
+                      className={`text-[10px] font-bold tracking-[0.24em] text-[#151926]/75 uppercase ${inter.className}`}
                     >
                       {t('bedrooms_label')}
                     </p>
                     <p
-                      className={`mt-2 text-4xl text-[#151926] md:text-5xl ${playfair.className}`}
-                      style={{ transform: 'scaleY(1.3)', transformOrigin: 'left' }}
+                      className={`mt-2 text-4xl text-[#151926] lg:text-5xl ${playfair.className}`}
+                      style={{ transform: 'scaleY(1.25)', transformOrigin: 'left' }}
                     >
                       {slides[selectedIndex]?.bedrooms}
                     </p>
                   </div>
                   <div>
                     <p
-                      className={`text-[9px] font-bold tracking-[0.2em] text-[#151926]/90 uppercase ${inter.className}`}
+                      className={`text-[10px] font-bold tracking-[0.24em] text-[#151926]/75 uppercase ${inter.className}`}
                     >
                       {t('area_up_to_label')}
                     </p>
                     <p
-                      className={`mt-2 text-3xl whitespace-nowrap text-[#151926] md:text-4xl ${playfair.className}`}
-                      style={{ transform: 'scaleY(1.3)', transformOrigin: 'left' }}
+                      className={`mt-2 text-2xl whitespace-nowrap text-[#151926] lg:text-3xl ${playfair.className}`}
+                      style={{ transform: 'scaleY(1.25)', transformOrigin: 'left' }}
                     >
                       {slides[selectedIndex]?.area}
                     </p>
@@ -408,44 +506,47 @@ export function SixthSection() {
             </div>
           </div>
 
-          {/* Center Column (Image Carousel) */}
-          <div className="relative z-10 mb-24 h-[55vh] w-full md:mb-0 md:h-[70vh] md:w-[64%]">
-            <div
-              className="h-full w-full overflow-hidden rounded-none"
-              ref={desktopEmblaRef}
-            >
-              <div className="flex h-full touch-pan-y">
-                {slides.map((slide, index) => (
-                  <div key={index} className="relative h-full w-full min-w-0 flex-[0_0_100%]">
-                    <Image
-                      src={slide.image}
-                      alt={slide.title}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                      unoptimized
-                    />
-                  </div>
-                ))}
-              </div>
+          {/* Center Column (WebGL Liquid Wave Slider) */}
+          <div className="relative z-10 mb-28 h-[55vh] w-full md:mb-0 md:h-[65vh] lg:h-[72vh] md:w-[58%]">
+            {/* Decoupled shadow backing plate */}
+            <div className="pointer-events-none absolute inset-0 shadow-[0_20px_45px_rgba(21,25,38,0.12)]" />
+            <div className="relative h-full w-full overflow-hidden">
+              <LazyWebGLSlider
+                images={SLIDE_IMAGES}
+                activeIndex={selectedIndex}
+                onIndexChange={(idx) => handleSelect(idx)}
+                hideControls
+                absoluteFill
+                noRounded
+              />
             </div>
 
-            {/* Large Title Over Image - Animated (Staggered Crossfade) */}
-            <div className="pointer-events-none absolute bottom-0 left-1/2 z-20 hidden h-[120px] w-[160%] -translate-x-1/2 translate-y-1/2 md:block">
-              <AnimatePresence>
+            {/* Grand Title Over Image - Interactive 3D Char Reveal (Era Residence animateTextH) */}
+            <div
+              onClick={handleNext}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  handleNext();
+                }
+              }}
+              title="Click to next slide"
+              className="group absolute bottom-0 left-1/2 z-20 hidden h-[120px] w-[160%] -translate-x-1/2 translate-y-1/2 cursor-pointer select-none items-center justify-center md:flex"
+            >
+              <AnimatePresence mode="wait">
                 <motion.div
                   key={selectedIndex}
-                  variants={containerVariants}
-                  initial="initial"
-                  animate="animate"
-                  exit="exit"
-                  className="absolute inset-0 flex h-full w-full items-center justify-center"
+                  className="absolute inset-0 flex h-full w-full items-center justify-center pointer-events-none"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0, transition: { duration: 0.25 } }}
                 >
                   <h2
-                    className={`flex justify-center text-[4vw] leading-none tracking-tighter whitespace-nowrap text-[#151926] uppercase lg:text-[4.5vw] ${playfair.className}`}
+                    className={`flex justify-center text-[4vw] leading-none tracking-tight whitespace-nowrap text-[#151926] uppercase transition-transform duration-300 group-hover:scale-[1.02] lg:text-[4.5vw] ${playfair.className}`}
                     style={{
                       transform: 'scaleY(1.2)',
-                      textShadow: '0 0 15px #B1C6D4, 0 0 15px #B1C6D4, 0 0 15px #B1C6D4',
+                      textShadow: '0 1px 12px #B1C6D4',
                       WebkitFontSmoothing: 'antialiased',
                       WebkitBackfaceVisibility: 'hidden',
                       transformOrigin: 'center center',
@@ -455,7 +556,7 @@ export function SixthSection() {
                       (char, i) => {
                         if (char === ' ') {
                           return (
-                            <span key={i} className="inline-block w-[1.5vw]">
+                            <span key={i} className="inline-block w-[1.3vw]">
                               &nbsp;
                             </span>
                           );
@@ -463,9 +564,17 @@ export function SixthSection() {
                         return (
                           <motion.span
                             key={i}
+                            custom={i}
                             variants={charVariants}
+                            initial="initial"
+                            animate="animate"
+                            exit="exit"
                             className="inline-block"
-                            style={{ willChange: 'transform, opacity' }}
+                            style={{
+                              transform: 'translateZ(0)',
+                              backfaceVisibility: 'hidden',
+                              WebkitBackfaceVisibility: 'hidden',
+                            }}
                           >
                             {char}
                           </motion.span>
@@ -477,117 +586,158 @@ export function SixthSection() {
               </AnimatePresence>
             </div>
 
-            {/* Controls (Premium Design) */}
-            <div className="pointer-events-auto absolute -bottom-16 left-1/2 z-30 flex -translate-x-1/2 items-center gap-8 md:-bottom-24 md:gap-12">
+            {/* Controls (Era Residence Exact Structure: [ < 01 ] ─── [ 02 > ] / 03) */}
+            <div
+              data-slider="pag"
+              className="pointer-events-auto absolute -bottom-16 left-1/2 z-30 flex -translate-x-1/2 items-center gap-6 md:-bottom-24 md:gap-8"
+            >
+              {/* Prev Button with Arrow + Current Slide Number */}
               <button
-                onClick={scrollPrev}
+                type="button"
+                onClick={handlePrev}
                 aria-label="Previous Slide"
-                className="group relative flex h-12 w-12 cursor-pointer items-center justify-center text-[#151926]/70 transition-colors duration-300 hover:text-[#151926]"
+                className="group flex cursor-pointer items-center gap-3 text-[#151926]/75 transition-colors duration-300 hover:text-[#151926]"
               >
                 <svg
-                  width="28"
+                  width="24"
                   height="10"
                   viewBox="0 0 28 10"
                   fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="transition-transform duration-500 ease-out group-hover:-translate-x-2"
+                  className="transition-transform duration-300 ease-out group-hover:-translate-x-1.5"
                 >
                   <path
                     d="M5 1L1 5L5 9"
                     stroke="currentColor"
-                    strokeWidth="1"
+                    strokeWidth="1.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   />
                   <path
                     d="M1 5H27"
                     stroke="currentColor"
-                    strokeWidth="1"
+                    strokeWidth="1.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   />
                 </svg>
-              </button>
-
-              <div className="flex items-center gap-6">
                 <span
-                  className={`text-[11px] text-[#151926] md:text-xs ${inter.className} font-light tracking-widest`}
+                  className={`text-[12px] font-medium tracking-widest text-[#151926] ${inter.className}`}
                 >
                   {String(selectedIndex + 1).padStart(2, '0')}
                 </span>
+              </button>
 
-                <div className="relative h-[1px] w-16 overflow-hidden bg-[#151926]/20 md:w-24">
-                  <motion.div
-                    className="absolute top-0 bottom-0 left-0 w-full bg-[#151926] origin-left"
-                    style={{ willChange: 'transform' }}
-                    initial={{ scaleX: 0 }}
-                    animate={{ scaleX: (selectedIndex + 1) / slides.length }}
-                    transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                  />
-                </div>
-
-                <span
-                  className={`text-[11px] text-[#151926]/70 md:text-xs ${inter.className} font-light tracking-widest`}
-                >
-                  {String(slides.length).padStart(2, '0')}
-                </span>
+              {/* Progress Bar (6-second linear auto-play timer) */}
+              <div
+                className="relative h-[2px] w-24 overflow-hidden rounded-full bg-[#151926]/20 md:w-36 lg:w-44"
+                title="Auto-play progress"
+              >
+                <motion.div
+                  key={progressKey}
+                  className="h-full bg-[#151926] origin-left"
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{
+                    duration: 6,
+                    ease: 'linear',
+                  }}
+                  style={{ width: '100%', willChange: 'transform' }}
+                />
               </div>
 
+              {/* Next Slide Number + Next Button with Arrow */}
               <button
-                onClick={scrollNext}
+                type="button"
+                onClick={handleNext}
                 aria-label="Next Slide"
-                className="group relative flex h-12 w-12 cursor-pointer items-center justify-center text-[#151926]/70 transition-colors duration-300 hover:text-[#151926]"
+                className="group flex cursor-pointer items-center gap-3 text-[#151926]/75 transition-colors duration-300 hover:text-[#151926]"
               >
+                <span
+                  className={`text-[12px] font-medium tracking-widest text-[#151926] ${inter.className}`}
+                >
+                  {String(nextIndex + 1).padStart(2, '0')}
+                </span>
                 <svg
-                  width="28"
+                  width="24"
                   height="10"
                   viewBox="0 0 28 10"
                   fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="transition-transform duration-500 ease-out group-hover:translate-x-2"
+                  className="transition-transform duration-300 ease-out group-hover:translate-x-1.5"
                 >
                   <path
                     d="M23 1L27 5L23 9"
                     stroke="currentColor"
-                    strokeWidth="1"
+                    strokeWidth="1.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   />
                   <path
                     d="M27 5H1"
                     stroke="currentColor"
-                    strokeWidth="1"
+                    strokeWidth="1.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   />
                 </svg>
               </button>
+
+              {/* Total Slides Count */}
+              <span
+                className={`text-[11px] font-light tracking-widest text-[#151926]/50 ${inter.className}`}
+              >
+                / {String(slides.length).padStart(2, '0')}
+              </span>
             </div>
           </div>
 
-          {/* Right Column (Description & Button) - Fixed & Animated */}
-          <div className="relative z-30 mt-0 flex w-full flex-col justify-center md:w-[18%] md:pl-10">
-            <div className="relative flex h-[180px] w-full flex-col justify-center md:h-[150px]">
+          {/* Right Column (Description & Luxury CTA) */}
+          <div className="relative z-30 mt-0 flex w-full flex-col justify-center md:w-[20%] md:pl-8 lg:pl-10">
+            <div className="relative flex h-[180px] w-full flex-col justify-center md:h-[220px]">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={selectedIndex}
-                  variants={textVariants}
+                  variants={descVariants}
                   initial="initial"
                   animate="animate"
                   exit="exit"
-                  transition={{ duration: 0.4, ease: 'easeOut', delay: 0.1 }}
                   className="absolute left-0 flex w-full flex-col"
                 >
                   <p
-                    className={`text-xs leading-relaxed font-light text-[#151926] md:text-[13px] ${inter.className}`}
+                    className={`text-xs leading-relaxed font-light text-[#151926]/90 lg:text-[13px] ${inter.className}`}
                   >
                     {slides[selectedIndex]?.description}
                   </p>
-                  <button
-                    className={`mx-auto mt-8 w-fit rounded-full border border-[#151926] px-6 py-3 text-[9px] font-bold tracking-[0.1em] uppercase transition-colors hover:bg-[#151926] hover:text-white ${inter.className}`}
-                  >
-                    {slides[selectedIndex]?.buttonText}
-                  </button>
+                  <div className="mt-8">
+                    <Link
+                      href="/apartments"
+                      className={`group relative inline-flex items-center gap-3 overflow-hidden rounded-full border border-[#151926] px-6 py-2.5 text-[9px] font-bold tracking-[0.16em] uppercase text-[#151926] transition-colors duration-500 hover:text-white ${inter.className}`}
+                    >
+                      <span className="relative z-10">{slides[selectedIndex]?.buttonText}</span>
+                      <svg
+                        width="14"
+                        height="8"
+                        viewBox="0 0 28 10"
+                        fill="none"
+                        className="relative z-10 transition-transform duration-300 ease-out group-hover:translate-x-1"
+                      >
+                        <path
+                          d="M23 1L27 5L23 9"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M27 5H1"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                      <div className="absolute inset-0 -translate-y-full bg-[#151926] transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:translate-y-0" />
+                    </Link>
+                  </div>
                 </motion.div>
               </AnimatePresence>
             </div>

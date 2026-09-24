@@ -3,11 +3,9 @@
 import { motion } from 'framer-motion';
 import { SmartVideo } from '@/components/SmartVideo';
 import { useTranslations } from 'next-intl';
-import { Playfair_Display, Inter } from 'next/font/google';
 import { useState } from 'react';
-
-const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400', '500', '600', '700'] });
-const inter = Inter({ subsets: ['latin'], weight: ['300', '400', '500', '600', '700'] });
+import { inter, playfair } from '@/utils/Fonts';
+import { RevealHeading, RevealLabel, RevealLine, RevealParagraph } from './RevealText';
 
 export function NinthSection() {
   const t = useTranslations('Index');
@@ -40,35 +38,31 @@ export function NinthSection() {
     <section className="bg-textured-sand relative flex w-full flex-col items-center justify-start overflow-x-clip py-24 text-[#151926] md:py-40">
       {/* Top indicator with subtle vertical line */}
       <div className="top-20 z-20 flex flex-col items-center justify-center md:top-28">
-        <span
+        <RevealLabel
+          text={t('developer_partners')}
           className={`text-[10px] font-bold tracking-[0.25em] text-[#8B7043] uppercase md:text-xs ${inter.className}`}
-        >
-          {t('developer_partners')}
-        </span>
-        <div className="my-6 h-12 w-[1px] bg-[#151926]/25 md:my-8 md:h-20"></div>
+        />
+        <RevealLine
+          direction="vertical"
+          className="my-6 h-12 w-[1px] bg-[#151926]/25 md:my-8 md:h-20"
+        />
       </div>
 
       {/* Main Developer Narrative */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-80px' }}
-        transition={{ duration: 0.8, ease: 'easeOut' }}
-        className="relative z-10 flex max-w-[860px] flex-col items-center px-6 text-center"
-      >
-        <h2
+      <div className="relative z-10 flex max-w-[860px] flex-col items-center px-6 text-center">
+        <RevealHeading
+          as="h2"
+          text={t('at_group_title')}
           className={`text-2xl font-medium tracking-tight text-[#151926] uppercase sm:text-3xl md:text-4xl lg:text-[44px] lg:leading-[1.25] ${playfair.className}`}
-        >
-          {t('at_group_title')}
-        </h2>
+        />
 
         <div
           className={`mt-6 space-y-4 text-sm leading-[1.85] font-light text-[#2D3346] sm:text-base sm:leading-[1.9] md:mt-8 md:text-[16px] md:leading-[1.9] ${inter.className}`}
         >
-          <p>{t('at_group_desc_1')}</p>
-          <p>{t('at_group_desc_2')}</p>
+          <RevealParagraph text={t('at_group_desc_1')} />
+          <RevealParagraph text={t('at_group_desc_2')} delay={0.28} />
         </div>
-      </motion.div>
+      </div>
 
       {/* Interactive Pillars & Key Project Information */}
       <div className="relative z-10 mt-20 flex w-full max-w-[1000px] flex-col items-center px-6 md:mt-28">

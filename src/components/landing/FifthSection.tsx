@@ -2,11 +2,9 @@
 
 import { AnimatePresence, motion, useInView } from 'framer-motion';
 import { useTranslations } from 'next-intl';
-import { Inter } from 'next/font/google';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
-
-const inter = Inter({ subsets: ['latin'], weight: ['300', '400', '500', '600', '700'] });
+import { inter } from '@/utils/Fonts';
 
 export function FifthSection() {
   const t = useTranslations('Index');
@@ -110,6 +108,7 @@ export function FifthSection() {
       {/* Marquee 1 - Fast Clouds (Foreground) */}
       <motion.div
         className="pointer-events-none absolute top-[-15vh] left-0 z-10 flex w-[200vw] opacity-90"
+        style={{ willChange: 'transform', transform: 'translateZ(0)' }}
         animate={isInView ? { x: [0, '-50%'] } : undefined}
         transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
       >
@@ -120,6 +119,7 @@ export function FifthSection() {
             alt="Cloud"
             width={800}
             height={500}
+            style={{ height: 'auto' }}
             className="h-auto w-[45vw] max-w-[800px] object-contain"
           />
           <Image
@@ -127,6 +127,7 @@ export function FifthSection() {
             alt="Cloud"
             width={1000}
             height={600}
+            style={{ height: 'auto' }}
             className="h-auto w-[50vw] max-w-[1000px] object-contain"
           />
         </div>
@@ -137,6 +138,7 @@ export function FifthSection() {
             alt="Cloud"
             width={800}
             height={500}
+            style={{ height: 'auto' }}
             className="h-auto w-[45vw] max-w-[800px] object-contain"
           />
           <Image
@@ -144,6 +146,7 @@ export function FifthSection() {
             alt="Cloud"
             width={1000}
             height={600}
+            style={{ height: 'auto' }}
             className="h-auto w-[50vw] max-w-[1000px] object-contain"
           />
         </div>
@@ -152,6 +155,7 @@ export function FifthSection() {
       {/* Marquee 2 - Slow Clouds (Background) */}
       <motion.div
         className="pointer-events-none absolute top-[-5vh] left-0 z-10 flex w-[200vw] opacity-80"
+        style={{ willChange: 'transform', transform: 'translateZ(0)' }}
         animate={isInView ? { x: [0, '-50%'] } : undefined}
         transition={{ duration: 120, repeat: Infinity, ease: 'linear' }}
       >
@@ -162,6 +166,7 @@ export function FifthSection() {
             alt="Cloud"
             width={900}
             height={550}
+            style={{ height: 'auto' }}
             className="mt-10 h-auto w-[55vw] max-w-[900px] object-contain"
           />
           <Image
@@ -169,6 +174,7 @@ export function FifthSection() {
             alt="Cloud"
             width={600}
             height={400}
+            style={{ height: 'auto' }}
             className="mt-20 h-auto w-[35vw] max-w-[600px] object-contain"
           />
         </div>
@@ -179,6 +185,7 @@ export function FifthSection() {
             alt="Cloud"
             width={900}
             height={550}
+            style={{ height: 'auto' }}
             className="mt-10 h-auto w-[55vw] max-w-[900px] object-contain"
           />
           <Image
@@ -186,6 +193,7 @@ export function FifthSection() {
             alt="Cloud"
             width={600}
             height={400}
+            style={{ height: 'auto' }}
             className="mt-20 h-auto w-[35vw] max-w-[600px] object-contain"
           />
         </div>

@@ -2,23 +2,13 @@
 
 import { AnimatePresence, motion } from 'framer-motion';
 import { useLocale, useTranslations } from 'next-intl';
-import { Inter, Playfair_Display } from 'next/font/google';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Link, usePathname } from '@/libs/I18nNavigation';
 import { useUIStore } from '@/store/useUIStore';
-
-const playfair = Playfair_Display({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  display: 'swap',
-});
-const inter = Inter({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-  display: 'swap',
-});
+import { inter, playfair } from '@/utils/Fonts';
+import { RollingNavText } from './RevealText';
 
 const clipPathPolygon =
   'polygon(16px 0, calc(100% - 16px) 0, 100% 16px, 100% calc(100% - 16px), calc(100% - 16px) 100%, 16px 100%, 0 calc(100% - 16px), 0 16px)';
@@ -456,7 +446,7 @@ export function MenuOverlay() {
                               isHovered ? 'text-[#8B7043]' : 'text-[#151926]'
                             } ${playfair.className}`}
                           >
-                            {item.title}
+                            <RollingNavText text={item.title} isHovered={isHovered} />
                           </h2>
                         </div>
 

@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { routing } from '@/libs/I18nRouting';
 import { getBaseUrl } from '@/utils/Helpers';
 import { getLocalizedKeywords, getOpenGraphLocales } from '@/utils/Seo';
+import { inter, playfair } from '@/utils/Fonts';
 import '@/styles/global.css';
 
 export async function generateMetadata(props: {
@@ -114,7 +115,7 @@ export default async function RootLayout(props: {
 
   return (
     <html lang={locale} className="overflow-x-clip">
-      <body className="relative w-full max-w-[100vw] bg-textured-sand antialiased">
+      <body className={`relative w-full max-w-[100vw] bg-textured-sand antialiased ${inter.variable} ${playfair.variable}`}>
         <NextIntlClientProvider>{props.children}</NextIntlClientProvider>
       </body>
     </html>

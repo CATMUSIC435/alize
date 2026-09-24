@@ -2,21 +2,8 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useTranslations } from 'next-intl';
-import { Inter, Playfair_Display } from 'next/font/google';
 import { useUIStore } from '@/store/useUIStore';
-
-const playfair = Playfair_Display({
-  subsets: ['latin', 'vietnamese'],
-  weight: ['400', '500', '600', '700'],
-  display: 'swap',
-});
-const playfairItalic = Playfair_Display({
-  subsets: ['latin', 'vietnamese'],
-  weight: ['400', '500', '600'],
-  style: 'italic',
-  display: 'swap',
-});
-const inter = Inter({ subsets: ['latin'], weight: ['300', '400', '500'], display: 'swap' });
+import { inter, playfair, playfairItalic } from '@/utils/Fonts';
 
 /** Renders words with smooth baseline slide-up and fade-in without character jitter. */
 const AnimatedWords = (props: {

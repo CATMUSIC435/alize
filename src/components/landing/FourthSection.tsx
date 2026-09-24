@@ -2,14 +2,14 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useTranslations } from 'next-intl';
-import { Playfair_Display, Inter, Pinyon_Script } from 'next/font/google';
+import { Pinyon_Script } from 'next/font/google';
 import Image from 'next/image';
 import { useRef } from 'react';
+import { inter, playfair } from '@/utils/Fonts';
 import { CircleButton } from './CircleButton';
 import { FlowerOverlay } from './FlowerOverlay';
+import { RevealHeading, RevealLabel, RevealParagraph } from './RevealText';
 
-const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400', '500', '600', '700'] });
-const inter = Inter({ subsets: ['latin'], weight: ['400', '500', '600', '700'] });
 const cursive = Pinyon_Script({ subsets: ['latin'], weight: ['400'] });
 
 // Helper component for vertical timeline points
@@ -178,61 +178,22 @@ export function FourthSection() {
           }}
           className="relative z-10 flex w-full max-w-4xl flex-col items-center justify-center"
         >
-          <motion.p
-            variants={{
-              hidden: { opacity: 0, y: 20 },
-              visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: 'easeOut' } },
-            }}
+          <RevealLabel
+            text={t('the_concept')}
             className={`mb-12 text-[10px] font-bold tracking-[0.2em] text-[#151926] uppercase md:text-xs ${inter.className}`}
-          >
-            {t('the_concept')}
-          </motion.p>
+          />
 
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-10%' }}
-            variants={{
-              hidden: {},
-              visible: { transition: { staggerChildren: 0.05, delayChildren: 0.4 } },
-            }}
-          >
-            <h2
-              className={`max-w-[1200px] text-center text-[22px] leading-[1.4] tracking-tight text-[#151926] uppercase sm:text-[28px] md:text-[4vw] md:leading-[1.1] md:tracking-tighter lg:text-[50px] ${playfair.className} origin-top`}
-            >
-              <span className="inline-flex flex-wrap justify-center gap-x-[0.25em] gap-y-[0.15em]">
-                {t('concept_title')
-                  .split(' ')
-                  .map((word, i) => (
-                    <span key={i} className="inline-block overflow-hidden pb-1">
-                      <motion.span
-                        className="inline-block origin-bottom"
-                        variants={{
-                          hidden: { opacity: 0, y: '100%' },
-                          visible: {
-                            opacity: 1,
-                            y: '0%',
-                            transition: { duration: 1, ease: [0.2, 0.65, 0.3, 0.9] },
-                          },
-                        }}
-                      >
-                        {word}
-                      </motion.span>
-                    </span>
-                  ))}
-              </span>
-            </h2>
-          </motion.div>
+          <RevealHeading
+            as="h2"
+            text={t('concept_title')}
+            className={`max-w-[1200px] text-center text-[22px] leading-[1.4] tracking-tight text-[#151926] uppercase sm:text-[28px] md:text-[4vw] md:leading-[1.1] md:tracking-tighter lg:text-[50px] ${playfair.className}`}
+          />
 
-          <motion.p
-            variants={{
-              hidden: { opacity: 0, y: 20 },
-              visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: 'easeOut' } },
-            }}
+          <RevealParagraph
+            text={t('concept_desc')}
+            delay={0.3}
             className={`mt-10 max-w-[720px] px-4 text-center text-sm leading-[1.85] font-light text-[#2D3346] sm:text-base sm:leading-[1.9] md:mt-14 md:text-[17px] md:leading-[1.95] ${inter.className}`}
-          >
-            {t('concept_desc')}
-          </motion.p>
+          />
 
           <motion.div
             variants={{

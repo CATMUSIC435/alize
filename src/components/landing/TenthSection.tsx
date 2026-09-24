@@ -2,13 +2,10 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useTranslations } from 'next-intl';
-import { Playfair_Display, Inter } from 'next/font/google';
 import Image from 'next/image';
 import { useRef } from 'react';
+import { inter, playfair } from '@/utils/Fonts';
 import { CircleButton } from './CircleButton';
-
-const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400', '500', '600', '700'] });
-const inter = Inter({ subsets: ['latin'], weight: ['300', '400', '500', '600', '700'] });
 
 export function TenthSection() {
   const t = useTranslations('Index');
@@ -37,11 +34,7 @@ export function TenthSection() {
   const imageScale = useTransform(scrollYProgress, [0, 1], [1, 1.15]);
   const imageY = useTransform(scrollYProgress, [0, 1], ['0%', '5%']);
 
-  const exitScale = useTransform(exitProgress, (v) => {
-    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-    if (isMobile) return 1;
-    return 1 - v * 0.35;
-  });
+  const exitScale = useTransform(exitProgress, [0, 1], [1, 0.65]);
 
   return (
     <section ref={targetRef} className="bg-textured-sand relative h-[200vh] w-full">

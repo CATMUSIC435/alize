@@ -97,6 +97,7 @@ export function useWebGLTransition(options: WebGLTransitionOptions): WebGLTransi
   const progressRef = useRef(0);
   const animationFrameRef = useRef<number | null>(null);
   const prevIndexRef = useRef(currentIndex);
+  const targetIndexRef = useRef(currentIndex);
   const renderSceneRef = useRef<() => void>(() => {});
 
   const isInViewRef = useRef(isInView);
@@ -136,20 +137,37 @@ export function useWebGLTransition(options: WebGLTransitionOptions): WebGLTransi
   const goToIndex = useCallback(
     (newIndex: number) => {
       if (
-        isAnimatingRef.current ||
         !materialRef.current ||
-        newIndex === prevIndexRef.current ||
         !texturesRef.current[newIndex] ||
-        !texturesRef.current[prevIndexRef.current]
+        (newIndex === prevIndexRef.current && !isAnimatingRef.current)
       ) {
         return;
       }
 
+      if (isAnimatingRef.current && newIndex === targetIndexRef.current) {
+        return;
+      }
+
+      if (isAnimatingRef.current) {
+        if (animationFrameRef.current) {
+          cancelAnimationFrame(animationFrameRef.current);
+          animationFrameRef.current = null;
+        }
+        isAnimatingRef.current = false;
+        prevIndexRef.current = targetIndexRef.current;
+      }
+
+      if (!texturesRef.current[prevIndexRef.current]) {
+        return;
+      }
+
+      targetIndexRef.current = newIndex;
       const { uniforms } = materialRef.current;
 
       // If offscreen, snap immediately without animating RAF to save CPU/GPU
       if (!isInViewRef.current) {
         prevIndexRef.current = newIndex;
+        targetIndexRef.current = newIndex;
         if (uniforms.uTexture1) {
           uniforms.uTexture1.value = texturesRef.current[newIndex];
         }
@@ -195,6 +213,7 @@ export function useWebGLTransition(options: WebGLTransitionOptions): WebGLTransi
         } else {
           isAnimatingRef.current = false;
           prevIndexRef.current = newIndex;
+          targetIndexRef.current = newIndex;
           animationFrameRef.current = null;
           if (onTransitionCompleteRef.current) {
             onTransitionCompleteRef.current(newIndex);

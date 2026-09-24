@@ -1,12 +1,10 @@
 'use client';
 
 import { motion, useInView } from 'framer-motion';
-import { Inter } from 'next/font/google';
 import Image from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { usePrefersReducedMotion, useWebGLTransition } from '@/hooks';
-
-const inter = Inter({ subsets: ['latin'], weight: ['300', '400', '500', '600'] });
+import { inter } from '@/utils/Fonts';
 
 type WebGLSliderProps = {
   images: string[];
@@ -45,8 +43,9 @@ export function WebGLSlider(props: WebGLSliderProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const isControlled = activeIndex !== undefined;
-  const [internalIndex, setInternalIndex] = useState(0);
-  const currentIndex = isControlled ? activeIndex : internalIndex;
+  const [internalIndex, setInternalIndex] = useState(activeIndex ?? 0);
+  const displayedIndexRef = useRef(activeIndex ?? 0);
+  const currentIndex = isControlled ? (activeIndex ?? 0) : internalIndex;
 
   const prefersReducedMotion = usePrefersReducedMotion();
   // Observe container with 200px margin without freezeOnceVisible to pause RAF when offscreen
@@ -54,6 +53,7 @@ export function WebGLSlider(props: WebGLSliderProps) {
 
   const handleTransitionComplete = useCallback(
     (newIndex: number) => {
+      displayedIndexRef.current = newIndex;
       if (!isControlled) {
         setInternalIndex(newIndex);
       }
@@ -68,16 +68,18 @@ export function WebGLSlider(props: WebGLSliderProps) {
     canvasRef,
     containerRef,
     images,
-    currentIndex,
+    currentIndex: displayedIndexRef.current,
     isInView: isInView && !prefersReducedMotion,
     onTransitionComplete: handleTransitionComplete,
   });
 
   const goToIndex = useCallback(
     (newIndex: number) => {
-      if (newIndex === currentIndex || newIndex < 0 || newIndex >= images.length) {
+      if (newIndex === displayedIndexRef.current || newIndex < 0 || newIndex >= images.length) {
         return;
       }
+
+      displayedIndexRef.current = newIndex;
 
       if (prefersReducedMotion || isContextLost || !isReady) {
         // Fallback for reduced-motion or pending WebGL initialization
@@ -86,24 +88,24 @@ export function WebGLSlider(props: WebGLSliderProps) {
         triggerWebGLTransition(newIndex);
       }
     },
-    [currentIndex, images.length, prefersReducedMotion, isContextLost, isReady, handleTransitionComplete, triggerWebGLTransition],
+    [images.length, prefersReducedMotion, isContextLost, isReady, handleTransitionComplete, triggerWebGLTransition],
   );
 
   const goToNext = useCallback(() => {
-    const nextIndex = (currentIndex + 1) % images.length;
+    const nextIndex = (displayedIndexRef.current + 1) % images.length;
     goToIndex(nextIndex);
-  }, [currentIndex, images.length, goToIndex]);
+  }, [images.length, goToIndex]);
 
   const goToPrev = useCallback(() => {
-    const prevIndex = currentIndex === 0 ? images.length - 1 : currentIndex - 1;
+    const prevIndex = displayedIndexRef.current === 0 ? images.length - 1 : displayedIndexRef.current - 1;
     goToIndex(prevIndex);
-  }, [currentIndex, images.length, goToIndex]);
+  }, [images.length, goToIndex]);
 
   useEffect(() => {
-    if (isControlled && activeIndex !== undefined && activeIndex !== currentIndex) {
+    if (isControlled && activeIndex !== undefined && activeIndex !== displayedIndexRef.current) {
       goToIndex(activeIndex);
     }
-  }, [activeIndex, isControlled, currentIndex, goToIndex]);
+  }, [activeIndex, isControlled, goToIndex]);
 
   useEffect(() => {
     let intervalId: ReturnType<typeof setInterval> | undefined;
@@ -161,7 +163,7 @@ export function WebGLSlider(props: WebGLSliderProps) {
         <canvas
           ref={canvasRef}
           aria-label="WebGL Interactive View"
-          className={`relative z-10 block h-full w-full transition-opacity duration-700 ${
+          className={`absolute inset-0 z-10 block h-full w-full transition-opacity duration-700 ${
             isReady && !isContextLost && !prefersReducedMotion
               ? 'opacity-100'
               : 'pointer-events-none opacity-0'

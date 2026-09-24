@@ -1,27 +1,17 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Inter } from 'next/font/google';
 import { useState } from 'react';
 import { Link } from '@/libs/I18nNavigation';
+import { inter } from '@/utils/Fonts';
 
-const inter = Inter({ subsets: ['latin'], weight: ['500', '700'] });
-
-type CircleButtonProps = {
+export function CircleButton(props: {
   text: string;
   variant?: 'light' | 'dark';
   href?: string;
   onClick?: () => void;
-  className?: string; // For sizing or positioning overrides
-};
-
-export function CircleButton({
-  text,
-  variant = 'light',
-  href,
-  onClick,
-  className = '',
-}: CircleButtonProps) {
+  className?: string;
+}) {
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLAnchorElement | HTMLDivElement>) => {
@@ -37,32 +27,37 @@ export function CircleButton({
     setPosition({ x: 0, y: 0 });
   };
 
-  const isLight = variant === 'light';
+  const isLight = props.variant === 'light';
 
   const defaultClasses =
-    'group flex items-center justify-center rounded-full border backdrop-blur-sm transition-colors duration-500 overflow-hidden relative';
+    'group flex items-center justify-center rounded-full border backdrop-blur-sm transition-all duration-500 overflow-hidden relative';
 
   const colorClasses = isLight
-    ? 'border-white/30 bg-transparent text-white'
-    : 'border-[#151926]/20 bg-transparent text-[#151926]';
+    ? 'border-white/30 bg-transparent text-white group-hover:border-white/60'
+    : 'border-[#151926]/20 bg-transparent text-[#151926] group-hover:border-[#151926]/40';
+
+  // Subtle glowing text outline and halo on hover
+  const textHoverStyle = isLight
+    ? '[-webkit-text-stroke:0px_transparent] [paint-order:stroke_fill] group-hover:[-webkit-text-stroke:0.5px_rgba(255,255,255,0.85)] group-hover:[text-shadow:0_0_12px_rgba(255,255,255,0.9),0_0_4px_rgba(255,255,255,0.9)]'
+    : '[-webkit-text-stroke:0px_transparent] [paint-order:stroke_fill] group-hover:[-webkit-text-stroke:0.75px_rgba(255,255,255,0.85)] group-hover:[text-shadow:0_0_10px_rgba(255,255,255,0.85),0_0_2px_rgba(255,255,255,0.95),-1px_-1px_0_rgba(255,255,255,0.65),1px_-1px_0_rgba(255,255,255,0.65),-1px_1px_0_rgba(255,255,255,0.65),1px_1px_0_rgba(255,255,255,0.65)]';
 
   // Rendering text normally allows natural wrapping based on the container width (w-[80%])
   const content = (
     <span
-      className={`relative z-10 w-[80%] text-center text-[9px] leading-relaxed font-bold tracking-[0.2em] uppercase transition-transform duration-500 group-hover:scale-105 md:text-[11px] ${inter.className}`}
+      className={`relative z-10 w-[80%] text-center text-[9px] leading-relaxed font-bold tracking-[0.2em] uppercase transition-all duration-500 group-hover:scale-105 md:text-[11px] ${textHoverStyle} ${inter.className}`}
     >
-      {text}
+      {props.text}
     </span>
   );
 
-  const sizeClasses = `flex-shrink-0 h-32 w-32 sm:h-40 sm:w-40 md:h-56 md:w-56 lg:h-[250px] lg:w-[250px] ${className}`;
+  const sizeClasses = `flex-shrink-0 h-32 w-32 sm:h-40 sm:w-40 md:h-56 md:w-56 lg:h-[250px] lg:w-[250px] ${props.className ?? ''}`;
 
   const mergedClasses = `${defaultClasses} ${colorClasses} ${sizeClasses}`;
 
   const motionProps = {
     onMouseMove: handleMouseMove,
     onMouseLeave: handleMouseLeave,
-    onClick,
+    onClick: props.onClick,
     className: mergedClasses,
     style: { cursor: 'pointer' },
     animate: { x: position.x, y: position.y },
@@ -110,10 +105,10 @@ export function CircleButton({
     </svg>
   );
 
-  if (href) {
-    if (href.startsWith('http') || href.startsWith('//')) {
+  if (props.href) {
+    if (props.href.startsWith('http') || props.href.startsWith('//')) {
       return (
-        <motion.a href={href} target="_blank" rel="noopener noreferrer" {...motionProps}>
+        <motion.a href={props.href} target="_blank" rel="noopener noreferrer" {...motionProps}>
           {backgroundFill}
           {content}
         </motion.a>
@@ -121,7 +116,7 @@ export function CircleButton({
     }
 
     return (
-      <Link href={href} prefetch={false} className="contents">
+      <Link href={props.href} prefetch={false} className="contents">
         <motion.div {...motionProps}>
           {backgroundFill}
           {content}

@@ -1,9 +1,7 @@
 'use client';
 
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { Inter } from 'next/font/google';
-
-const inter = Inter({ subsets: ['latin'], weight: ['600'] });
+import { inter } from '@/utils/Fonts';
 
 export function CircularLogo() {
   const text = 'ALIZE · ALIZE · ALIZE · ALIZE · ';

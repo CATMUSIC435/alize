@@ -3,13 +3,10 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { SmartVideo } from '@/components/SmartVideo';
 import { useTranslations } from 'next-intl';
-import { Playfair_Display, Inter } from 'next/font/google';
 import Image from 'next/image';
 import { useRef } from 'react';
+import { inter, playfair } from '@/utils/Fonts';
 import { CircleButton } from './CircleButton';
-
-const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400', '500', '600', '700'] });
-const inter = Inter({ subsets: ['latin'], weight: ['300', '400', '500', '600'] });
 
 export function ArchitectureSplit() {
   const t = useTranslations('Index');

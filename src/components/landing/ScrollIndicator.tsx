@@ -2,10 +2,8 @@
 
 import { motion, useScroll, useTransform, useMotionTemplate } from 'framer-motion';
 import { useTranslations } from 'next-intl';
-import { Inter } from 'next/font/google';
 import { useUIStore } from '@/store/useUIStore';
-
-const inter = Inter({ subsets: ['latin'], weight: ['300', '400', '500', '700'], display: 'swap' });
+import { inter } from '@/utils/Fonts';
 
 export function ScrollIndicator() {
   const t = useTranslations('Index');

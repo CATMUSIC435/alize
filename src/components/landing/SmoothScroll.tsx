@@ -36,8 +36,7 @@ export function SmoothScroll(props: { children: React.ReactNode }) {
     }
 
     const lenis = new Lenis({
-      duration: 1.1,
-      easing: (t) => Math.min(1, 1.001 - 2 ** (-10 * t)),
+      lerp: 0.085,
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
@@ -64,32 +63,12 @@ export function SmoothScroll(props: { children: React.ReactNode }) {
       lenis.start();
     }
 
-    let resizeDebounceTimer: ReturnType<typeof setTimeout> | null = null;
-    const resizeObserver = typeof ResizeObserver !== 'undefined'
-      ? new ResizeObserver(() => {
-          if (resizeDebounceTimer) {
-            clearTimeout(resizeDebounceTimer);
-          }
-          resizeDebounceTimer = setTimeout(() => {
-            lenisRef.current?.resize();
-          }, 150);
-        })
-      : null;
-
-    if (resizeObserver && typeof document !== 'undefined') {
-      resizeObserver.observe(document.body);
-    }
-
     const resizeTimer = setTimeout(() => {
       lenisRef.current?.resize();
-    }, 400);
+    }, 300);
 
     return () => {
-      if (resizeDebounceTimer) {
-        clearTimeout(resizeDebounceTimer);
-      }
       clearTimeout(resizeTimer);
-      resizeObserver?.disconnect();
       if (typeof window !== 'undefined') {
         delete (window as unknown as { __lenis?: Lenis }).__lenis;
       }

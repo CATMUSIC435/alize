@@ -2,15 +2,13 @@
 
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import { useTranslations } from 'next-intl';
-import { Playfair_Display, Inter } from 'next/font/google';
 import Image from 'next/image';
 import { useRef, useEffect } from 'react';
 import { useUIStore } from '@/store/useUIStore';
-import { SandRipples } from './SandRipples';
+import { inter, playfair } from '@/utils/Fonts';
 import { LazyWebGLSlider } from './LazyWebGLSlider';
-
-const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400', '500', '600', '700'] });
-const inter = Inter({ subsets: ['latin'], weight: ['400', '500', '600'] });
+import { RevealHeading, RevealLabel, RevealLine, RevealParagraph } from './RevealText';
+import { SandRipples } from './SandRipples';
 
 const secondSectionImages = [
   'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1920',
@@ -110,32 +108,36 @@ export function SecondSection() {
                   alt="Alizé Logo"
                   width={140}
                   height={168}
-                  className="h-20 w-auto object-contain md:h-28"
+                  style={{ width: 'auto' }}
+                  className="h-20 max-h-20 w-auto object-contain md:h-28 md:max-h-28"
                 />
               </div>
 
               <div
                 className={`flex items-center gap-4 text-xs font-bold tracking-[0.2em] text-[#151926] uppercase md:gap-6 md:text-xs ${inter.className}`}
               >
-                <span>{t('costa')}</span>
-                <span>{t('del_sol')}</span>
+                <RevealLabel text={`${t('costa')} — ${t('del_sol')}`} />
               </div>
 
-              {/* Vertical Line */}
-              <div className="my-12 h-24 w-[1px] bg-[#151926]/30 md:my-8 md:h-32 lg:h-48"></div>
+              {/* Animated Vertical Line */}
+              <RevealLine
+                direction="vertical"
+                className="my-12 h-24 w-[1px] bg-[#151926]/30 md:my-8 md:h-32 lg:h-48"
+              />
 
-              <p
+              <RevealParagraph
+                text={t('trade_wind_story')}
                 className={`max-w-[680px] px-4 text-center text-sm leading-[1.8] font-light tracking-wide text-[#2D3346] sm:text-base sm:leading-[1.85] md:text-[17px] md:leading-[1.9] ${inter.className}`}
-              >
-                {t('trade_wind_story')}
-              </p>
+              />
             </div>
 
             {/* Real Life Location */}
             <div className="flex w-full flex-col items-center">
-              <h2 className={`mb-14 max-w-[1150px] px-6 text-center text-2xl leading-[1.4] font-normal tracking-tight text-[#151926] sm:text-3xl sm:leading-[1.35] md:mb-24 md:text-4xl md:leading-[1.3] lg:text-[48px] lg:leading-[1.28] xl:text-[54px] xl:leading-[1.25] ${playfair.className}`}>
-                {t('real_life_location')}
-              </h2>
+              <RevealHeading
+                as="h2"
+                text={t('real_life_location')}
+                className={`mb-14 max-w-[1150px] px-6 text-center text-2xl leading-[1.4] font-normal tracking-tight text-[#151926] sm:text-3xl sm:leading-[1.35] md:mb-24 md:text-4xl md:leading-[1.3] lg:text-[48px] lg:leading-[1.28] xl:text-[54px] xl:leading-[1.25] ${playfair.className}`}
+              />
 
               {/* Image Slider Component wrapped with fade/y animation */}
               <motion.div
@@ -154,18 +156,17 @@ export function SecondSection() {
               </motion.div>
 
               {/* Location Heading & Description Paragraphs */}
-                <h3
-                  className={`mt-12 text-center text-xs font-bold tracking-[0.25em] text-[#151926] uppercase sm:text-sm md:mt-16 md:text-base ${inter.className}`}
-                >
-                  {t('location_heading')}
-                </h3>
+              <RevealLabel
+                text={t('location_heading')}
+                className={`mt-12 text-center text-xs font-bold tracking-[0.25em] text-[#151926] uppercase sm:text-sm md:mt-16 md:text-base ${inter.className}`}
+              />
 
-                <div
-                  className={`mt-6 max-w-[680px] space-y-4 px-4 text-center text-sm leading-[1.85] font-light text-[#2D3346] sm:text-base sm:leading-[1.9] md:text-[16px] md:leading-[1.95] ${inter.className}`}
-                >
-                  <p>{t('location_desc_1')}</p>
-                  <p>{t('location_desc_2')}</p>
-                </div>
+              <div
+                className={`mt-6 max-w-[680px] space-y-4 px-4 text-center text-sm leading-[1.85] font-light text-[#2D3346] sm:text-base sm:leading-[1.9] md:text-[16px] md:leading-[1.95] ${inter.className}`}
+              >
+                <RevealParagraph text={t('location_desc_1')} />
+                <RevealParagraph text={t('location_desc_2')} delay={0.3} />
+              </div>
             </div>
           </div>{' '}
           {/* End of content wrapper */}

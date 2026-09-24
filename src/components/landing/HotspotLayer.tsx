@@ -2,7 +2,7 @@
 
 import { motion, useMotionValueEvent, useScroll, useTransform } from 'framer-motion';
 import { useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useUIStore } from '@/store/useUIStore';
 import { Hotspot } from './Hotspot';
 
@@ -16,14 +16,24 @@ export function HotspotLayer() {
   const { scrollY } = useScroll();
   const opacity = useTransform(scrollY, [200, 340], [0, 1]);
 
+  const heroEndRef = useRef(1350);
+
+  useEffect(() => {
+    const updateHeroEnd = () => {
+      const isMobile = window.innerWidth < 768;
+      heroEndRef.current = isMobile ? window.innerHeight * 1.25 : window.innerHeight * 1.5;
+    };
+    updateHeroEnd();
+    window.addEventListener('resize', updateHeroEnd, { passive: true });
+    return () => window.removeEventListener('resize', updateHeroEnd);
+  }, []);
+
   // Initial check on mount in case user is already scrolled past the hero typography
   useEffect(() => {
     if (typeof window === 'undefined') return;
     if (!isIntroComplete) return;
     const currentScroll = window.scrollY;
-    const isMobile = window.innerWidth < 768;
-    const heroEnd = isMobile ? window.innerHeight * 1.25 : window.innerHeight * 1.5;
-    if (currentScroll >= 300 && currentScroll < heroEnd) {
+    if (currentScroll >= 300 && currentScroll < heroEndRef.current) {
       setActiveHotspotId(1);
     }
   }, [isIntroComplete]);
@@ -32,12 +42,8 @@ export function HotspotLayer() {
   // Auto-close when leaving Section 1 or scrolling back up to the hero text (latest < 250).
   useMotionValueEvent(scrollY, 'change', (latest) => {
     if (!useUIStore.getState().isIntroComplete) return;
-    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-    const heroEnd = isMobile
-      ? (typeof window !== 'undefined' ? window.innerHeight * 1.25 : 1000)
-      : (typeof window !== 'undefined' ? window.innerHeight * 1.5 : 1350);
 
-    const isInHeroSection = latest >= 300 && latest < heroEnd;
+    const isInHeroSection = latest >= 300 && latest < heroEndRef.current;
 
     if (isInHeroSection) {
       if (activeHotspotId === null && !userExplicitlyClosed) {
@@ -57,13 +63,8 @@ export function HotspotLayer() {
   // Prevent clicks when invisible
   const pointerEvents = useTransform(opacity, (v) => (v > 0.2 ? 'auto' : 'none'));
 
-  // MATCH THE PARALLAX OF THE BACKGROUND EXACTLY ON DESKTOP, KEEP FIXED ON MOBILE
-  const y = useTransform(scrollY, (latest) => {
-    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-    if (isMobile) return '0%';
-    const progress = Math.min(latest / 1000, 1);
-    return `${-15 * progress}%`;
-  });
+  // Direct numeric transform for background parallax match
+  const y = useTransform(scrollY, [0, 1000], ['0%', '-15%']);
 
   const projectOverview = {
     name: t('project_name'),

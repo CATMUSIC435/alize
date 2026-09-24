@@ -98,7 +98,8 @@ export default function NotFoundPage() {
             width={72}
             height={144}
             priority
-            className="h-auto w-9 object-contain sm:w-11 md:w-12"
+            style={{ height: 'auto' }}
+            className="h-auto w-9 max-w-[36px] object-contain sm:w-11 sm:max-w-[44px] md:w-12 md:max-w-[48px]"
           />
           <div className="flex flex-col text-left">
             <span

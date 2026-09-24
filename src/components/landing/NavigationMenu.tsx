@@ -2,18 +2,11 @@
 
 import { motion } from 'framer-motion';
 import { useTranslations, useLocale } from 'next-intl';
-import { Playfair_Display, Inter } from 'next/font/google';
 import { useState } from 'react';
 import { Link, usePathname } from '@/libs/I18nNavigation';
 import { useUIStore } from '@/store/useUIStore';
+import { inter, playfair } from '@/utils/Fonts';
 import { MenuOverlay } from './MenuOverlay';
-
-const playfair = Playfair_Display({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  display: 'swap',
-});
-const inter = Inter({ subsets: ['latin'], weight: ['400', '500', '600', '700'], display: 'swap' });
 
 const languages = ['vi', 'en', 'zh'];
 
