@@ -38,12 +38,31 @@
   font-display: swap;
 }
 
+:root {
+  color-scheme: light;
+  supported-color-schemes: light;
+}
+
 * {
   font-variant-numeric: lining-nums tabular-nums;
 }
 
 html {
+  color-scheme: light;
   scrollbar-gutter: stable;
+}
+
+body {
+  color-scheme: light;
+}
+
+/* Strictly enforce light theme across all devices and prevent auto-dark inversion */
+@media (prefers-color-scheme: dark) {
+  :root,
+  html,
+  body {
+    color-scheme: light !important;
+  }
 }
 
 html.lenis,

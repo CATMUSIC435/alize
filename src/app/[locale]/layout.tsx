@@ -94,7 +94,8 @@ export async function generateMetadata(props: {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#151926',
+  colorScheme: 'light',
+  themeColor: '#f0ebe1',
 };
 
 export function generateStaticParams() {
@@ -114,12 +115,14 @@ export default async function RootLayout(props: {
   setRequestLocale(locale);
 
   return (
-    <html lang={locale} className="overflow-x-clip">
+    <html lang={locale} className="overflow-x-clip" style={{ colorScheme: 'light' }} data-theme="light">
       <head>
+        <meta name="color-scheme" content="light" />
+        <meta name="supported-color-schemes" content="light" />
         <link rel="preconnect" href="https://images.unsplash.com" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
       </head>
-      <body className={`relative w-full max-w-[100vw] bg-textured-sand antialiased ${inter.variable} ${playfair.variable}`}>
+      <body className={`relative w-full max-w-[100vw] bg-textured-sand antialiased ${inter.variable} ${playfair.variable}`} style={{ colorScheme: 'light' }}>
         <NextIntlClientProvider>{props.children}</NextIntlClientProvider>
       </body>
     </html>
